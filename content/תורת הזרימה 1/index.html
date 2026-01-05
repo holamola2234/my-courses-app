@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבוא לתורת הזרימה 1 - הספר המלא</title>
+
+    <!-- גופנים -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            /* Indigo 900 */
+            --secondary-color: #0d47a1;
+            /* Blue 900 */
+            --accent-color: #c2185b;
+            /* Pink 700 */
+            --bg-color: #f5f5f5;
+            --sidebar-width: 300px;
+            --text-color: #212121;
+            --theory-bg: #e8eaf6;
+            --algo-bg: #fff3e0;
+            --example-bg: #e0f2f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* סרגל צד */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #424242;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links li a:hover {
+            background-color: #e3f2fd;
+            color: var(--secondary-color);
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        /* תוכן ראשי */
+        #main-content {
+            margin-right: var(--sidebar-width);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .chapter {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary-color);
+        }
+
+        h2 {
+            font-family: 'Heebo', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.8rem;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        /* תיבות תוכן */
+        .content-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+
+        .theory {
+            background-color: var(--theory-bg);
+            border-right: 5px solid #3949ab;
+        }
+
+        .algorithm {
+            background-color: var(--algo-bg);
+            border-right: 5px solid #ff9800;
+        }
+
+        .example {
+            background-color: var(--example-bg);
+            border-right: 5px solid #009688;
+        }
+
+        .box-title {
+            display: block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #000;
+            font-family: 'Heebo', sans-serif;
+            text-decoration: underline;
+        }
+
+        /* תרגילים */
+        .exercise {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .ex-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* פתרונות */
+        details {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        summary {
+            padding: 0.8rem 0;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+            outline: none;
+            list-style: none;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        summary::after {
+            content: " ▼ הצג פתרון מלא";
+            font-size: 0.9rem;
+        }
+
+        details[open] summary::after {
+            content: " ▲ הסתר פתרון";
+        }
+
+        .solution-body {
+            background-color: #fafafa;
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: #333;
+            border-right: 3px solid #ccc;
+        }
+
+        /* רספונסיביות */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(100%);
+                width: 85%;
+                transition: transform 0.3s ease;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-right: 0;
+                padding: 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 2000;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.6rem 1rem;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* הדגשות בתוך טקסט */
+        strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        ul,
+        ol {
+            padding-right: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* מצב כהה */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --theory-bg: #1a237e;
+            --algo-bg: #4a3a2a;
+            --example-bg: #1a3a3a;
+        }
+
+        body.dark-mode #sidebar {
+            background-color: #1e1e1e;
+            border-left: 1px solid #333;
+        }
+
+        body.dark-mode .chapter,
+        body.dark-mode .exercise {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border-color: #333;
+        }
+
+        body.dark-mode .nav-links li a {
+            color: #bbb;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .nav-links li a:hover {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        body.dark-mode .solution-body {
+            background-color: #252525;
+            color: #ccc;
+        }
+
+        body.dark-mode strong,
+        body.dark-mode .box-title {
+            color: #fff;
+        }
+
+        /* כפתור החלפת ערכת נושא */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 5rem;
+            z-index: 2000;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* כפתור נוסחאון צף */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 2000;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* מודאל נוסחאון */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        .close-modal {
+            position: absolute;
+            left: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .formula-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        body.dark-mode .formula-item {
+            border-bottom-color: #333;
+        }
+
+        .formula-item:last-child {
+            border-bottom: none;
+        }
+
+        .math-display {
+            background: #f9f9f9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        body.dark-mode .math-display {
+            background: #252525;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('active')">תפריט</button>
+    <button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')"
+        title="החלף מצב תצוגה">🌓</button>
+    <button class="fab" onclick="openFormulaSheet()" title="נוסחאון מהיר">Σ</button>
+
+    <!-- מודאל נוסחאון -->
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFormulaSheet()">&times;</span>
+            <h2 id="modalTitle">נוסחאון מהיר</h2>
+            <div id="formulaContainer">
+                <!-- נוסחאות יוטענו כאן דינמית -->
+            </div>
+        </div>
+    </div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>תורת הזרימה 1</h1>
+            <p>המדריך המלא</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html"
+                    style="background-color: var(--accent-color); color: white; text-align: center; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.1);">🏠
+                    חזרה למאגר הקורסים</a></li>
+            <li><a href="#ch1">1. תכונות הזורם</a></li>
+            <li><a href="#ch2">2. הידרוסטטיקה בסיסית</a></li>
+            <li><a href="#ch3">3. כוחות על משטחים מישוריים</a></li>
+            <li><a href="#ch4">4. משטחים עקומים וציפה</a></li>
+            <li><a href="#ch5">5. קינמטיקה ו-RTT</a></li>
+            <li><a href="#ch6">6. ברנולי ומשוואת האנרגיה</a></li>
+            <li><a href="#ch7">7. משוואת התנע הקווי</a></li>
+            <li><a href="#ch8">8. אנליזה ממדית ודמיון</a></li>
+            <li><a href="#ch9">9. זרימה צמיגה בצינורות</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+
+        <div id="chapters-container">
+            <!-- פרק 1 -->
+            <section id="ch1" class="chapter">
+                <h2>פרק 1: תכונות הזורם (Fluid Properties)</h2>
+
+                <div class="content-box theory">
+                    <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                    <p><strong>1. הגדרות יסוד</strong></p>
+                    <ul>
+                        <li><strong>צפיפות ($\rho$):</strong> מסה ליחידת נפח.
+                            <ul>
+                                <li>$\rho = \frac{m}{\forall}$</li>
+                                <li>יחידות: $kg/m^3$</li>
+                                <li>עבור מים: $\rho_{water} \approx 1000 \, kg/m^3$ (ב-4°C).</li>
+                            </ul>
+                        </li>
+                        <li><strong>משקל סגולי ($\gamma$):</strong> משקל ליחידת נפח (כוח הכבידה הפועל על המסה).
+                            <ul>
+                                <li>$\gamma = \rho g$</li>
+                                <li>יחידות: $N/m^3$</li>
+                                <li>עבור מים: $\gamma_{water} \approx 9810 \, N/m^3$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>צפיפות יחסית ($SG$ או $S$):</strong> היחס בין צפיפות הנוזל לצפיפות מים (גודל חסר
+                            יחידות).
+                            <ul>
+                                <li>$SG = \frac{\rho_{fluid}}{\rho_{water}} = \frac{\gamma_{fluid}}{\gamma_{water}}$
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p><strong>2. צמיגות (Viscosity) – הלב של הפרק</strong></p>
+                    <p>הצמיגות היא ההתנגדות של הזורם למאמצי גזירה (ה"חיכוך הפנימי").</p>
+                    <ul>
+                        <li><strong>חוק הצמיגות של ניוטון:</strong> $$\tau = \mu \frac{du}{dy}$$
+                            <ul>
+                                <li>$\tau$ (Tau): מאמץ הגזירה [Pa] או [$N/m^2$].</li>
+                                <li>$\mu$ (Mu): צמיגות דינמית (Absolute Viscosity). יחידות: $Pa \cdot s$ או $N \cdot s /
+                                    m^2$ או $kg/(m \cdot s)$.</li>
+                                <li>$\frac{du}{dy}$: גרדיאנט המהירות (קצב מעוות הגזירה). השינוי במהירות כתלות במרחק
+                                    מהדופן.</li>
+                            </ul>
+                        </li>
+                        <li><strong>צמיגות קינמטית ($\nu$):</strong> $$\nu = \frac{\mu}{\rho}$$
+                            <ul>
+                                <li>יחידות: $m^2/s$ (לעיתים משתמשים ב-Stokes, כאשר $1 St = 10^{-4} m^2/s$).</li>
+                            </ul>
+                        </li>
+                        <li><strong>הכוח הצמיג ($F$):</strong> עבור לוחות מישוריים או פערים קטנים: $$F = \tau \cdot A =
+                            \mu \frac{du}{dy} \cdot A$$</li>
+                    </ul>
+
+                    <p><strong>3. דחיסות וגז אידיאלי</strong></p>
+                    <ul>
+                        <li><strong>מודול האלסטיות הנפחי ($E_v$ או $B$):</strong> מדד להתנגדות הנוזל לדחיסה. $$E_v = -
+                            \forall \frac{dP}{d\forall} = \rho \frac{dP}{d\rho}$$
+                            <ul>
+                                <li>נוזלים נחשבים לרוב כבלתי-דחיסים ($E_v \to \infty$).</li>
+                            </ul>
+                        </li>
+                        <li><strong>משוואת המצב לגז אידיאלי:</strong> $$P = \rho R T$$
+                            <ul>
+                                <li>$P$: לחץ מוחלט [Pa].</li>
+                                <li>$T$: טמפרטורה מוחלטת [K] (חובה קלווין!).</li>
+                                <li>$R$: קבוע הגז הספציפי ($R = R_{univ}/M_{molar}$).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p><strong>4. מתח פנים ($\sigma$)</strong></p>
+                    <ul>
+                        <li>כוח הפועל על פני השטח של הנוזל.</li>
+                        <li><strong>עלייה קפילרית (בצינור דק):</strong> $$h = \frac{2 \sigma \cos \theta}{\gamma r}$$
+                            <ul>
+                                <li>$\theta$: זווית המגע.</li>
+                                <li>$r$: רדיוס הצינורית.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div
+                        style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                        <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                        <ol>
+                            <li><strong>מרווחים קטנים (Small Gaps):</strong> כאשר המרווח $h$ בין משטחים קטן מאוד, מניחים
+                                פרופיל מהירות ליניארי. כלומר: $\frac{du}{dy} \approx \frac{V}{h}$.</li>
+                            <li><strong>רדיאנים:</strong> $V=\omega R$, המהירות הזוויתית $\omega$ חייבת להיות ב-$rad/s$.
+                                אם נתון RPM, יש להמיר: $\omega = 2\pi \frac{RPM}{60}$.</li>
+                            <li><strong>מומנט (Torque):</strong> $T = F \cdot R$.</li>
+                            <li><strong>טמפרטורה:</strong> בנוזלים, כשחם יותר הצמיגות יורדת. בגזים, כשחם יותר הצמיגות
+                                עולה.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="content-box algorithm">
+                    <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון") - שאלות צמיגות</span>
+                    <ol>
+                        <li><strong>שלב 1: זיהוי הגיאומטריה וסוג התנועה</strong> - האם זה משטח ישר (פלטה) או עקום
+                            (גליל/חרוט)? האם התנועה קווית ($V$) או סיבובית ($\omega$)?</li>
+                        <li><strong>שלב 2: הנחת פרופיל המהירות</strong> - אם המרווח $h$ קטן מאוד ($h \ll R$ או $h \ll
+                            L$), נניח פרופיל ליניארי.
+                            <ul>
+                                <li>$\frac{du}{dy} = \frac{V}{h}$ (עבור תנועה קווית).</li>
+                                <li>$\frac{du}{dy} = \frac{\omega R}{h}$ (עבור תנועה סיבובית, כאשר $V=\omega R$).</li>
+                            </ul>
+                        </li>
+                        <li><strong>שלב 3: ניסוח מאמץ הגזירה ($\tau$)</strong> - נציב בחוק ניוטון: $\tau = \mu
+                            \frac{V}{h}$.</li>
+                        <li><strong>שלב 4: הגדרת אלמנט שטח ($dA$)</strong> - אם המהירות קבועה (גליל): $A = \pi D L$. אם
+                            משתנה (דיסק): $dA = 2\pi r dr$.</li>
+                        <li><strong>שלב 5: חישוב כוח ($F$) או מומנט ($T$)</strong> - $F = \int \tau dA$. מומנט: $M =
+                            \int r \cdot \tau \cdot dA$.</li>
+                        <li><strong>שלב 6: בדיקת יחידות</strong> - וודא שכל האורכים במטרים, כוחות בניוטון, וצמיגות ב-$Pa
+                            \cdot s$.</li>
+                    </ol>
+                </div>
+
+                <div class="content-box example">
+                    <span class="box-title">חלק 3: דוגמה פתורה (מיסב החלקה)</span>
+                    <p><strong>שאלה:</strong> ציר (Shaft) בקוטר $D = 100 \, mm$ ובאורך $L = 300 \, mm$ מסתובב בתוך מיסב
+                        נייח במהירות $1200 \, RPM$. המרווח הרדיאלי הוא $h = 0.2 \, mm$ ומלא בשמן עם צמיגות $\mu = 0.1 \,
+                        Pa \cdot s$. חשב את המומנט המתנגד לסיבוב ואת ההספק הנדרש.</p>
+                    <p><strong>פתרון:</strong></p>
+                    <ol>
+                        <li><strong>שלב 1: המרות:</strong> $R=0.05m, L=0.3m, h=0.0002m, \omega = \frac{1200 \cdot
+                            2\pi}{60} = 40\pi \approx 125.66 \, rad/s$.</li>
+                        <li><strong>שלב 2: מהירות קווית:</strong> $V = \omega R = 125.66 \cdot 0.05 = 6.283 \, m/s$.
+                        </li>
+                        <li><strong>שלב 3: מאמץ גזירה:</strong> $\tau = \mu \frac{V}{h} = 0.1 \cdot \frac{6.283}{0.0002}
+                            = 3141.5 \, Pa$.</li>
+                        <li><strong>שלב 4: כוח ומומנט:</strong> $A = \pi D L \approx 0.0942 \, m^2$. $T = (\tau A) \cdot
+                            R = (3141.5 \cdot 0.0942) \cdot 0.05 = 14.8 \, Nm$.</li>
+                        <li><strong>שלב 5: הספק:</strong> $P = T \cdot \omega = 14.8 \cdot 125.66 \approx 1.86 \, kW$.
+                        </li>
+                    </ol>
+                </div>
+
+                <h3>חלק 4: בנק שאלות (מדורג)</h3>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 1</div>
+                    <p>נתון שמן בעל צפיפות יחסית $SG = 0.85$ וצמיגות קינמטית $\nu = 1.2 \times 10^{-4} \, m^2/s$. חשב את
+                        הצפיפות ($\rho$), המשקל הסגולי ($\gamma$) והצמיגות הדינמית ($\mu$).</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>1. צפיפות: $\rho = SG \cdot \rho_{water} = 0.85 \cdot 1000 = 850 \, kg/m^3$.</p>
+                            <p>2. משקל סגולי: $\gamma = \rho g = 850 \cdot 9.81 = 8338.5 \, N/m^3$.</p>
+                            <p>3. צמיגות דינמית: $\nu = \frac{\mu}{\rho} \Rightarrow \mu = \nu \cdot \rho = (1.2 \times
+                                10^{-4}) \cdot 850 = 0.102 \, Pa \cdot s$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 2</div>
+                    <p>פלטה שטוחה בשטח $A = 0.5 \, m^2$ נמשכת במהירות קבועה של $V = 0.4 \, m/s$ על גבי שכבת שמן בעובי $h
+                        = 2 \, mm$. השמן נמצא על משטח נייח. נתון $\mu = 0.05 \, Pa \cdot s$. חשב את הכוח הדרוש.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>מהירות הגזירה: $\frac{du}{dy} = \frac{V}{h} = \frac{0.4}{0.002} = 200 \, s^{-1}$.
+                                </li>
+                                <li>מאמץ גזירה: $\tau = \mu \frac{du}{dy} = 0.05 \cdot 200 = 10 \, Pa$.</li>
+                                <li>כוח: $F = \tau \cdot A = 10 \cdot 0.5 = 5 \, N$.</li>
+                            </ol>
+                            <p>תשובה: $5 \, N$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 3</div>
+                    <p>בוכנה הידראולית דוחסת שמן בנפח התחלתי של $V_1 = 0.5 \, m^3$ בלחץ התחלתי $P_1 = 10 \, MPa$. הלחץ
+                        עולה ל-$P_2 = 20 \, MPa$ והנפח מצטמצם ב-$0.4\%$. חשב את מודול האלסטיות הנפחי ($E_v$).</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$E_v = - \forall \frac{\Delta P}{\Delta \forall} = - \frac{10 \times 10^6}{-0.004} = 2.5
+                                \times 10^9 \, Pa = 2.5 \, GPa$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 4</div>
+                    <p>ציר (Shaft) בקוטר $D = 100 \, mm$ ובאורך $L = 300 \, mm$ מסתובב במהירות $1200 \, RPM$ בתוך מיסב
+                        עם מרווח $h = 0.2 \, mm$ ושמן $\mu = 0.1 \, Pa \cdot s$. מצא מומנט והספק.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>מומנט: $14.8 \, Nm$. הספק: $1.86 \, kW$. (ראה פתרון מפורט בחלק 3 - דוגמה פתורה).</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 5</div>
+                    <p>בלוק קובייתי ($50 \, N$, $20 \, cm$) מחליק במורד מישור משופע ב-$30^\circ$ על שכבת שמן ($h=0.1 \,
+                        mm$, $\mu = 0.08 \, Pa \cdot s$). חשב את המהירות הסופית.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$W \sin 30^\circ = \tau A \Rightarrow 25 = (\mu \frac{V}{h}) a^2 \Rightarrow 25 = (0.08
+                                \cdot \frac{V}{0.0001}) \cdot 0.04 \Rightarrow V = 0.781 \, m/s$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 6</div>
+                    <p>בוכנה גלילית ($10 \, N$, $D=99.5 \, mm$, $L=100 \, mm$) נופלת בצינור ($D=100 \, mm$) עם שמן ($\mu
+                        = 0.2 \, Pa \cdot s$). מצא מהירות נפילה.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$W = \tau A \Rightarrow 10 = (\mu \frac{V}{h}) (\pi D L) \Rightarrow 10 = (0.2 \cdot
+                                \frac{V}{0.00025}) (0.0314) \Rightarrow V \approx 0.398 \, m/s$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 7</div>
+                    <p>צינור זכוכית ($d=2 \, mm$) מוכנס למים ($\sigma = 0.073, \gamma = 9810$). חשב את גובה הקפילריות.
+                    </p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$h = \frac{2 \sigma \cos \theta}{\gamma r} = \frac{2 \cdot 0.073 \cdot 1}{9810 \cdot
+                                0.001} \approx 14.9 \, mm$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 8</div>
+                    <p>דיסקית ברדיוס $R$ מסתובבת במהירות $\omega$ במרחק $h$ ממשטח עם נוזל $\mu$. פתח ביטוי למומנט.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$dT = r \cdot \tau dA = r \cdot (\mu \frac{\omega r}{h}) (2\pi r dr) \Rightarrow T =
+                                \int_0^R \frac{2\pi \mu \omega}{h} r^3 dr = \frac{\pi \mu \omega R^4}{2h}$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 9</div>
+                    <p>חרוט ברדיוס $R$ וגובה $H$ מסתובב במרווח $h$ עם נוזל $\mu$. הוכח: $T = \frac{\pi \mu \omega R^4}{2
+                        h \sin \alpha}$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$dA = \frac{2\pi r dr}{\sin \alpha}$. המומנט: $T = \int r \tau dA$, יוצא $\frac{\pi \mu
+                                \omega R^4}{2 h \sin \alpha}$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 10</div>
+                    <p>ציר בשני מקטעי שמן ($\mu_1, \mu_2=2\mu_1$) באורכים $L_1, L_2$. מצא מומנט כולל.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$T_{total} = T_1 + T_2 = \frac{2\pi \mu_1 \omega R^3}{h} (L_1 + 2L_2)$.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- פרק 2 -->
+            <section id="ch2" class="chapter">
+                <h2>פרק 2: הידרוסטטיקה בסיסית (לחץ ומנומטרים)</h2>
+
+                <div class="content-box theory">
+                    <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                    <p><strong>1. מושגי יסוד בלחץ</strong></p>
+                    <ul>
+                        <li><strong>לחץ אבסולוטי מול מנתי:</strong> $P_{abs} = P_{gauge} + P_{atm}$.
+                            <ul>
+                                <li>$P_{atm} \approx 101.3 \, kPa$ או $1 \, bar$.</li>
+                                <li>בלחץ מנתי (Gauge), $P_{atm}$ מוגדר כ-0.</li>
+                            </ul>
+                        </li>
+                        <li><strong>המשוואה היסודית של ההידרוסטטיקה:</strong> השינוי בלחץ בנוזל במנוחה: $$\frac{dP}{dz}
+                            = -\gamma \Rightarrow P_2 = P_1 + \gamma h$$
+                            <ul>
+                                <li>$h$: עומק (מרחק אנכי למטה).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p><strong>2. מנומטרים (מדידת לחצים)</strong></p>
+                    <p>השיטה לפתרון מנומטרים מבוססת על המעבר בתוך הצינור:</p>
+                    <ul>
+                        <li><strong>יורדים למטה ($+$):</strong> הלחץ עולה ככל שמעמיקים.</li>
+                        <li><strong>עולים למעלה ($-$):</strong> הלחץ יורד ככל שעולים.</li>
+                        <li><strong>נקודות שוות לחץ:</strong> בשני צדדי צינור U, באותו גובה ובאותו נוזל רציף, הלחץ זהה.
+                        </li>
+                    </ul>
+
+                    <p><strong>3. מכשירים נוספים</strong></p>
+                    <ul>
+                        <li><strong>ברומטר:</strong> מודד לחץ אטמוספרי. $P_{atm} = \gamma_{Hg} h_{Hg}$.</li>
+                        <li><strong>פיאזומטר:</strong> צינור אנכי פתוח למדידת לחץ בצינור. $P_A = \gamma h$.</li>
+                    </ul>
+
+                    <div
+                        style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                        <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                        <ul>
+                            <li><strong>גזים (אוויר):</strong> מכיוון שצפיפות הגז נמוכה מאוד ($\rho_{air} \approx 1.2$),
+                                לרוב מזניחים את שינוי הלחץ בתוך עמודת אוויר (אלא אם הגובה עצום).</li>
+                            <li><strong>צינור משופע:</strong> תמיד להשתמש בגובה האנכי $h = L \sin \theta$.</li>
+                            <li><strong>נוזלים שונים:</strong> אל תשכח להחליף את ה-$\gamma$ כשעוברים ממים לכספית או שמן.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-box algorithm">
+                    <span class="box-title">חלק 2: אלגוריתם פתרון - מנומטרים ("הזחילה לאורך הצינור")</span>
+                    <ol>
+                        <li><strong>שלב 1:</strong> התחל בנקודה ידועה (לדוגמה, פתח לאטמוספירה $P=0$ או מיכל A).</li>
+                        <li><strong>שלב 2:</strong> "לך" לאורך המנומטר.
+                            <ul>
+                                <li>על כל קטע שיורדים בו גובה $h_i$, הוסף $+\gamma_{fluid} h_i$.</li>
+                                <li>על כל קטע שעולים בו גובה $h_i$, החסר $-\gamma_{fluid} h_i$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>שלב 3:</strong> השתמש ב"קפיצה": אם הגעת לתחתית של U, קפוץ לצד השני לאותו גובה (הלחץ
+                            שם זהה).</li>
+                        <li><strong>שלב 4:</strong> השווה את הביטוי שקיבלת ללחץ בנקודת הסיום.</li>
+                    </ol>
+                </div>
+
+                <div class="content-box example">
+                    <span class="box-title">חלק 3: דוגמה פתורה (מנומטר רב-שלבי)</span>
+                    <p><strong>שאלה:</strong> מיכל מים סגור מחובר למנומטר U המכיל כספית ($SG=13.6$). פני המים במיכל
+                        נמצאים בגובה $2 \, m$ מעל נקודת החיבור. הכספית בצינור יורדת $10 \, cm$ מתחת לנקודת החיבור בצד
+                        אחד, ועולה $40 \, cm$ בצד השני הפתוח לאטמוספירה. חשב את הלחץ המנתי של האוויר מעל המים במיכל.</p>
+                    <p><strong>פתרון:</strong></p>
+                    <ol>
+                        <li>נתחיל מהאוויר במיכל ($P_{air}$) ונרד לפני המים: $P_{surface} = P_{air}$.</li>
+                        <li>נרד עד לנקודת החיבור: $P_{junction} = P_{air} + \gamma_w \cdot 2$.</li>
+                        <li>נרד בצינור המנומטר עד לתחילת הכספית: $P_{Hg\_start} = P_{junction} + \gamma_w \cdot 0.1$.
+                        </li>
+                        <li>נרד לתחתית ה-U ונעלה בצד השני (או פשוט נקפוץ): הלחץ בצד השני באותו גובה של $Hg\_start$ הוא
+                            זהה.</li>
+                        <li>נעלה בכספית עד לקצה הפתוח: $P_{atm} = P_{Hg\_start} - \gamma_{Hg} \cdot (0.4 + 0.1)$.</li>
+                        <li>נשווה לאפס (לחץ מנתי): $P_{air} + 9810 \cdot 2.1 - (13.6 \cdot 9810) \cdot 0.5 = 0$.</li>
+                        <li>$P_{air} = 66708 - 20601 = 46107 \, Pa \approx 46.1 \, kPa$.</li>
+                    </ol>
+                </div>
+
+                <h3>חלק 4: בנק שאלות (מדורג)</h3>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 1</div>
+                    <p>מיכל מכיל שמן ($SG=0.8$) לעומק של $3 \, m$. מעל השמן יש שכבת אוויר בלחץ $50 \, kPa$ (מנתי). חשב
+                        את הלחץ בתחתית המיכל.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$P_{bottom} = P_{air} + \gamma_{oil} h = 50,000 + (0.8 \cdot 9810) \cdot 3 = 50,000 +
+                                23,544 = 73,544 \, Pa = 73.54 \, kPa$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 2</div>
+                    <p>באזור מסוים הלחץ האטמוספרי הוא $750 \, mm \, Hg$. מד לחץ על מיכל אוויר מראה $200 \, kPa$. מהו
+                        הלחץ האבסולוטי במיכל?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>נחשב $P_{atm}$: $0.75 \cdot 13.6 \cdot 9810 = 100,062 \, Pa \approx 100 \, kPa$.
+                                </li>
+                                <li>$P_{abs} = P_{gauge} + P_{atm} = 200 + 100 = 300 \, kPa$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 3</div>
+                    <p>ברומטר כספית ($SG=13.6$) מראה $760 \, mm$. מה היה גובה העמודה בברומטר מים?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>לחץ זהה: $(\gamma h)_{Hg} = (\gamma h)_{water}$.</p>
+                            <p>$13.6 \cdot \gamma_w \cdot 0.76 = 1 \cdot \gamma_w \cdot h_w \Rightarrow h_w = 10.336 \,
+                                m$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 4</div>
+                    <p>צוללת נמצאת בעומק $100 \, m$ בים ($\rho = 1025 \, kg/m^3$). הלחץ בתוך הצוללת הוא אטמוספרי. מהו
+                        הכוח הפועל על צוהר (Window) עגול בקוטר $40 \, cm$?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>הפרש לחצים: $\Delta P = \rho g h = 1025 \cdot 9.81 \cdot 100 = 1,005,525 \, Pa
+                                    \approx 1 \, MPa$.</li>
+                                <li>שטח: $A = \pi r^2 = \pi \cdot 0.2^2 = 0.1256 \, m^2$.</li>
+                                <li>כוח: $F = \Delta P \cdot A = 1,005,525 \cdot 0.1256 = 126,293 \, N \approx 126 \,
+                                    kN$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 5</div>
+                    <p>צינור U מכיל מים. לתוך זרוע אחת מוזגים שמן ($SG=0.85$) עד ליצירת עמודה בגובה $10 \, cm$. בכמה
+                        יעלו פני המים בזרוע השנייה?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>במישור ההפרדה: $\gamma_{oil} h_{oil} = \gamma_w h_w$.</p>
+                            <p>$0.85 \cdot 9810 \cdot 0.1 = 9810 \cdot h_w \Rightarrow h_w = 8.5 \, cm$.</p>
+                            <p>הערה: פני המים בזרוע השנייה יעלו ב-$4.25 \, cm$ ביחס למצב המקורי (חצי מהפרש הגבהים לעומת
+                                הממשק).</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 6</div>
+                    <p>צינור A (מים) וצינור B (שמן $SG=0.9$) מחוברים במנומטר כספית. הכספית ב-A נמוכה ב-$20 \, cm$ מאשר
+                        ב-B. גובה המים מעל הכספית ב-A הוא $50 \, cm$, וגובה השמן ב-B מעל הכספית הוא $30 \, cm$. חשב $P_A
+                        - P_B$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>משוואת מסלול: $P_A + \gamma_w(0.5) - \gamma_{Hg}(0.2) - \gamma_{oil}(0.3) = P_B$.</p>
+                            <p>$P_A - P_B = -9810(0.5) + (13.6 \cdot 9810)(0.2) + (0.9 \cdot 9810)(0.3) = -4905 +
+                                26683.2 + 2648.7 = 24426.9 \, Pa \approx 24.4 \, kPa$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 7</div>
+                    <p>מיכל מים סגור. לחץ האוויר מעל המים הוא $10 \, kPa$. מנומטר U מחובר למיכל בתחתית. הנוזל במנומטר
+                        הוא שמן ($SG=0.9$). אם המרחק מפני המים לחיבור המנומטר הוא $2 \, m$, וגובה השמן בזרוע הפתוחה הוא
+                        $h$, מצא את $h$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$P_{air} + \gamma_w \cdot 2 = \gamma_{oil} \cdot h$.</p>
+                            <p>$10,000 + 9810 \cdot 2 = (0.9 \cdot 9810) \cdot h \Rightarrow 29,620 = 8829 h \Rightarrow
+                                h = 3.35 \, m$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 8</div>
+                    <p>מנומטר משופע בזווית $30^\circ$ משמש למדידת לחץ גז נמוך. נוזל המדידה הוא אלכוהול ($SG=0.8$). אם
+                        הנוזל נע לאורך $15 \, cm$ בצינור המשופע מהאפס, מה הלחץ?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>הגובה האנכי: $h = L \sin \theta = 0.15 \cdot \sin 30^\circ = 0.075 \, m$.</p>
+                            <p>$P = \gamma h = (0.8 \cdot 9810) \cdot 0.075 = 588.6 \, Pa$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 9</div>
+                    <p>מתקן הרמה הידראולי: בוכנה קטנה ($A_1 = 10 \, cm^2$) ובוכנה גדולה ($A_2 = 500 \, cm^2$). אם
+                        מפעילים $100 \, N$ על הקטנה, איזה משקל ניתן להרים על הגדולה?</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>לפי חוק פסקל: $\frac{F_1}{A_1} = \frac{F_2}{A_2}$.</p>
+                            <p>$F_2 = F_1 \cdot \frac{A_2}{A_1} = 100 \cdot \frac{500}{10} = 5000 \, N$. (ניתן להרים
+                                $510 \, kg$).</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 10</div>
+                    <p>במנומטר U, כמה כספית ($SG=13.6$) נדרשת כדי לאזן לחץ של $1 \, atm$ ($101.3 \, kPa$)? מצא את הגובה
+                        $h$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$P = \gamma h \Rightarrow 101,300 = (13.6 \cdot 9810) \cdot h \Rightarrow h =
+                                \frac{101,300}{133,416} \approx 0.759 \, m = 759 \, mm$.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- פרק 3 -->
+            <section id="ch3" class="chapter">
+                <h2>פרק 3: כוחות על משטחים מישוריים</h2>
+
+                <div class="content-box theory">
+                    <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                    <p><strong>1. גודל הכוח השקול ($F_R$):</strong></p>
+                    <p>הכוח הנובע מלחץ הנוזל הפועל על משטח שטוח (מישורי): $$F_R = P_c \cdot A = \gamma h_c \cdot A$$
+                    <ul>
+                        <li>$P_c$: הלחץ במרכז הכובד (Centroid) של המשטח.</li>
+                        <li>$h_c$: העומק האנכי מפני המים למרכז הכובד.</li>
+                        <li>$A$: שטח המשטח.</li>
+                    </ul>
+                    </p>
+
+                    <p><strong>2. מיקום הכוח - מרכז הלחץ ($y_{cp}$):</strong></p>
+                    <p>הכוח השקול אינו פועל במרכז הכובד, אלא נמוך יותר (בגלל שהלחץ גדל עם העומק). המיקום נמדד לאורך
+                        המשטח (ציר $y$): $$y_{cp} = y_c + \frac{I_{xc}}{y_c \cdot A}$$
+                    <ul>
+                        <li>$y_c$: המרחק לאורך המשטח מפני המים (או המשכם) למרכז הכובד.</li>
+                        <li>$I_{xc}$: מומנט האינרציה של המשטח סביב ציר אופקי העובר דרך מרכז הכובד שלו.</li>
+                    </ul>
+                    </p>
+
+                    <p><strong>3. מומנטי אינרציה ומרכזי כובד נפוצים ($I_{xc}$):</strong></p>
+                    <ul>
+                        <li><strong>מלבן ($b \times a$):</strong> $A = ab$, $y_c$ במרכז, $I_{xc} = \frac{b a^3}{12}$.
+                        </li>
+                        <li><strong>עיגול (רדיוס $R$):</strong> $A = \pi R^2$, $y_c$ במרכז, $I_{xc} = \frac{\pi
+                            R^4}{4}$.</li>
+                        <li><strong>משולש (בסיס $b$, גובה $a$):</strong> $A = \frac{ba}{2}$, $y_c$ במרחק $a/3$ מהבסיס,
+                            $I_{xc} = \frac{b a^3}{36}$.</li>
+                    </ul>
+
+                    <div
+                        style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                        <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                        <ul>
+                            <li><strong>$y$ מול $h$:</strong> $h$ הוא תמיד עומק אנכי. $y$ הוא מרחק לאורך המשטח. הקשר: $h
+                                = y \sin \theta$.</li>
+                            <li><strong>ציר $y$:</strong> תמיד התחל את מדידת $y$ מפני המים, גם אם המשטח נמצא עמוק מתחתם.
+                            </li>
+                            <li><strong>שתי פנים:</strong> אם יש מים משני צידי השער, חשב כוח שקול עבור כל צד בנפרד ובצע
+                                שקול כוחות/מומנטים.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-box algorithm">
+                    <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון")</span>
+                    <ol>
+                        <li><strong>שלב 1: הצבת צירים</strong> - קבע את ציר $y$ לאורך נטיית המשטח, החל מפני המים
+                            ($y=0$).</li>
+                        <li><strong>שלב 2: גיאומטריה</strong> - מצא את $A$ ואת המרחק למרכז הכובד $y_c$.</li>
+                        <li><strong>שלב 3: עומק אנכי</strong> - חשב את $h_c = y_c \sin \theta$.</li>
+                        <li><strong>שלב 4: גודל הכוח</strong> - חשב $F_R = \gamma h_c A$.</li>
+                        <li><strong>שלב 5: נקודת הפעלה</strong> - מצא את $I_{xc}$ וחשב את $y_{cp} = y_c +
+                            \frac{I_{xc}}{y_c A}$.</li>
+                        <li><strong>שלב 6: שיווי משקל</strong> - אם נדרש כוח חיצוני למניעת פתיחה, בצע $\Sigma M_{hinge}
+                            = 0$.</li>
+                    </ol>
+                </div>
+
+                <div class="content-box example">
+                    <span class="box-title">חלק 3: דוגמה פתורה (שער משופע)</span>
+                    <p><strong>שאלה:</strong> שער מלבני ברוחב $2 \, m$ ובאורך (נטוי) $3 \, m$ מוצב בזווית $60^\circ$
+                        לאופק. הקצה העליון של השער נמצא בעומק $1 \, m$ אנכי מתחת לפני המים. חשב את הכוח השקול ומיקומו.
+                    </p>
+                    <p><strong>פתרון:</strong></p>
+                    <ol>
+                        <li><strong>שלב 1: חישוב המרחק $y$ לקצה העליון:</strong> $y_{top} = 1 / \sin 60^\circ = 1.155 \,
+                            m$.</li>
+                        <li><strong>שלב 2: מרכז כובד:</strong> $y_c = y_{top} + 1.5 = 2.655 \, m$.</li>
+                        <li><strong>שלב 3: עומק מרכז כובד:</strong> $h_c = y_c \sin 60^\circ = 2.655 \cdot 0.866 = 2.3
+                            \, m$.</li>
+                        <li><strong>שלב 4: כוח:</strong> $A = 2 \cdot 3 = 6 \, m^2$. $F_R = 9810 \cdot 2.3 \cdot 6 =
+                            135,378 \, N \approx 135.4 \, kN$.</li>
+                        <li><strong>שלב 5: מיקום $y_{cp}$:</strong> $I_{xc} = \frac{2 \cdot 3^3}{12} = 4.5 \, m^4$.
+                            $y_{cp} = 2.655 + \frac{4.5}{2.655 \cdot 6} = 2.655 + 0.282 = 2.937 \, m$.</li>
+                    </ol>
+                </div>
+
+                <h3>חלק 4: בנק שאלות (מדורג)</h3>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 1</div>
+                    <p>שער מלבני אנכי ($2m$ רוחב, $3m$ גובה) ששפתו העליונה בפני המים. מצא כוח ומיקום.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li><strong>גאומטריה:</strong> $y_c = 1.5m, h_c = 1.5m, A=6m^2$.</li>
+                                <li><strong>כוח:</strong> $F_R = 9810 \cdot 1.5 \cdot 6 = 88,290 \, N = 88.3 \, kN$.
+                                </li>
+                                <li><strong>מיקום:</strong> $I_{xc} = 4.5m^4 \Rightarrow y_{cp} = 1.5 + \frac{4.5}{1.5
+                                    \cdot 6} = 2.0 \, m$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 2</div>
+                    <p>לוח עגול ברדיוס $R=1m$ מוצב אנכית כשמרכזו בעומק $5m$. חשב את הכוח ומיקומו.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>$h_c = 5m, A = \pi \cdot 1^2 = 3.1416 \, m^2$.</li>
+                                <li>$F_R = 9810 \cdot 5 \cdot 3.1416 = 154,095 \, N \approx 154 \, kN$.</li>
+                                <li>$I_{xc} = \frac{\pi R^4}{4} = \frac{\pi}{4} = 0.7854 \, m^4$.</li>
+                                <li>$y_{cp} = 5 + \frac{0.7854}{5 \cdot 3.1416} = 5 + 0.05 = 5.05 \, m$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 3</div>
+                    <p>לוח מלבני ($2m \times 2m$) נטוי ב-$45^\circ$. מרכזו בעומק $2m$ אנכי. מצא את הכוח ומיקומו לאורך
+                        הלוח.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>$h_c = 2m$. $y_c = h_c / \sin 45^\circ = 2 / 0.707 \approx 2.828 \, m$.</li>
+                                <li>$F_R = 9810 \cdot 2 \cdot 4 = 78,480 \, N = 78.5 \, kN$.</li>
+                                <li>$I_{xc} = \frac{2 \cdot 2^3}{12} = 1.333 \, m^4$.</li>
+                                <li>$y_{cp} = 2.828 + \frac{1.333}{2.828 \cdot 4} = 2.828 + 0.118 = 2.946 \, m$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 4</div>
+                    <p>פתח משולשי שווה-שוקיים (בסיס $2m$ למעלה, גובה $3m$) מוצב אנכית. הבסיס נמצא בפני המים. מצא $F_R$
+                        ו-$y_{cp}$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>$A = \frac{2 \cdot 3}{2} = 3m^2$.</li>
+                                <li>במשולש עם בסיס למעלה, מרכז הכובד במרחק $1/3$ מהבסיס $\Rightarrow y_c = 1.0 \, m$.
+                                </li>
+                                <li>$F_R = 9810 \cdot 1 \cdot 3 = 29,430 \, N = 29.4 \, kN$.</li>
+                                <li>$I_{xc} = \frac{b a^3}{36} = \frac{2 \cdot 3^3}{36} = 1.5 \, m^4$.</li>
+                                <li>$y_{cp} = 1.0 + \frac{1.5}{1 \cdot 3} = 1.5 \, m$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 5</div>
+                    <p>שער מלבני ($1m$ רוחב, $2m$ גובה) סוגר פתח בתחתית סכר. השער מחוזק בציר בקצה העליון. גובה המים מעל
+                        הקצה העליון של השער הוא $5m$. מצא את הכוח האופקי שיש להפעיל בתחתית כדי להחזיק את השער סגור.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>$h_c = 5 + 1 = 6m, A = 2m^2 \Rightarrow F_R = 9810 \cdot 6 \cdot 2 = 117.72 \, kN$.
+                                </li>
+                                <li>$I_{xc} = \frac{1 \cdot 2^3}{12} = 0.667 \Rightarrow y_{cp} = 6 + \frac{0.667}{6
+                                    \cdot 2} = 6.0556 \, m$.</li>
+                                <li>המרחק מהציר (הנמצא ב-$y=5$) הוא $d = 6.0556 - 5 = 1.0556 \, m$.</li>
+                                <li>מומנטים סביב הציר: $F_R \cdot 1.0556 = F_{ext} \cdot 2 \Rightarrow 117.72 \cdot
+                                    1.0556 / 2 = 62.14 \, kN$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 6</div>
+                    <p>שער מלבני בגובה $L$ מוחזק ע"י ציר במרחק $d$ מהתחתית. הוכח שכדי שיפתח אוטומטית כשהמים מגיעים לקצהו
+                        העליון, $d \leq L/3$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>מרכז הלחץ למלבן ששפתו העליונה בפני המים הוא $y_{cp} = \frac{2}{3}L$.</li>
+                                <li>השער יפתח אם הכוח פועל מתחת לציר.</li>
+                                <li>כלומר $y_{cp}$ חייב להיות גדול מהמרחק של הציר מלמעלה ($L-d$).</li>
+                                <li>$\frac{2}{3}L \geq L - d \Rightarrow d \geq \frac{1}{3}L$.</li>
+                                <li>כלומר ב-$d=L/3$ השער יפתח.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 7</div>
+                    <p>מיכל מכיל מים ומתחתיהם כספית ($SG=13.6$). עומק המים $2m$ ועומק הכספית $1m$. לוח מרובע ($0.5m
+                        \times 0.5m$) מוצב אנכית בתוך הכספית כך שמרכזו בעומק $0.5m$ מתחת לממשק. מצא את הכוח עליו.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>נחשב לחץ אפקטיבי במרכז הכובד: $P_c = \gamma_w \cdot 2 + \gamma_{Hg} \cdot 0.5$.</li>
+                                <li>$P_c = 9810 \cdot 2 + (13.6 \cdot 9810) \cdot 0.5 = 19620 + 66708 = 86,328 \, Pa$.
+                                </li>
+                                <li>כוח: $F_R = P_c \cdot A = 86,328 \cdot 0.25 = 21,582 \, N \approx 21.6 \, kN$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 8</div>
+                    <p>שער בצורת חצי עיגול ברדיוס $R=1m$ מוצב אנכית כשהקוטר (השפה הישרה) נמצא בפני המים. מצא $F_R$
+                        ו-$y_{cp}$.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <ol>
+                                <li>מרכז כובד של חצי עיגול נמוך מהקוטר ב-$d = \frac{4R}{3\pi} = \frac{4 \cdot 1}{3\pi} =
+                                    0.4244 \, m$.</li>
+                                <li>$A = \frac{\pi R^2}{2} = 1.5708 \, m^2$. $h_c = 0.4244 \, m$.</li>
+                                <li>$F_R = 9810 \cdot 0.4244 \cdot 1.5708 = 6540 \, N \approx 6.54 \, kN$.</li>
+                                <li>$I_{xc} = 0.10976 R^4 = 0.10976 \, m^4$.</li>
+                                <li>$y_{cp} = 0.4244 + \frac{0.10976}{0.4244 \cdot 1.5708} = 0.4244 + 0.1646 = 0.589 \,
+                                    m$.</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 9</div>
+                    <p>פתח בצורת מעויין (אלכסונים $1m$ ו-$2m$) מוצב אנכית כשהאלכסון הארוך אנכי וקודקודו העליון בעומק
+                        $1m$. מצא את הכוח.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$A = \frac{d_1 d_2}{2} = \frac{1 \cdot 2}{2} = 1m^2$.</p>
+                            <p>$h_c = 1 + 1 = 2m$ (מרכז הכובד באמצע האלכסון האנכי).</p>
+                            <p>$F_R = 9810 \cdot 2 \cdot 1 = 19,620 \, N = 19.6 \, kN$.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="exercise">
+                    <div class="ex-badge">שאלה 10</div>
+                    <p>שער מלבני ($L \times B$) משופע בזווית $90^\circ$ (אנכי) עם מים בשני צידיו. בצד אחד הגובה $h_1$
+                        ובשני $h_2$. מצא את הכוח השקול.</p>
+                    <details>
+                        <summary></summary>
+                        <div class="solution-body">
+                            <p>$F_1 = \gamma \frac{h_1}{2} (h_1 B)$</p>
+                            <p>$F_2 = \gamma \frac{h_2}{2} (h_2 B)$</p>
+                            <p>$F_{net} = \frac{1}{2}\gamma B (h_1^2 - h_2^2)$.</p>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        </section>
+
+        <!-- פרק 4 -->
+        <section id="ch4" class="chapter">
+            <h2>פרק 4: כוחות על משטחים עקומים, ציפה ויציבות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. כוחות על משטחים עקומים (Curved Surfaces)</strong></p>
+                <p>בניגוד למשטח ישר, הלחץ משנה כיוון ללא הרף לאורך העקומה. לכן, אנחנו לא מחשבים את הכוח ישירות, אלא
+                    מפרקים אותו לרכיבים: אופקי ($F_H$) ואנכי ($F_V$).</p>
+                <ul>
+                    <li><strong>הרכיב האופקי ($F_H$):</strong>
+                        <ul>
+                            <li>שווה לכוח שהיה פועל על ההיטל האנכי (Projection) של המשטח העקום.</li>
+                            <li>$F_H = P_{center} \cdot A_{proj} = (\gamma \cdot h_c) \cdot A_{proj}$</li>
+                            <li>נקודת הפעולה ($y_{cp}$): מחושבת כמו למשטח ישר רגיל (עבור ההיטל).</li>
+                        </ul>
+                    </li>
+                    <li><strong>הרכיב האנכי ($F_V$):</strong>
+                        <ul>
+                            <li>שווה למשקל הנוזל שנמצא (או יכול היה להימצא) מעל המשטח העקום עד לפני המים החופשיים.</li>
+                            <li>$F_V = W_{fluid} = \gamma \cdot \forall_{volume}$</li>
+                            <li>נקודת הפעולה: עוברת דרך מרכז הכובד האופקי ($x_c$) של נפח הנוזל מעל המשטח.</li>
+                            <li><strong>חוק חשוב:</strong> אם הנוזל נמצא מעל המשטח $\leftarrow$ הכוח כלפי מטה. אם הנוזל
+                                נמצא מתחת למשטח $\leftarrow$ הכוח כלפי מעלה (משקל הנפח ה"דמיוני" עד פני המים).</li>
+                        </ul>
+                    </li>
+                    <li><strong>הכוח השקול:</strong> $R = \sqrt{F_H^2 + F_V^2}$</li>
+                    <li><strong>זווית הפעולה:</strong> $\tan \alpha = F_V / F_H$</li>
+                </ul>
+
+                <p><strong>2. ציפה (Buoyancy) - חוק ארכימדס</strong></p>
+                <ul>
+                    <li>כוח העילוי ($F_B$) הפועל על גוף טבול שווה למשקל הנוזל שהגוף דחה: $$F_B = \gamma_{fluid} \cdot
+                        \forall_{displaced}$$</li>
+                    <li>הכוח פועל כלפי מעלה דרך מרכז הציפה ($B$ - Center of Buoyancy), שהוא מרכז הכובד של נפח הנוזל
+                        המודח.</li>
+                    <li>גוף צף: $F_B = W_{body}$.</li>
+                </ul>
+
+                <p><strong>3. יציבות של גופים צפים (Stability)</strong></p>
+                <ul>
+                    <li><strong>נקודת המטא-סנטר ($M$):</strong> הנקודה סביבה הגוף מתנדנד בזוויות קטנות.</li>
+                    <li><strong>תנאי יציבות:</strong> הגוף יציב אם $M$ נמצא מעל $G$ (מרכז הכובד). כלומר $GM > 0$.</li>
+                    <li><strong>חישוב הגובה המטא-סנטרי ($GM$):</strong> $$GM = \frac{I_{min}}{\forall_{sub}} - BG$$
+                        <ul>
+                            <li>$I_{min}$: מומנט האינרציה המינימלי של שטח החתך במפלס המים (Waterline Area).</li>
+                            <li>$\forall_{sub}$: הנפח הטבול (Displaced Volume).</li>
+                            <li>$BG$: המרחק בין מרכז הציפה למרכז הכובד.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ טיפ זהב למשטחים מעגליים</strong>
+                    <p>הכוח השקול תמיד עובר דרך מרכז המעגל (כי לחץ פועל בניצב למשיק, כלומר רדיאלית). זה חוסך חישובי
+                        מומנטים בעיסוק עם צירים הנמצאים במרכז המעגל!</p>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון")</span>
+                <p><strong>למשטחים עקומים (שערים/סכרים):</strong></p>
+                <ol>
+                    <li><strong>שרטוט ההיטל ($F_H$):</strong> צייר קו אנכי שמייצג את גובה המשטח. חשב כוח עליו כמו בפרק 3
+                        ($F = \gamma h_c A$).</li>
+                    <li><strong>זיהוי הנפח ($F_V$):</strong> סמן את נפח המים הכלוא בין המשטח העקום לבין פני המים
+                        החופשיים. אם אין מים ממש מעל, קח את הנפח עד פני המים ה"דמיוניים".</li>
+                    <li><strong>חישוב המשקל ($F_V$):</strong> חלק לצורות פשוטות (מלבן + רבע עיגול וכו') וחשב נפח
+                        $\times$ $\gamma$.</li>
+                    <li><strong>שקול כוחות:</strong> אם מבקשים מומנט על ציר במרכז המעגל - הכוח השקול לא יוצר מומנט (זרוע
+                        0).</li>
+                </ol>
+                <p><strong>ליציבות (Stability):</strong></p>
+                <ol>
+                    <li><strong>מציאת נקודת שיווי משקל ($h$):</strong> השווה $W_{body} = F_B$. מצא את עומק הטבילה.</li>
+                    <li><strong>איתור המרכזים:</strong> מצא את גובה מרכז הכובד $y_G$ ואת גובה מרכז הציפה $y_B$.</li>
+                    <li><strong>חישוב $BM$:</strong> חשב אינרציה של שטח המים ($I$) וחלק בנפח הטבול.</li>
+                    <li><strong>בדיקת יציבות:</strong> חשב $GM = BM - BG$. חיובי = יציב.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>קוביה מעץ באורך צלע $L=0.5m$ צפה במים. הצפיפות היחסית של העץ היא $SG=0.7$.
+                    <br>א. מהו עומק הטבילה ($h$) של הקוביה?
+                    <br>ב. מהו המשקל המקסימלי שניתן להניח עליה לפני שתשקע כולה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>א. עומק טבילה:</strong></p>
+                        <p>בשיווי משקל: $F_B = W$.</p>
+                        <p>$\rho_{water} g (L^2 h) = \rho_{wood} g L^3$</p>
+                        <p>$1000 \cdot h = 700 \cdot L \Rightarrow h = 0.7 \cdot 0.5 = 0.35 \, m$</p>
+                        <p><strong>ב. משקל מקסימלי:</strong></p>
+                        <p>כדי להטביע את כולו, עומק הטבילה יהיה $L=0.5m$.</p>
+                        <p>כוח הציפה המקסימלי: $F_{B,max} = 1000 \cdot 9.81 \cdot 0.5^3 = 1226.25 \, N$.</p>
+                        <p>משקל הקוביה: $W_{wood} = 700 \cdot 9.81 \cdot 0.5^3 = 858.37 \, N$.</p>
+                        <p>המשקל הנוסף: $\Delta W = F_{B,max} - W_{wood} = 1226.25 - 858.37 = 367.88 \, N$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>שער בצורת רבע גליל ברדיוס $R=2m$ ורוחב $b=3m$ סוגר מאגר מים. החלק העליון של השער נמצא בפני המים.
+                    <br>א. חשב את הכוח האופקי $F_H$ ואת מיקומו.
+                    <br>ב. חשב את הכוח האנכי $F_V$ ואת כיוונו.
+                    <br>ג. חשב את הכוח השקול (גודל וכיוון).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>א. כוח אופקי ($F_H$):</strong></p>
+                        <p>ההיטל הוא מלבן בגובה $R=2m$ וברוחב $b=3m$.</p>
+                        <p>$h_c = R/2 = 1m$ (מרכז ההיטל). $A = 2 \cdot 3 = 6 \, m^2$.</p>
+                        <p>$F_H = \gamma h_c A = 9810 \cdot 1 \cdot 6 = 58,860 \, N = 58.86 \, kN$</p>
+                        <p>מיקום: $y_{cp} = 1 + \frac{bd^3/12}{1 \cdot bd} = 1 + \frac{2^2}{12 \cdot 1} = 1.33 \, m$
+                            (שליש תחתון).</p>
+                        <p><strong>ב. כוח אנכי ($F_V$):</strong></p>
+                        <p>הנפח מעל השער הוא רבע גליל של מים.</p>
+                        <p>$\forall = (\frac{\pi R^2}{4}) \cdot b = \frac{\pi \cdot 4}{4} \cdot 3 = 3\pi \approx 9.42 \,
+                            m^3$.</p>
+                        <p>$F_V = \gamma \forall = 9810 \cdot 9.42 = 92,410 \, N = 92.41 \, kN$</p>
+                        <p>כיוון: כלפי מטה (המים מעל השער).</p>
+                        <p>מיקום: עובר במרכז הכובד של רבע עיגול, במרחק $x_c = \frac{4R}{3\pi} \approx 0.85 \, m$ מהדופן
+                            הישרה.</p>
+                        <p><strong>ג. שקול:</strong></p>
+                        <p>$R = \sqrt{58.86^2 + 92.41^2} \approx 109.6 \, kN$</p>
+                        <p>זווית: $\tan \alpha = 92.41 / 58.86 \Rightarrow \alpha \approx 57.5^\circ$ מהאופק.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>גליל עץ בקוטר $D=0.5m$ ובגובה $H=1m$ צף במים אנכית. צפיפות העץ $600 \, kg/m^3$. בדוק האם הגליל יציב
+                    במצב זה ($GM > 0$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>טבילה ($h$):</strong> $\rho_{body} / \rho_{water} = h/H \Rightarrow h = 0.6 \cdot
+                            1 = 0.6 \, m$.</p>
+                        <p>2. <strong>מיקומים ($KB, KG$):</strong> נמדוד מתחתית הגליל.</p>
+                        <p>מרכז כובד $G$: $KG = H/2 = 0.5 \, m$.</p>
+                        <p>מרכז ציפה $B$: $KB = h/2 = 0.3 \, m$.</p>
+                        <p>מרחק $BG = 0.5 - 0.3 = 0.2 \, m$ ($G$ מעל $B$).</p>
+                        <p>3. <strong>רדיוס מטא-סנטרי ($BM$):</strong></p>
+                        <p>$I = \frac{\pi D^4}{64}$ (עיגול). $\forall = \frac{\pi D^2}{4} h$.</p>
+                        <p>$BM = \frac{I}{\forall} = \frac{D^2}{16 h} = \frac{0.5^2}{16 \cdot 0.6} = \frac{0.25}{9.6}
+                            \approx 0.026 \, m$.</p>
+                        <p>4. <strong>יציבות ($GM$):</strong></p>
+                        <p>$GM = BM - BG = 0.026 - 0.2 = -0.174 \, m$</p>
+                        <p>תשובה: $GM < 0$, הגליל אינו יציב ויתהפך.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>שער בצורת חצי גליל (קמור כלפי מעלה) ברדיוס $R=1m$ ורוחב $1m$ מונח בתחתית מיכל מים שעומקם $H=3m$. חשב
+                    את הכוח האנכי הפועל על החצי-גליל.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>הכוח האנכי הוא משקל עמודת הנוזל שיושבת בפועל על הגליל.</p>
+                        <p>שטח החתך = (שטח המלבן $2R \times H$) - (שטח חצי העיגול $\pi R^2/2$).</p>
+                        <p>$\forall = [2 \cdot 1 \cdot 3 - \pi \cdot 1^2 / 2] \cdot 1 = 6 - 1.57 = 4.43 \, m^3$.</p>
+                        <p>$F_V = \gamma \forall = 9810 \cdot 4.43 = 43,458 \, N$.</p>
+                        <p>כיוון: כלפי מטה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>כדור פלדה חלול בקוטר $D=1m$ צף בשיווי משקל בין שכבת מים לשכבת שמן ($SG=0.8$). קו הממשק עובר בדיוק
+                    במרכז הכדור (חצי במים, חצי בשמן). חשב את המשקל הכולל של הכדור.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>חוק ארכימדס מוכלל: כוח הציפה שווה לסכום משקלי הנוזלים המודחים.</p>
+                        <p>$\forall_{sphere} = \frac{4}{3}\pi R^3 = \frac{4}{3}\pi (0.5)^3 = 0.5236 \, m^3$. חצי נפח:
+                            $\forall_{half} = 0.2618 \, m^3$.</p>
+                        <p>$F_B = (\gamma_{oil} \cdot \forall_{half}) + (\gamma_{water} \cdot \forall_{half}) = 0.2618
+                            \cdot 9810 \cdot (0.8 + 1) = 4623 \, N$</p>
+                        <p>המשקל שווה לכוח הציפה: $W = 4.62 \, kN$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>שער סקטוריאלי ($60^\circ$) ברדיוס $R=4m$ אוצר מים. ציר הסיבוב נמצא במרכז המעגל. המים מגיעים בדיוק עד
+                    לציר. הוכח שאין מומנט הידרוסטטי סביב הציר.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>מומנט:</strong> כוחות הלחץ על המשטח העגול הם תמיד רדיאליים (ניצבים למשיק). לכן,
+                            קווי הפעולה של כל הכוחות האלמנטריים $dF$ נפגשים במרכז המעגל.</p>
+                        <p>מכיוון שהציר נמצא במרכז, הזרוע היא 0. המומנט ההידרוסטטי הוא אפס.</p>
+                        <p>2. <strong>כוח שקול (להמחשה):</strong> יש לחשב $F_H$ ו-$F_V$. במקרה סימטרי סביב האופק, $F_V$
+                            יתבטל והשקול יהיה אופקי בלבד.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>מיכל סוגר אוויר בלחץ $P_{air} = 20 \, kPa$ ומים. בדופן יש בליטה חצי כדורית ($R=0.5m$) הפונה החוצה.
+                    מרכז החצי-כדור בעומק $h=2m$. חשב את הכוח האופקי על הברגים.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נמיר הכל ללחץ שקול (עומד מים אקוויולנטי): $h_{air} = P_{air} / \gamma = 20000 / 9810 = 2.04
+                            \, m$.</p>
+                        <p>עומק המרכז $h_c$: העומק הפיזי $2m$ + תוספת הלחץ $2.04m$ = $4.04 \, m$.</p>
+                        <p>ההיטל הוא עיגול: $A = \pi \cdot 0.5^2 = 0.785 \, m^2$.</p>
+                        <p>$F_H = \gamma h_c A = 9810 \cdot 4.04 \cdot 0.785 = 31,110 \, N = 31.1 \, kN$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>מצוף גלילי חלול בקוטר $D$ ובגובה $H$ שוקל $W_{body}$. כדי לייצב אותו, תולים בתחתיתו משקולת
+                    $W_{lead}$. איך זה משפיע על היציבות?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>כדי שהגליל יהיה יציב, אנו צריכים $GM > 0$. המשקולת מורידה את מרכז הכובד $G$ באופן דרסטי
+                            (מקטינה את $KG$), מה שמגדיל את $GM$.</p>
+                        <p>החישוב דורש מציאת המסה הכוללת, נפח טבול חדש, ומיקומי $KB$ ו-$KG$ משוקללים, ואז דרישה ש-$KB +
+                            BM > KG$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>שער בצורת רבע גליל ($R=2m$) משמש כמחיצה. משמאל מים בגובה מלא, מימין בגובה חצי. חשב את המומנט הנטו
+                    סביב ציר במרכז המעגל (בהתחשב במשקל השער $W$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>כוחות המים:</strong> כפי שהוסבר, כוחות הלחץ הם רדיאליים ולכן המומנט שלהם סביב
+                            המרכז הוא אפס.</p>
+                        <p>2. <strong>משקל השער:</strong> המומנט ינבע רק ממשקל השער עצמו. אם השער הוא רבע קשת אחידה,
+                            מרכז הכובד שלו ניתן לחישוב $x_c = 2R/\pi$, והמומנט יהיה $W \cdot x_c$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>גוף קוני (חרוט) צף כשקודקודו כלפי מטה בתוך חור עגול ברצפת מיכל, כך שרק חלקו העליון רטוב והחלק התחתון
+                    בולט החוצה לאוויר. מהו כוח הציפה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>הכוח האנכי שקול לאינטגרציה של הלחץ על המשטח הרטוב.</p>
+                        <p>הלחץ פועל בניצב לפני השטח. בחרוט שקודקודו למטה, המשטח פונה כלפי מעלה, לכן הלחץ דוחף כלפי
+                            מעלה.</p>
+                        <p>$F_V = \gamma \cdot (\text{Volume of submerged cone part})$. החלק שבולט למטה לאוויר לא תורם
+                            לציפה כי הלחץ שם אטמוספרי.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 5 -->
+        <section id="ch5" class="chapter">
+            <h2>פרק 5: קינמטיקה ומשפט ההובלה (Kinematics & RTT)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. תיאור הזרימה: לגרנז' מול אוילר</strong></p>
+                <ul>
+                    <li><strong>גישת לגרנז' (Lagrangian):</strong> עוקבים אחרי חלקיק פלואיד ספציפי לאורך זמן (כמו GPS על
+                        מכונית).</li>
+                    <li><strong>גישת אוילר (Eulerian):</strong> מסתכלים על "חלון" קבוע במרחב (נפח בקרה) ובודקים מה עובר
+                        דרכו. זו הגישה העיקרית בקורס.</li>
+                </ul>
+
+                <p><strong>2. הנגזרת המלווה (Material Derivative)</strong></p>
+                <p>כדי לחשב שינוי בתכונה של חלקיק בגישת אוילר, חייבים להתחשב גם בשינוי בזמן וגם בשינוי במקום:
+                    $$\frac{D(\bullet)}{Dt} = \underbrace{\frac{\partial(\bullet)}{\partial t}}_{\text{Local}} +
+                    \underbrace{(\vec{V} \cdot \nabla)(\bullet)}_{\text{Convective}}$$
+                </p>
+                <p><strong>תאוצה (Acceleration):</strong> עבור $\vec{V} = u\hat{i} + v\hat{j} + w\hat{k}$:
+                    $$a_x = \frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} + v\frac{\partial u}{\partial
+                    y} + w\frac{\partial u}{\partial z}$$
+                </p>
+
+                <p><strong>3. קווי זרימה (Streamlines)</strong></p>
+                <p>קוים המשיקים לוקטור המהירות בכל נקודה. המשוואה בדו-ממד: $$\frac{dy}{dx} = \frac{v}{u}$$</p>
+
+                <p><strong>4. משפט ההובלה של ריינולדס (RTT)</strong></p>
+                <p>הקשר בין השינוי במערכת (System) לשינוי בנפח בקרה (CV):
+                    $$\frac{DN_{sys}}{Dt} = \frac{\partial}{\partial t} \int_{CV} \eta \rho d\forall + \int_{CS} \eta
+                    \rho (\vec{V}_{rel} \cdot \hat{n}) dA$$
+                </p>
+
+                <p><strong>5. שימור מסה (משוואת הרציפות)</strong></p>
+                <p>עבור נוזל בלתי דחיס וזרימה תמידית: $$\sum Q_{in} = \sum Q_{out} \quad (Q = V \cdot A)$$</p>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                    <ul>
+                        <li><strong>סימנים ב-Flux:</strong> יציאה (+) כי הוקטורים באותו כיוון, כניסה (-) כי הם הפוכים.
+                        </li>
+                        <li><strong>מהירות יחסית:</strong> אם נפח הבקרה זז, השתמש ב-$\vec{V}_{rel} = \vec{V}_{fluid} -
+                            \vec{V}_{CS}$.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון - שימור מסה ו-RTT</span>
+                <ol>
+                    <li><strong>שלב 1: הגדרת נפח בקרה (CV)</strong> - בחר מעטפת דמיונית שחוצה פתחי כניסה ויציאה.</li>
+                    <li><strong>שלב 2: הנחות יסוד</strong> - זרימה תמידית? ($\frac{\partial}{\partial t} = 0$). בלתי
+                        דחיס? ($\rho$ קבוע).</li>
+                    <li><strong>שלב 3: איבר האגירה (Accumulation)</strong> - חשב את השינוי בתוך ה-CV (למשל מפלס עולה:
+                        $\rho A \frac{dh}{dt}$).</li>
+                    <li><strong>שלב 4: שטף (Flux)</strong> - חשב $\sum \dot{m}_{out} - \sum \dot{m}_{in}$ עבור כל
+                        הפתחים.</li>
+                    <li><strong>שלב 5: הרכבת המשוואה</strong> - $0 = \text{Accumulation} + \text{Flux}_{net}$.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>נתון שדה מהירות: $\vec{V} = (2x)\hat{i} + (-2y)\hat{j}$.
+                    <br>א. האם הזרימה תמידית?
+                    <br>ב. מצא את נקודת הסטגנציה.
+                    <br>ג. חשב את תאוצת חלקיק בנקודה $(1,1)$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>א. <strong>תמידיות:</strong> אין תלות מפורשת ב-$t$, לכן הזרימה תמידית.</p>
+                        <p>ב. <strong>סטגנציה:</strong> $2x=0 \Rightarrow x=0, -2y=0 \Rightarrow y=0$. הנקודה $(0,0)$.
+                        </p>
+                        <p>ג. <strong>תאוצה:</strong> $a_x = u\frac{\partial u}{\partial x} + v\frac{\partial
+                            u}{\partial y} = (2x)(2) + 0 = 4x$. בדומה $a_y = 4y$. בנקודה $(1,1)$ התאוצה היא $(4,4)$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>עבור שדה המהירות $\vec{V} = 2x\hat{i} - 2y\hat{j}$, מצא את משוואת קווי הזרימה העוברים בנקודה $(2,1)$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\frac{dy}{dx} = \frac{v}{u} = \frac{-2y}{2x} = -\frac{y}{x}$.</p>
+                        <p>הפרדת משתנים ואינטגרציה: $\int \frac{dy}{y} = -\int \frac{dx}{x} \Rightarrow \ln y = -\ln x +
+                            C \Rightarrow xy = C$.</p>
+                        <p>עבור $(2,1)$: $2 \cdot 1 = C \Rightarrow C = 2$. המשוואה היא $xy = 2$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>מים זורמים בצומת T.
+                    <br>כניסה 1: $D=10cm, V=2m/s$.
+                    <br>כניסה 2: $D=5cm, V=4m/s$.
+                    <br>יציאה 3: $D=12cm$. חשב $V_3$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>שימור מסה (בלתי דחיס): $Q_1 + Q_2 = Q_3 \Rightarrow A_1 V_1 + A_2 V_2 = A_3 V_3$.</p>
+                        <p>$A_1 = 0.00785, A_2 = 0.00196, A_3 = 0.01131 \, m^2$.</p>
+                        <p>$(0.00785 \cdot 2) + (0.00196 \cdot 4) = 0.01131 \cdot V_3 \Rightarrow V_3 = 2.08 \, m/s$.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>מיכל ($D=1m$) מתמלא בספיקה $Q_{in} = 0.05 \, m^3/s$. מהחור בתחתית ($d=5cm$) יוצאים מים ב-$V_{out} =
+                    \sqrt{2gh}$. מצא את הגובה המקסימלי $h_{max}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>בגובה מקסימלי, $\frac{dh}{dt} = 0 \Rightarrow Q_{in} = Q_{out}$.</p>
+                        <p>$Q_{in} = A_{hole} \sqrt{2gh_{max}}$.</p>
+                        <p>$0.05 = (\frac{\pi \cdot 0.05^2}{4}) \sqrt{2 \cdot 9.81 \cdot h_{max}} \Rightarrow 0.05 =
+                            0.00196 \sqrt{19.62 h_{max}}$.</p>
+                        <p>$h_{max} = \frac{1}{19.62} (\frac{0.05}{0.00196})^2 \approx 33.1 \, m$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>בוכנה דוחסת אוויר במיכל ($d\forall/dt = -0.1 \, m^3/s$). אוויר בורח בשסתום ב-$\dot{m}_{out} = 0.2 \,
+                    kg/s$. פתח ביטוי ל-$d\rho/dt$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\frac{d(\rho \forall)}{dt} = -\dot{m}_{out} \Rightarrow \forall \frac{d\rho}{dt} + \rho
+                            \frac{d\forall}{dt} = -0.2$.</p>
+                        <p>$\forall \frac{d\rho}{dt} + \rho (-0.1) = -0.2 \Rightarrow \frac{d\rho}{dt} = \frac{0.1\rho -
+                            0.2}{\forall}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>מזרק בקוטר $D$ עם בוכנה במהירות $V_p$ דוחפת נוזל דרך מחט בקוטר $d$. חשב $V_{jet}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>שימור מסה: $A_{piston} V_p = A_{needle} V_{jet}$.</p>
+                        <p>$\frac{\pi D^2}{4} V_p = \frac{\pi d^2}{4} V_{jet} \Rightarrow V_{jet} = V_p
+                            (\frac{D}{d})^2$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>מים זורמים רדיאלית בין דיסקים. $V_r = \frac{Q}{2\pi r h}$. חשב את התאוצה $a_r$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>התאוצה תלויה במקום (קונבקטיבית): $a_r = V_r \frac{\partial V_r}{\partial r}$.</p>
+                        <p>$\frac{\partial}{\partial r}(\frac{C}{r}) = -\frac{C}{r^2} \Rightarrow a_r = \frac{C}{r}
+                            (-\frac{C}{r^2}) = -\frac{C^2}{r^3} = -\frac{(Q/2\pi h)^2}{r^3}$.</p>
+                        <p>התאוצה שלילית - החלקיק מאט כי המרווח גדל.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>מיכל ערבוב מקבל $Q_1=0.2, \rho_1=1020$ ו-$Q_2=0.1, \rho_2=1000$. חשב $\rho_{out}$ אם המפלס קבוע.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. ספיקה נפחית: $Q_{out} = Q_1 + Q_2 = 0.3 \, m^3/s$.</p>
+                        <p>2. שימור מסה: $\rho_{out} Q_{out} = \rho_1 Q_1 + \rho_2 Q_2$.</p>
+                        <p>$\rho_{out} (0.3) = (1020 \cdot 0.2) + (1000 \cdot 0.1) = 304 \Rightarrow \rho_{out} = 1013.3
+                            \, kg/m^3$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>בכניסה לצינור $V=U_0$ (אחיד). ביציאה $u(r) = U_{max}(1 - r^2/R^2)$. מצא קשר בין $U_{max}$ ל-$U_0$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>שימור מסה: $Q_{in} = Q_{out}$.</p>
+                        <p>$Q_{in} = U_0 \cdot \pi R^2$.</p>
+                        <p>$Q_{out} = \int_0^R U_{max}(1 - \frac{r^2}{R^2}) 2\pi r dr = 2\pi U_{max} [\frac{r^2}{2} -
+                            \frac{r^4}{4R^2}]_0^R = \frac{\pi R^2 U_{max}}{2}$.</p>
+                        <p>נשווה: $U_0 \pi R^2 = \frac{\pi R^2 U_{max}}{2} \Rightarrow $ $U_{max} = 2U_0$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>גל הלם ("פטיש מים") מתקדם במהירות $C$. מימין $\rho, V$. משמאל $\rho+\Delta\rho, V=0$. השתמש ב-RTT נע
+                    כדי למצוא $\Delta\rho$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נפח בקרה שזז עם הגל (מהירות יחסית):</p>
+                        <p>כניסה: $V_{rel} = V+C, \rho$. יציאה: $V_{rel} = C, \rho+\Delta\rho$.</p>
+                        <p>$\rho (V+C) = (\rho+\Delta\rho) C \Rightarrow \rho V + \rho C = \rho C + \Delta\rho C
+                            \Rightarrow \Delta\rho = \rho \frac{V}{C}$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+        </section>
+
+        <!-- פרק 6 -->
+        <section id="ch6" class="chapter">
+            <h2>פרק 6: משוואת ברנולי ומשוואת האנרגיה הכללית</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. משוואת ברנולי (Bernoulli's Equation) - תזכורת</strong></p>
+                <p>עבור זרימה תמידית, בלתי דחיסה, לא צמיגה ולאורך קו זרימה:
+                    $$P_1 + \frac{1}{2}\rho V_1^2 + \rho g z_1 = P_2 + \frac{1}{2}\rho V_2^2 + \rho g z_2 =
+                    \text{const}$$
+                    או ביחידות של "עומד" (Head):
+                    $$\frac{P_1}{\gamma} + \frac{V_1^2}{2g} + z_1 = \frac{P_2}{\gamma} + \frac{V_2^2}{2g} + z_2$$
+                </p>
+
+                <p><strong>2. משוואת האנרגיה הכללית (General Energy Equation)</strong></p>
+                <p>כאשר יש במערכת משאבות, טורבינות והפסדים (חיכוך):
+                    $$\left(\frac{P_1}{\gamma} + \frac{V_1^2}{2g} + z_1\right) + h_{pump} = \left(\frac{P_2}{\gamma} +
+                    \frac{V_2^2}{2g} + z_2\right) + h_{turbine} + h_L$$
+                    כאשר:
+                <ul>
+                    <li>$h_{pump}$: עומד משאבה (אנרגיה המתווספת לזורם).</li>
+                    <li>$h_{turbine}$: עומד טורבינה (אנרגיה הנלקחת מהזורם).</li>
+                    <li>$h_L$: הפסדי אנרגיה (Head Loss) עקב חיכוך ואביזרים.</li>
+                </ul>
+                </p>
+
+                <p><strong>3. הספק (Power) ונצילות (Efficiency)</strong></p>
+                <ul>
+                    <li><strong>הספק המועבר לזורם (WHP - Water Horsepower):</strong> $\dot{W}_{fluid} = \gamma Q
+                        h_{pump}$</li>
+                    <li><strong>הספק המשאבה (Brake Power):</strong> $\dot{W}_{pump} =
+                        \frac{\dot{W}_{fluid}}{\eta_{pump}}$</li>
+                    <li><strong>יחידות:</strong> $Watt$ (וואט). יש לזכור: $1 \, hp = 746 \, W$.</li>
+                </ul>
+
+                <p><strong>4. קו האנרגיה (EGL) וקו הלחץ (HGL)</strong></p>
+                <ul>
+                    <li><strong>EGL (Energy Grade Line):</strong> סך האנרגיה הכוללת ($z + P/\gamma + V^2/2g$). תמיד יורד
+                        בכיוון הזרימה (אלא אם יש משאבה).</li>
+                    <li><strong>HGL (Hydraulic Grade Line):</strong> העומד הסטטי ($z + P/\gamma$). נמוך מה-EGL במרחק
+                        $V^2/2g$.</li>
+                </ul>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                    <ul>
+                        <li><strong>לחץ אטמוספרי:</strong> בפני מאגר פתוח או בסילון חופשי (Free Jet), הלחץ היגסי הוא 0.
+                        </li>
+                        <li><strong>מהירות במאגר:</strong> עבור מאגר גדול מאוד, המהירות $V \approx 0$.</li>
+                        <li><strong>קירבטציה (Cavitation):</strong> מתרחשת בנקודות שבהן הלחץ יורד מתחת ללחץ האדים ($P <
+                                P_v$).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון")</span>
+                <ol>
+                    <li><strong>בחירת נקודות 1 ו-2:</strong> בחר נקודות שבהן יש לך הכי הרבה מידע (סילון חופשי, פני
+                        מאגר).</li>
+                    <li><strong>קביעת מישור ייחוס (Datum):</strong> בחר גובה $z=0$ (בדרך כלל הנקודה הנמוכה ביותר).</li>
+                    <li><strong>חישוב מהירויות:</strong> השתמש בשימור מסה ($A_1 V_1 = A_2 V_2$) כדי לבטא את המהירויות.
+                    </li>
+                    <li><strong>כתיבת משוואת האנרגיה:</strong> הצב את כל הנתונים (כולל עומד משאבה או הפסדים אם נתון).
+                    </li>
+                    <li><strong>בידוד הנעלם:</strong> פתור עבור הלחץ, הגובה או הספיקה המבוקשים.</li>
+                    <li><strong>חישובי הספק:</strong> אם התבקשת, חשב $P = \gamma Q h$ תוך שימוש ביחידות SI תקניות.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>צינור אופקי משנה את קוטרו מ-$10cm$ ל-$5cm$. הלחץ בחלק הרחב הוא $200 \, kPa$ והמהירות היא $2 \, m/s$.
+                    חשב את הלחץ בחלק הצר (הזנח הפסדים).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>שימור מסה:</strong> $A_1 V_1 = A_2 V_2 \Rightarrow 10^2 \cdot 2 = 5^2 \cdot V_2
+                            \Rightarrow V_2 = 2 \cdot (10/5)^2 = 8 \, m/s$.</p>
+                        <p>2. <strong>ברנולי (אופקי $z_1=z_2$):</strong> $P_1 + \frac{1}{2}\rho V_1^2 = P_2 +
+                            \frac{1}{2}\rho V_2^2$.</p>
+                        <p>$200,000 + 0.5 \cdot 1000 \cdot 2^2 = P_2 + 0.5 \cdot 1000 \cdot 8^2$.</p>
+                        <p>$200,000 + 2,000 = P_2 + 32,000 \Rightarrow P_2 = 170,000 \, Pa = 170 \, kPa$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>מים זורמים ממאגר גדול דרך צינור בקוטר $5cm$ הנמצא $10m$ מתחת לפני המים. הצינור מסתיים בסיומת (Nozzle)
+                    בקוטר $2cm$ הפולטת סילון לאטמוספרה. חשב את הספיקה $Q$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>נקודות:</strong> 1 (פני המאגר), 2 (יציאת הסילון).</p>
+                        <p>2. <strong>נתונים:</strong> $P_1 = 0, V_1 \approx 0, z_1 = 10$. $P_2 = 0, z_2 = 0$.</p>
+                        <p>3. <strong>ברנולי:</strong> $z_1 = \frac{V_2^2}{2g} \Rightarrow 10 = \frac{V_2^2}{2 \cdot
+                            9.81}$.</p>
+                        <p>$V_2 = \sqrt{196.2} = 14 \, m/s$.</p>
+                        <p>4. <strong>ספיקה:</strong> $Q = A_2 V_2 = (\frac{\pi \cdot 0.02^2}{4}) \cdot 14 = 0.0044 \,
+                            m^3/s \approx 4.4 \, L/s$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>משאבה מעלה מים ממאגר נמוך למאגר גבוה (הפרש גבהים $30m$) בספיקה של $50 \, L/s$. הפסדי האנרגיה בצינור
+                    הם $5m$. נצילות המשאבה $75\%$. חשב את הספק המשאבה הנדרש.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>משוואת אנרגיה:</strong> $0 + 0 + 0 + h_p = 0 + 0 + 30 + 5 \Rightarrow h_p = 35 \,
+                            m$.</p>
+                        <p>2. <strong>הספק מועבר למים:</strong> $\dot{W}_f = \gamma Q h_p = 9810 \cdot 0.05 \cdot 35 =
+                            17,167.5 \, W$.</p>
+                        <p>3. <strong>הספק המשאבה (חשמלי):</strong> $\dot{W}_p = \frac{17167.5}{0.75} = 22,890 \, W
+                            \approx 22.9 \, kW$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>בצינור אנכי בקוטר $20cm$, המהירות הממוצעת היא $3m/s$. בנקודה A הגובה הוא $5m$ והלחץ $150 \, kPa$.
+                    בנקודה B הגובה הוא $12m$. הזנח הפסדים. מצא את הלחץ בנקודה B.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>מכיוון שהקוטר קבוע, המהירות קבועה: $V_A = V_B = 3 \, m/s$.</p>
+                        <p>$\frac{P_A}{\gamma} + z_A = \frac{P_B}{\gamma} + z_B$.</p>
+                        <p>$\frac{150,000}{9810} + 5 = \frac{P_B}{9810} + 12 \Rightarrow 15.29 + 5 = \frac{P_B}{9810} +
+                            12$.</p>
+                        <p>$\frac{P_B}{9810} = 8.29 \Rightarrow P_B = 81,325 \, Pa \approx 81.3 \, kPa$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>מד ספיקה מסוג ונטורי (Venturi Meter) מותקן בצינור מים. קוטר הכניסה $10cm$ וקוטר הצרק $5cm$. מד הלחץ
+                    מראה הפרש של $50 \, kPa$. חשב את הספיקה $Q$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>קשר מהירויות:</strong> $V_2 = (D_1/D_2)^2 V_1 = 4V_1$.</p>
+                        <p>2. <strong>ברנולי:</strong> $\frac{P_1 - P_2}{\rho} = \frac{V_2^2 - V_1^2}{2} =
+                            \frac{(4V_1)^2 - V_1^2}{2} = \frac{15 V_1^2}{2}$.</p>
+                        <p>$\frac{50,000}{1000} = 7.5 V_1^2 \Rightarrow V_1^2 = 50 / 7.5 = 6.67 \Rightarrow V_1 = 2.58
+                            \, m/s$.</p>
+                        <p>3. <strong>ספיקה:</strong> $Q = A_1 V_1 = (\frac{\pi \cdot 0.1^2}{4}) \cdot 2.58 = 0.0203 \,
+                            m^3/s$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>טורבינה מנצלת נפילה של מים מסכר (גובה $50m$) בספיקה של $2 \, m^3/s$. הפסדי האנרגיה עד הטורבינה הם
+                    $2m$. אם הטורבינה מייצרת $800 \, kW$, מהי נצילותה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1. <strong>משוואת אנרגיה:</strong> $50 = h_t + 2 \Rightarrow h_t = 48 \, m$ (האנרגיה שהזורם
+                            נותן לטורבינה).</p>
+                        <p>2. <strong>הספק מקסימלי (תיאורטי):</strong> $\dot{W}_{max} = \gamma Q h_t = 9810 \cdot 2
+                            \cdot 48 = 941,760 \, W = 941.8 \, kW$.</p>
+                        <p>3. <strong>נצילות:</strong> $\eta = \frac{800}{941.8} = 0.849 \approx 85\%$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>צינור פיטו (Pitot Tube) מראה הפרש גבהים של $15cm$ במנומטר כספית ($SG=13.6$) בזמן זרימת מים. חשב את
+                    המהירות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$V = \sqrt{2g \Delta h_{air/water}}$. עבור מנומטר נוזל: $\Delta h_{effective} = h_{man}
+                            (\frac{\rho_m}{\rho} - 1)$.</p>
+                        <p>$\Delta h_{eff} = 0.15 \cdot (13.6 - 1) = 1.89 \, m$.</p>
+                        <p>$V = \sqrt{2 \cdot 9.81 \cdot 1.89} = 6.09 \, m/s$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>משאבה שואבת מים מנחל. בנקודת הכניסה למשאבה הלחץ הוא $-30 \, kPa$ (ואקום) והמהירות $2m/s$. חשב את
+                    ה-HGL בנקודה זו יחסית לפני הנחל.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$HGL = z + P/\gamma$.</p>
+                        <p>אם נמדוד מהנחל ($z=0$): $HGL = z + (-30,000 / 9810) = z - 3.06 \, m$.</p>
+                        <p>משמעות: ה-HGL נמצא $3.06m$ מתחת לפני הנחל בגלל הפסדי השאיבה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>סילון מים פוגע בלוח אנכי ומפעיל עליו כוח של $200 \, N$. קוטר הסילון $5cm$. מהי מהירות הסילון?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>מתוך RTT (מסה ומומנטום): $F = \rho Q V = \rho A V^2$.</p>
+                        <p>$200 = 1000 \cdot (\frac{\pi \cdot 0.05^2}{4}) \cdot V^2$.</p>
+                        <p>$200 = 1.963 \cdot V^2 \Rightarrow V^2 = 101.8 \Rightarrow V = 10.1 \, m/s$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>מים זורמים בצינור אטום בזווית $30^\circ$ כלפי מעלה. הלחץ יורד ב-$20 \, kPa$ לאורך $10m$ של צינור. מהם
+                    הפסדי האנרגיה $h_L$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\frac{P_1}{\gamma} + z_1 = \frac{P_2}{\gamma} + z_2 + h_L \quad (V_1=V_2)$.</p>
+                        <p>$h_L = \frac{P_1 - P_2}{\gamma} + (z_1 - z_2)$.</p>
+                        <p>$z_1 - z_2 = -10 \sin 30^\circ = -5 \, m$.</p>
+                        <p>$h_L = \frac{20,000}{9810} - 5 = 2.04 - 5 \dots$</p>
+                        <p><strong>תיקון:</strong> משהו בנתונים לא הגיוני (הפסד לא יכול להיות שלילי). מסקנה: הזרימה היא
+                            כלפי מטה או שהפרש הלחצים גדול יותר. אם הלחץ ירד ב-$100 \, kPa$: $h_L = 10.19 - 5 = 5.19 \,
+                            m$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 7 -->
+        <section id="ch7" class="chapter">
+            <h2>פרק 7: משוואת התנע הקווי (Linear Momentum)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. המשוואה הווקטורית</strong></p>
+                <p>משוואת התנע היא יישום של החוק השני של ניוטון ($\sum \vec{F} = m\vec{a}$) על נפח בקרה. עבור זרימה
+                    תמידית (Steady Flow), סכום הכוחות החיצוניים שווה לשטף התנע נטו היוצא מנפח הבקרה:
+                    $$\sum \vec{F}_{external} = \sum (\dot{m} \vec{V})_{out} - \sum (\dot{m} \vec{V})_{in}$$
+                </p>
+                <ul>
+                    <li>$\sum \vec{F}$: סכום כל הכוחות הפועלים על נפח הבקרה (לחץ, כבידה, ריאקציה, חיכוך).</li>
+                    <li>$\dot{m}$: ספיקת המסה ($\rho Q$). תמיד חיובית.</li>
+                    <li>$\vec{V}$: וקטור המהירות (ביציאה או בכניסה).</li>
+                </ul>
+
+                <p><strong>2. פירוק לרכיבים (חובה!)</strong></p>
+                <p>אי אפשר לפתור את המשוואה כווקטור אחד. חייבים לפרק לצירים X ו-Y:</p>
+                <ul>
+                    <li>בכיוון X: $$\sum F_x = \sum (\dot{m} u)_{out} - \sum (\dot{m} u)_{in}$$</li>
+                    <li>בכיוון Y: $$\sum F_y = \sum (\dot{m} v)_{out} - \sum (\dot{m} v)_{in}$$</li>
+                </ul>
+
+                <p><strong>3. הכוחות הפועלים על ה-CV ($\sum F$)</strong></p>
+                <ol>
+                    <li><strong>כוחות לחץ ($F_P$):</strong> הלחץ תמיד דוחף פנימה (לתוך נפח הבקרה).
+                        <ul>
+                            <li>בחתך כניסה/יציאה: $F = P \cdot A$.</li>
+                            <li>סילון חופשי לאטמוספירה: $P_{gage} = 0 \Rightarrow F_P = 0$.</li>
+                        </ul>
+                    </li>
+                    <li><strong>כוח כבידה ($W$):</strong> משקל הנוזל והצינור בתוך נפח הבקרה (פועל ב-$y$ שלילי).</li>
+                    <li><strong>כוחות ריאקציה ($R_x, R_y$):</strong> הכוחות שהברגים/הסמך מפעילים כדי להחזיק את הצינור
+                        במקום. אלו בד"כ הנעלמים.</li>
+                </ol>
+
+                <p><strong>4. מקרה מיוחד: נפח בקרה נע (Moving CV)</strong></p>
+                <p>אם המשטח עליו פוגע הסילון זז במהירות קבועה $U$ (למשל כף של טורבינה או עגלה):</p>
+                <ul>
+                    <li>מחשבים את ספיקת המסה שנכנסת לפי המהירות היחסית: $\dot{m} = \rho A (V_{jet} - U)$.</li>
+                    <li>משתמשים במהירות היחסית גם בחישוב התנע.</li>
+                </ul>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                    <ol>
+                        <li><strong>סימנים:</strong> כוחות: ימינה/למעלה (+), שמאלה/למטה (-). מהירות: אם מהירות הכניסה
+                            היא שמאלה, מציבים ערך שלילי (למשל $-5$) בתוך הסוגריים.</li>
+                        <li><strong>הנוסחה מול המהירות:</strong> הנוסחה היא "יציאה פחות כניסה". המינוס הוא חלק מהנוסחה.
+                        </li>
+                        <li><strong>לחץ מנתי בלבד:</strong> תמיד תעבוד עם לחץ מנתי ($P_{atm}=0$). הלחץ האטמוספרי מבטל את
+                            עצמו מכל הכיוונים.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון")</span>
+                <ol>
+                    <li><strong>שלב 1: שרטוט והגדרת נפח בקרה (CV)</strong> - סמן מעטפת סביב האזור הבעייתי, חתוך צינורות
+                        בניצב לזרימה וקבע מערכת צירים.</li>
+                    <li><strong>שלב 2: חישוב נתונים מקדים</strong> - וודא שיש לך את כל הנתונים ($P, V$). השתמש בברנולי
+                        או רציפות אם חסר משהו.</li>
+                    <li><strong>שלב 3: ציור כוחות (FBD)</strong> - צייר $P \cdot A$ דוחף פנימה בכל חתך, משקל $W$,
+                        וריאקציות $R_x, R_y$.</li>
+                    <li><strong>שלב 4: כתיבת משוואת התנע</strong> - לכל ציר בנפרד (X ו-Y).</li>
+                    <li><strong>שלב 5: הצבה ופתרון</strong> - חלץ את $R_x, R_y$. אם שואלים על הכוח שהמים מפעילים על
+                        הצינור - זה הכיוון ההפוך.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>זרנוק כיבוי אש מחובר לקצה צינור. קוטר הצינור $D_1 = 10cm$ וקוטר היציאה מהנחיר $D_2 = 5cm$. הלחץ
+                    בצינור לפני הנחיר הוא $P_1 = 500 kPa$ (מנתי). הסילון יוצא לאטמוספירה. חשב את הכוח האופקי שהמחבר
+                    (הפלנג') צריך להפעיל כדי להחזיק את הנחיר במקום.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>שלב 1: נתונים וברנולי</strong></p>
+                        <ul>
+                            <li>$P_1 = 500,000 Pa, P_2 = 0$.</li>
+                            <li>רציפות: $A_1 V_1 = A_2 V_2 \Rightarrow D_1^2 V_1 = D_2^2 V_2 \Rightarrow V_2 = 4 V_1$.
+                            </li>
+                            <li>ברנולי: $P_1 + \frac{1}{2}\rho V_1^2 = \frac{1}{2}\rho (4V_1)^2 \Rightarrow 500,000 =
+                                7500 V_1^2 \Rightarrow V_1 = 8.16 m/s, V_2 = 32.66 m/s$.</li>
+                            <li>$\dot{m} = \rho A_1 V_1 = 64.1 kg/s$.</li>
+                        </ul>
+                        <p><strong>שלב 2: משוואת התנע (ציר X)</strong></p>
+                        <p>$P_1 A_1 - R_x = \dot{m} (V_2 - V_1)$</p>
+                        <p>$500,000 \cdot 0.00785 - R_x = 64.1 (32.66 - 8.16)$</p>
+                        <p>$3925 - R_x = 1570 \Rightarrow R_x = 2355 N$.</p>
+                        <p>תשובה: הפלנג' צריך להפעיל $2.355 kN$ שמאלה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>סילון מים אופקי בקוטר $d=5cm$ ובמהירות $V=20 m/s$ פוגע בקיר אנכי שטוח ומתפצל לצדדים בצורה סימטרית.
+                    חשב את הכוח שהמים מפעילים על הקיר.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>ציר X:</strong></p>
+                        <ul>
+                            <li>כוחות: $-R_x$ (הקיר על המים).</li>
+                            <li>$\dot{m} = 1000 \cdot \frac{\pi 0.05^2}{4} \cdot 20 = 39.27 kg/s$.</li>
+                            <li>מהירות כניסה: $u_{in} = 20, u_{out} = 0$ (זרימה לצדדים).</li>
+                        </ul>
+                        <p>$-R_x = \dot{m} (0 - 20) \Rightarrow R_x = 785.4 N$.</p>
+                        <p>תשובה: לפי חוק שלישי, המים מפעילים $785.4 N$ ימינה על הקיר.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>מים זורמים בצינור אופקי בקוטר $D=15cm$ עם פנייה של $90^\circ$. $P_1 = 200 kPa, P_2 = 190 kPa$. ספיקה
+                    $Q=0.1 m^3/s$. חשב את כוח הריאקציה לעיגון הברך (הזנח משקל).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>$A = 0.01767 m^2, V = 5.66 m/s, \dot{m} = 100 kg/s$.</li>
+                            <li>ציר X: $P_1 A - R_x = \dot{m} (0 - V) \Rightarrow 3534 - R_x = -566 \Rightarrow R_x =
+                                4100 N$.</li>
+                            <li>ציר Y: $R_y - P_2 A = \dot{m} (V - 0) \Rightarrow R_y - 3357 = 566 \Rightarrow R_y =
+                                3923 N$.</li>
+                            <li>שקול: $R = \sqrt{4100^2 + 3923^2} \approx 5675 N$.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>סילון מים ($d=5cm, V=30 m/s$) פוגע בכף קעורה שמסיטה את המים ב-$180^\circ$. הזנח חיכוך. חשב את הכוח
+                    האופקי על הכף ופי כמה הוא גדול מהכוח על קיר שטוח.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>$u_{in} = V, u_{out} = -V$.</li>
+                            <li>$-R_x = \dot{m} (-V - V) = -2\dot{m}V \Rightarrow R_x = 2\dot{m}V$.</li>
+                            <li>$\dot{m} = \rho A V = 58.9 kg/s$. $F = 2 \cdot 58.9 \cdot 30 = 3534 N$.</li>
+                        </ul>
+                        <p>תשובה: הכוח על כף קעורה גדול פי 2 מהכוח על קיר שטוח.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>ברך אנכית מקטינה ($45^\circ$). כניסה: $D_1=20cm, P_1=150 kPa$. ספיקה: $Q=0.1 m^3/s$. יצא לאטמוספירה
+                    דרך $D_2=10cm$. משקל מים וברך ביחד $590 N$. חשב ריאקציות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>$V_1 = 3.18, V_2=12.73, \dot{m}=100 kg/s$.</li>
+                            <li>ציר X: $R_x = \dot{m} (V_2 \cos 45 - 0) = 100 \cdot 9 = 900 N$.</li>
+                            <li>ציר Y: $P_1 A_1 - W + R_y = \dot{m} (V_2 \sin 45 - V_1) \Rightarrow 4710 - 590 + R_y =
+                                100 (9 - 3.18) \Rightarrow R_y = -3538 N$.</li>
+                        </ul>
+                        <p>תשובה: $R_x=900N, R_y=3538N$ (כלפי מטה).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>שער הזזה בתעלה (רוחב $1m$). לפני השער $y_1=2m, V_1 \approx 0$. אחרי השער $y_2=0.4m$. חשב את הכוח
+                    האופקי על השער.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ol>
+                            <li>ברנולי: $2 + 0 \approx 0.4 + V_2^2/2g \Rightarrow V_2 = 5.6 m/s, V_1 = 1.12 m/s$.</li>
+                            <li>$\dot{m} = 2240 kg/s$.</li>
+                            <li>כוחות לחץ הידרוסטטי: $F_1 = 19,620 N, F_2 = 785 N$.</li>
+                            <li>תנע: $19620 - 785 - F_{gate} = 2240 (5.6 - 1.12) \Rightarrow F_{gate} = 8806 N$.</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>צומת T אופקית. כניסה 1 ($D=10cm, V=5 m/s, P=200 kPa$). יציאות בזווית $90^\circ$ (צינורות 2 ו-3,
+                    $D=5cm$ כל אחד, $P=180 kPa$). חשב את הכוח על הצומת.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>ציר X: $P_1 A_1 - 2 R_x (?) \dots$ נסתכל על הנוזל.</li>
+                            <li>כוח ב-X: $P_1 A_1 - R_x = \dot{m} (u_{out} - u_{in})$. ביציאות ב-$90^\circ$, $u_{out} =
+                                0$.</li>
+                            <li>$A_1 = 0.00785 \Rightarrow 200,000 \cdot 0.00785 - R_x = 1000 \cdot A_1 \cdot 5 \cdot (0
+                                - 5) \Rightarrow 1570 - R_x = -196 \Rightarrow R_x = 1766 N$.</li>
+                            <li>ציר Y: סימטרי, המהירויות בכיוונים הפוכים, לכן $R_y = 0$ (הלחצים מאזנים זה את זה).</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>סילון ($d=5cm, V=30 m/s$) פוגע בעגלה נעה ($U=10 m/s$).
+                    <br>א. מהו הכוח על העגלה?
+                    <br>ב. מהו ההספק המושקע?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>מהירות יחסית: $V_{rel} = 30 - 10 = 20 m/s$.</li>
+                            <li>$\dot{m}_{eff} = \rho A V_{rel} = 39.2 kg/s$.</li>
+                            <li>כוח: $F = \dot{m}_{eff} V_{rel} = 39.2 \cdot 20 = 784 N$.</li>
+                            <li>הספק: $P = F \cdot U = 784 \cdot 10 = 7840 W = 7.84 kW$.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>ממטרה דו-זרועית ($R=0.3m$). יציאה משיקית מכל זרוע ($d=1cm, Q_{total}=1 L/s$). חשב מומנט דרוש לעצירה
+                    ($\omega=0$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <ul>
+                            <li>$Q_{branch} = 0.5 L/s = 0.0005 m^3/s$.</li>
+                            <li>$V_{exit} = Q / A_{exit} = 0.0005 / (\pi 0.01^2 / 4) = 6.37 m/s$.</li>
+                            <li>$\dot{m} = 0.5 kg/s$ לכל זרוע.</li>
+                            <li>כוח מכל זרוע: $F = \dot{m} V = 0.5 \cdot 6.37 = 3.18 N$.</li>
+                            <li>מומנט: $T = 2 \cdot (F \cdot R) = 2 \cdot 3.18 \cdot 0.3 = 1.91 N \cdot m$.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>הוכח שכוח הגרר על כנף בתוך נפח בקרה גדול הוא: $D = \int \rho u (U - u) dA$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>משוואת התנע לציר X: $\sum F_x = \dot{m}_{out} u_{out} - \dot{m}_{in} u_{in}$.</p>
+                        <p>לחץ אחיד $P_\infty$ מסביב מתבטל. הכוח שהכנף מפעילה על המים הוא $-D$.</p>
+                        <p>$-D = \int \rho u^2 dA - \int \rho U^2 dA_{in}$.</p>
+                        <p>משימור מסה: $\int \rho U dA_{in} = \int \rho u dA_{out}$.</p>
+                        <p>$D = \int \rho u U dA - \int \rho u^2 dA = \int \rho u (U - u) dA$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 8 -->
+        <section id="ch8" class="chapter">
+            <h2>פרק 8: אנליזה ממדית ודמיון (Dimensional Analysis & Similitude)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. ממדים בסיסיים (MLT vs FLT)</strong></p>
+                <p>כל משתנה פיזיקלי ניתן לביטוי באמצעות ממדי יסוד ($M, L, T$ או $F, L, T$):</p>
+                <ul>
+                    <li>צפיפות ($\rho$): $ML^{-3}$</li>
+                    <li>מהירות ($V$): $LT^{-1}$</li>
+                    <li>כוח ($F$): $MLT^{-2}$</li>
+                    <li>לחץ ($P$): $ML^{-1}T^{-2}$</li>
+                    <li>צמיגות ($\mu$): $ML^{-1}T^{-1}$</li>
+                </ul>
+
+                <p><strong>2. משפט בקינגהאם ($\Pi$ Theorem)</strong></p>
+                <p>אם יש $k$ משתנים ו-$r$ ממדי יסוד, ניתן לתאר את התופעה בעזרת $k-r$ קבוצות חסרות ממד ($\Pi$ groups).
+                </p>
+
+                <p><strong>3. מספרים חסרי ממד נפוצים</strong></p>
+                <ol>
+                    <li><strong>מספר ריינולדס ($Re$):</strong> יחס בין אינרציה לצמיגות. $Re = \frac{\rho V L}{\mu}$.
+                    </li>
+                    <li><strong>מספר פרוד ($Fr$):</strong> יחס בין אינרציה לכבידה. $Fr = \frac{V}{\sqrt{gL}}$.</li>
+                    <li><strong>מספר אוילר ($Eu$):</strong> יחס בין לחץ לאינרציה. $Eu = \frac{\Delta P}{\rho V^2}$.</li>
+                    <li><strong>מספר מאך ($Ma$):</strong> $V/C$ (דחיסות).</li>
+                </ol>
+
+                <p><strong>4. דמיון (Similitude)</strong></p>
+                <p>כדי שניסוי במודל ($m$) ייצג את המציאות ($p$), נדרשים:</p>
+                <ul>
+                    <li>דמיון גיאומטרי (יחס מידות).</li>
+                    <li>דמיון דינמי (השוואת מספרים חסרי ממד רלוונטיים, למשל $(Re)_m = (Re)_p$).</li>
+                </ul>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                    <ul>
+                        <li><strong>בחירת משתנים חוזרים:</strong> אסור לבחור משתנה תלוי (כמו גרר) או שני משתנים עם אותם
+                            ממדים בדיוק.</li>
+                        <li><strong>יחידות:</strong> באנליזה ממדית אין משמעות ליחידות ספציפיות, רק לממדים הכלליים.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון - משפט בקינגהאם</span>
+                <ol>
+                    <li><strong>זיהוי המשתנים:</strong> רשום את כל המשתנים המשפיעים ($k$).</li>
+                    <li><strong>פירוק לממדים:</strong> כתוב $MLT$ לכל אחד ומצא את מספר ממדי היסוד ($r$).</li>
+                    <li><strong>קביעת מספר הקבוצות:</strong> $k-r$.</li>
+                    <li><strong>בחירת משתנים חוזרים:</strong> בחר $r$ משתנים (לרוב $\rho, V, D$). חייבים להכיל את כל
+                        הממדים.</li>
+                    <li><strong>הרכבת הקבוצות:</strong> הכפל את החוזרים במשתנה הנותר והשוואה חזקות ל-0.</li>
+                    <li><strong>קשר סופי:</strong> $\Pi_1 = \phi(\Pi_2, ...)$.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>הספק ($P$) מוגדר כעבודה ליחידת זמן. מצא את הממדים של הספק בשיטת $MLT$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$P = \frac{Work}{Time} = \frac{Force \cdot Distance}{Time}$.</p>
+                        <p>$Force = MLT^{-2}, Distance = L, Time = T$.</p>
+                        <p>$[P] = \frac{(MLT^{-2}) \cdot L}{T} = ML^2 T^{-3}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>נוסחה לספיקה מעל סכר: $Q = C \cdot H^{5/2} \sqrt{g}$. האם הקבוע $C$ חסר ממד?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$[Q] = L^3 T^{-1}, [H] = L, [g] = L T^{-2}$.</p>
+                        <p>$L^3 T^{-1} = [C] \cdot L^{2.5} \cdot (L T^{-2})^{0.5} = [C] \cdot L^3 T^{-1}$.</p>
+                        <p>תשובה: כן, $[C] = 1$ (חסר ממד).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>צור מספר חסר ממד (מספר וובר) מהמשתנים: צפיפות $\rho$, מהירות $V$, קוטר $D$, מתח פנים $\sigma$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\sigma$ הוא כוח לאורך: $[\sigma] = \frac{MLT^{-2}}{L} = MT^{-2}$.</p>
+                        <p>ננסה: $\frac{\rho V^2 D}{\sigma} = \frac{(ML^{-3})(LT^{-1})^2 L}{MT^{-2}} =
+                            \frac{MT^{-2}}{MT^{-2}} = 1$.</p>
+                        <p>תשובה: $We = \frac{\rho V^2 D}{\sigma}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>מפל הלחץ $\Delta P$ לאורך צינור תלוי ב: $D, \ell, V, \rho, \mu$. השתמש במשפט $\Pi$ למציאת קשר עם
+                    משתנים חוזרים $\rho, V, D$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>קבוצות $\Pi$: $k=6, r=3 \Rightarrow 3$ קבוצות.</p>
+                        <ol>
+                            <li>$\Pi_1 = \frac{\Delta P}{\rho V^2}$ (מספר אוילר).</li>
+                            <li>$\Pi_2 = \frac{\ell}{D}$ (יחס גיאומטרי).</li>
+                            <li>$\Pi_3 = \frac{\mu}{\rho V D} = \frac{1}{Re}$.</li>
+                        </ol>
+                        <p>קשר: $\frac{\Delta P}{\rho V^2} = f(\frac{\ell}{D}, Re)$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>הכוח $F$ על כדור בזורם תלוי ב: $V, D, \rho, \mu$. הראה ש-$F = \rho V^2 D^2 \cdot \phi(Re)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\Pi_1 = F \rho^a V^b D^c \Rightarrow [MLT^{-2}][ML^{-3}]^a [LT^{-1}]^b [L]^c = 1$.</p>
+                        <p>$M: 1+a=0 \Rightarrow a=-1$. $T: -2-b=0 \Rightarrow b=-2$. $L: 1-3a+b+c=0 \Rightarrow
+                            1+3-2+c=0 \Rightarrow c=-2$.</p>
+                        <p>$\Pi_1 = \frac{F}{\rho V^2 D^2}$. $\Pi_2 = \frac{\mu}{\rho V D} = \frac{1}{Re}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>זורם חולף על פני גליל, נוצרות מערבולות בתדר $f (1/s)$. האם ניתן ליצור מספר חסר ממד אם התדר תלוי ב-$V$
+                    ו-$D$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$[f] = T^{-1}, [V] = LT^{-1}, [D] = L$.</p>
+                        <p>ננסה: $St = \frac{f D}{V} = \frac{T^{-1} L}{LT^{-1}} = 1$.</p>
+                        <p>תשובה: כן, השילוב $\frac{f D}{V}$ חסר ממד (נקרא מספר סטרוהל).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>מודל ספינה 1:50. ספינה אמיתית ב- $10 m/s$.
+                    <br>א. באיזו מהירות לגרור את המודל לפי דמיון פרוד?
+                    <br>ב. אם כוח המודל הוא $2 N$, מהו כוח הגרר על הספינה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>א. $V_m = V_p \sqrt{L_m/L_p} = 10 \cdot \sqrt{1/50} = 1.414 m/s$.</p>
+                        <p>ב. יחס כוחות: $F_p = F_m \cdot (L_p/L_m)^3 = 2 \cdot 50^3 = 250,000 N = 250 kN$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>צוללת במים ב- $5 m/s$. מודל 1:20 באוויר. $\nu_{air} = 15 \nu_{water}, \rho_{water}=1000,
+                    \rho_{air}=1.2$. מהירות אוויר דרושה לפי ריינולדס?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\frac{V_m L_m}{\nu_m} = \frac{V_p L_p}{\nu_p} \Rightarrow V_m = V_p \cdot \frac{L_p}{L_m}
+                            \cdot \frac{\nu_m}{\nu_p}$.</p>
+                        <p>$V_m = 5 \cdot 20 \cdot 15 = 1500 m/s$.</p>
+                        <p>תשובה: $1500 m/s$. (לא מעשי בגלל דחיסות).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>משאבה A: $Q=0.2, H=30, N=1500$. משאבה B: $D_B=2D_A, N_B=750$. מצא $Q_B, H_B$ לפי חוקי דמיון.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$Q_B = Q_A \frac{N_B}{N_A} (\frac{D_B}{D_A})^3 = 0.2 \cdot \frac{1}{2} \cdot 2^3 = 0.8
+                            m^3/s$.</p>
+                        <p>$H_B = H_A (\frac{N_B}{N_A})^2 (\frac{D_B}{D_A})^2 = 30 \cdot (1/2)^2 \cdot 2^2 = 30 m$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>מיכל מים מתרוקן בזמן $T_p = 10$ דקות. מודל 1:4 (קטן פי 4). מצא $T_m$ לפי דמיון פרוד.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>יחס זמנים $T_r = \sqrt{L_r} = \sqrt{1/4} = 1/2$.</p>
+                        <p>$T_m = T_p \cdot 0.5 = 5$ דקות.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 9 -->
+        <section id="ch9" class="chapter">
+            <h2>פרק 9: זרימה צמיגה בצינורות (Viscous Flow in Pipes)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>1. משטר הזרימה: ריינולדס ($Re$)</strong></p>
+                <p>הדבר הראשון שבודקים בכל שאלה! $Re = \frac{\rho V D}{\mu} = \frac{V D}{\nu}$.</p>
+                <ul>
+                    <li>למינרי ($Re < 2100$): זרימה מסודרת בשכבות.</li>
+                    <li>טורבולנטי ($Re > 4000$): זרימה כאוטית ומערבולתית. המהירות גבוהה והחיכוך גדל.</li>
+                </ul>
+
+                <p><strong>2. משוואת האנרגיה עם הפסדים</strong></p>
+                <p>$$(\frac{P_1}{\gamma} + z_1 + \frac{V_1^2}{2g}) + h_{pump} = (\frac{P_2}{\gamma} + z_2 +
+                    \frac{V_2^2}{2g}) + h_{turbine} + h_L$$</p>
+                <p>$h_L$: סך הפסדי העומד ($h_{major} + h_{minor}$).</p>
+
+                <p><strong>3. הפסדים עיקריים (חיכוך לאורך הצינור)</strong></p>
+                <p>משוואת דארסי-וייסבך: $h_f = f \frac{L}{D} \frac{V^2}{2g}$.</p>
+                <ul>
+                    <li>בלמינרי: $f = 64/Re$.</li>
+                    <li>בטורבולנטי: $f$ תלוי ב-$Re$ ובחיספוס היחסי $\epsilon/D$ (דיאגרמת מודי או נוסחת Haaland).</li>
+                </ul>
+
+                <p><strong>4. הפסדים משניים (אביזרים)</strong></p>
+                <p>הפסדים במחברים, ברזים, וכניסות/יציאות: $h_m = \sum K_L \frac{V^2}{2g}$.</p>
+
+                <p><strong>5. קוטר הידראולי ($D_h$)</strong></p>
+                <p>לצינורות לא עגולים: $D_h = \frac{4A}{P_{wet}}$ ($A$ שטח, $P_{wet}$ היקף רטוב).</p>
+
+                <div
+                    style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; border-right: 5px solid #ffeeba;">
+                    <strong>⚠️ מוקשים נפוצים (Pro Tips)</strong>
+                    <ul>
+                        <li><strong>ניחוש ראשוני:</strong> בבעיות מציאת ספיקה/קוטר, נחש $f=0.02$ להתחלת האיטרציות.</li>
+                        <li><strong>יחידות חיספוס:</strong> הקפד ש-$\epsilon$ ו-$D$ יהיו באותן יחידות כשמחשבים יחס.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם פתרון ("המתכון")</span>
+                <ol>
+                    <li><strong>סוג א' (חישוב הפסדים):</strong> חשב $Re \rightarrow$ קבע משטר $\rightarrow$ מצא $f
+                        \rightarrow$ חשב $h_f, h_m \rightarrow$ הצב במשוואת האנרגיה.</li>
+                    <li><strong>סוג ב' (חישוב ספיקה/קוטר):</strong> זו בעיה איטרטיבית. נחש $f \rightarrow$ חלץ $V
+                        \rightarrow$ חשב $Re$ ו-$f$ חדש $\rightarrow$ חזור חלילה עד התכנסות.</li>
+                </ol>
+            </div>
+
+            <h3>חלק 3: בנק שאלות (מדורג)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 1</div>
+                <p>מים ($20^\circ C, \nu=10^{-6}$) זורמים בצינור $D=50mm$ ב-$V=0.05 m/s$. מהו החיכוך $f$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$Re = \frac{0.05 \cdot 0.05}{10^{-6}} = 2500$ (אזור מעבר).</p>
+                        <p>בלמינרי: $f = 64/2500 = 0.0256$.</p>
+                        <p>בטורבולנטי חלק (מודי): $f \approx 0.04$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 2</div>
+                <p>שמן ($\mu=0.1 Pa\cdot s, \rho=900$) זורם בצינור אופקי ($L=10m, D=2cm, Q=2\cdot 10^{-5}$). חשב $\Delta
+                    P$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$V = Q/A = 0.0637 m/s$. $Re = \frac{900 \cdot 0.0637 \cdot 0.02}{0.1} = 11.5$ (למינרי).</p>
+                        <p>$f = 64/11.5 = 5.56$.</p>
+                        <p>$h_f = 5.56 \cdot \frac{10}{0.02} \cdot \frac{0.0637^2}{19.62} = 0.57 m$.</p>
+                        <p>$\Delta P = \gamma h_f = (900 \cdot 9.81) \cdot 0.57 = 5030 Pa$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 3</div>
+                <p>מים זורמים בצינור פלדה ($\epsilon=0.045mm$) בקוטר $10cm$. המהירות $2 m/s$. חשב $h_f$ ל-$100m$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$Re = 200,000, \epsilon/D = 0.00045$.</p>
+                        <p>נוסחת Haaland: $f \approx 0.0192$.</p>
+                        <p>$h_f = 0.0192 \cdot \frac{100}{0.1} \cdot \frac{2^2}{19.62} = 3.91 m$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 4</div>
+                <p>מים זורמים ממיכל למיכל ($H=5m, D=50mm, L=20m$). אביזרים: $K_{total} = 8.3$. הזנח חיכוך דופן. חשב $Q$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$H = \sum K_L \frac{V^2}{2g} \Rightarrow 5 = 8.3 \cdot \frac{V^2}{19.62} \Rightarrow V = 3.44
+                            m/s$.</p>
+                        <p>$Q = V A = 3.44 \cdot 0.00196 = 0.0067 m^3/s = 6.7 L/s$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 5</div>
+                <p>תעלת אוויר מלבנית ($30cm \times 60cm, L=50m, V=10 m/s$). תעלה חלקה. חשב $\Delta P$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$D_h = \frac{4 \cdot 0.18}{1.8} = 0.4 m$. $Re = \frac{10 \cdot 0.4}{1.5 \cdot 10^{-5}} =
+                            266,666$.</p>
+                        <p>$f_{smooth} = 0.015$. $h_f = 0.015 \cdot \frac{50}{0.4} \cdot \frac{10^2}{19.62} = 9.55 m$.
+                        </p>
+                        <p>$\Delta P = \rho g h_f = 1.2 \cdot 9.81 \cdot 9.55 = 112 Pa$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 6</div>
+                <p>משאבה מזרימה מים לגובה $20m$ דרך צינור בטון ($L=500m, D=20cm, \epsilon=1mm$) בספיקה $Q=0.1 m^3/s$.
+                    מהו הספק המשאבה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$V = 3.18 m/s, Re = 6.36 \cdot 10^5, \epsilon/D = 0.005 \Rightarrow f \approx 0.03$.</p>
+                        <p>$h_f = 0.03 \cdot \frac{500}{0.2} \cdot \frac{3.18^2}{19.62} = 38.6 m$.</p>
+                        <p>$h_p = \Delta z + h_f = 20 + 38.6 = 58.6 m$.</p>
+                        <p>$W = \gamma Q h_p = 9810 \cdot 0.1 \cdot 58.6 = 57.5 kW$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 7</div>
+                <p>מה הקוטר המינימלי הנדרש עבור $Q=0.05 m^3/s, L=100m$ ומפל לחץ מותר של $200 kPa$? צינור חלק.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>איטרציה 1: נחש $f=0.02$. $h_f = \frac{200,000}{9810} = 20.4 m$.</p>
+                        <p>$20.4 = 0.02 \cdot \frac{100}{D} \cdot \frac{(Q/A)^2}{2g} = \dots \Rightarrow D \approx 0.16
+                            m$.</p>
+                        <p>חשב $Re$, מצא $f$ חדש וחזור חלילה. קוטר סופי סביב $0.15 m$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 8</div>
+                <p>שני צינורות בטור: $100m/20cm/f=0.02$ ו-$100m/10cm/f=0.02$. $Q=0.05 m^3/s, K_{contraction}=0.35$. חשב
+                    $h_L$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$V_1 = 1.6, V_2=6.4$.</p>
+                        <p>$h_{f1} = 1.3 m, h_{f2} = 41.2 m, h_{minor} = 0.35 \cdot \frac{6.4^2}{19.62} = 0.7 m$.</p>
+                        <p>$h_L = 43.2 m$. עיקר ההפסד בצינור הצר.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 9</div>
+                <p>צינורות במקביל: 1 ($100m, D=10cm, f=0.02$), 2 ($200m, D=10cm, f=0.02$). $Q_{total}=0.03$. חשב $Q_1,
+                    Q_2$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$h_{f1} = h_{f2} \Rightarrow L_1 V_1^2 = L_2 V_2^2 \Rightarrow 100 V_1^2 = 200 V_2^2
+                            \Rightarrow V_1 = 1.41 V_2$.</p>
+                        <p>$Q_1 + Q_2 = Q_{total} \Rightarrow 1.41 V_2 A + V_2 A = 0.03 \Rightarrow V_2 = 1.58, V_1 =
+                            2.23$.</p>
+                        <p>$Q_1 = 0.0175, Q_2 = 0.0125$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה 10</div>
+                <p>שלושה מאגרים (A:100m, B:80m, C:60m) מחוברים לצומת J. מהם כיווני הזרימה ורום המים ב-J?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>מערכת משוואות: $Q_1 = Q_2 + Q_3$ (אם B מתמלא) ומשוואות דארסי לכל צינור.</p>
+                        <p>$100 - H_J = h_{f1}, H_J - 80 = h_{f2}, H_J - 60 = h_{f3}$.</p>
+                        <p>פותרים את $H_J$ ומקבלים ערך בין 80 ל-100 (B מתמלא) או מתחת ל-80 (B מתרוקן).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <script>
+            // מידע נוסחאות לכל פרק
+            const formulaData = {
+                'ch1': [
+                    { title: 'צפיפות', formula: '$\\rho = \\frac{m}{\\forall}$' },
+                    { title: 'משקל סגולי', formula: '$\\gamma = \\rho g$' },
+                    { title: 'חוק הצמיגות של ניוטון', formula: '$\\tau = \\mu \\frac{du}{dy}$' },
+                    { title: 'קפילריות', formula: '$h = \\frac{2\\sigma \\cos \\theta}{\\gamma r}$' }
+                ],
+                'ch2': [
+                    { title: 'לחץ הידרוסטטי', formula: '$P = P_0 + \\gamma h$' },
+                    { title: 'מנומטר U', formula: '$P_A + \\gamma_1 h_1 = P_B + \\gamma_2 h_2$' },
+                    { title: 'ברומטר', formula: '$P_{atm} = \\gamma_{Hg} h_{Hg}$' }
+                ],
+                'ch3': [
+                    { title: 'כוח על משטח מישורי', formula: '$F_R = P_{cg} A = \\gamma h_{cg} A$' },
+                    { title: 'מרכז לחץ ($y_{cp}$)', formula: '$y_{cp} = y_{cg} + \\frac{I_{xx,cg}}{y_{cg} A}$' }
+                ],
+                'ch4': [
+                    { title: 'כוח אופקי ($F_x$)', formula: '$F_x = \\gamma h_{cg} A_{proj}$' },
+                    { title: 'כוח אנכי ($F_y$)', formula: '$F_y = \\gamma \\forall$' },
+                    { title: 'כוח ציפה', formula: '$F_B = \\gamma \\forall_{displaced}$' }
+                ],
+                'ch5': [
+                    { title: 'שימור מסה (רציפות)', formula: '$\\sum \\dot{m}_{in} = \\sum \\dot{m}_{out}$' },
+                    { title: 'ספיקה נפחית', formula: '$Q = V A = \\int \\vec{V} \\cdot d\\vec{A}$' },
+                    { title: 'RTT כללי', formula: '$\\frac{dB_{sys}}{dt} = \\frac{\\partial}{\\partial t} \\int_{CV} \\beta \\rho d\\forall + \\int_{CS} \\beta \\rho (\\vec{V} \\cdot \\hat{n}) dA$' }
+                ],
+                'ch6': [
+                    { title: 'משוואת ברנולי', formula: '$P + \\frac{1}{2}\\rho V^2 + \\gamma z = const$' },
+                    { title: 'משוואת האנרגיה הכללית', formula: '$\\frac{P_1}{\\gamma} + \\alpha_1 \\frac{V_1^2}{2g} + z_1 + h_{p} = \\frac{P_2}{\\gamma} + \\alpha_2 \\frac{V_2^2}{2g} + z_2 + h_{t} + h_L$' }
+                ],
+                'ch7': [
+                    { title: 'משוואת התנע (Steady)', formula: '$\\sum \\vec{F} = \\sum \\dot{m}_{out} \\vec{V}_{out} - \\sum \\dot{m}_{in} \\vec{V}_{in}$' },
+                    { title: 'מומנט דחף (Angular)', formula: '$\\sum \\vec{M} = \\sum (\\dot{m} \\vec{r} \\times \\vec{V})_{out} - \\sum (\\dot{m} \\vec{r} \\times \\vec{V})_{in}$' }
+                ],
+                'ch8': [
+                    { title: 'מספר ריינולדס', formula: '$Re = \\frac{\\rho V D}{\\mu}$' },
+                    { title: 'מספר פרוד', formula: '$Fr = \\frac{V}{\\sqrt{gL}}$' },
+                    { title: 'מספר אוילר', formula: '$Eu = \\frac{\\Delta P}{\\rho V^2}$' }
+                ],
+                'ch9': [
+                    { title: 'הפסדי חיכוך (Darcy)', formula: '$h_f = f \\frac{L}{D} \\frac{V^2}{2g}$' },
+                    { title: 'חיכוך למינרי', formula: '$f = 64/Re$' },
+                    { title: 'הפסדים משניים', formula: '$h_m = K_L \\frac{V^2}{2g}$' }
+                ]
+            };
+
+            function getActiveChapterId() {
+                const chapters = document.querySelectorAll('.chapter');
+                let activeId = 'ch1';
+
+                // אנחנו מחפשים את הפרק שהכותרת שלו הכי קרובה לראש הדף (עם אופסט קטן)
+                const offset = 150;
+
+                for (const chapter of chapters) {
+                    const rect = chapter.getBoundingClientRect();
+                    // אם ראש הפרק עבר את סף ה-150 פיקסלים מלמעלה, הוא כנראה הפרק הנוכחי
+                    if (rect.top <= offset) {
+                        activeId = chapter.id;
+                    } else {
+                        // ברגע שמצאנו פרק שמתחיל מתחת לסף, הפרק הקודם הוא הפעיל
+                        break;
+                    }
+                }
+                return activeId;
+            }
+
+            function openFormulaSheet() {
+                const activeId = getActiveChapterId();
+                const container = document.getElementById('formulaContainer');
+                const title = document.getElementById('modalTitle');
+                const formulas = formulaData[activeId] || [];
+
+                // עדכון כותרת לפי שם הפרק מהסיידבר
+                const sidebarLink = document.querySelector(`.nav-links a[href="#${activeId}"]`);
+                title.innerText = sidebarLink ? `נוסחאון: ${sidebarLink.innerText}` : 'נוסחאון מהיר';
+
+                container.innerHTML = formulas.map(f => `
+                    <div class="formula-item">
+                        <strong>${f.title}</strong>
+                        <div class="math-display">${f.formula}</div>
+                    </div>
+                `).join('');
+
+                document.getElementById('formulaModal').style.display = 'block';
+
+                // רנדור מחדש של MathJax בתוך המודאל
+                if (window.MathJax) {
+                    MathJax.typesetPromise([container]);
+                }
+            }
+
+            function closeFormulaSheet() {
+                document.getElementById('formulaModal').style.display = 'none';
+            }
+
+            window.onclick = function (event) {
+                let modal = document.getElementById('formulaModal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+</body>
+
+</html>

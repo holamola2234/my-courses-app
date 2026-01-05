@@ -1,0 +1,2976 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קורס פונקציות מרוכבות - הספר המלא</title>
+
+    <!-- גופנים -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            /* Indigo 900 */
+            --secondary-color: #0d47a1;
+            /* Blue 900 */
+            --accent-color: #c2185b;
+            /* Pink 700 */
+            --bg-color: #f5f5f5;
+            --sidebar-width: 300px;
+            --text-color: #212121;
+            --theory-bg: #e8eaf6;
+            --algo-bg: #fff3e0;
+            --example-bg: #e0f2f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* סרגל צד */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #424242;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links li a:hover {
+            background-color: #e3f2fd;
+            color: var(--secondary-color);
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        /* תוכן ראשי */
+        #main-content {
+            margin-right: var(--sidebar-width);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .chapter {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary-color);
+        }
+
+        h2 {
+            font-family: 'Heebo', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.8rem;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        /* תיבות תוכן */
+        .content-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+
+        .theory {
+            background-color: var(--theory-bg);
+            border-right: 5px solid #3949ab;
+        }
+
+        .algorithm {
+            background-color: var(--algo-bg);
+            border-right: 5px solid #ff9800;
+        }
+
+        .example {
+            background-color: var(--example-bg);
+            border-right: 5px solid #009688;
+        }
+
+        .box-title {
+            display: block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #000;
+            font-family: 'Heebo', sans-serif;
+            text-decoration: underline;
+        }
+
+        /* תרגילים */
+        .exercise {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .ex-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* פתרונות */
+        details {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        summary {
+            padding: 0.8rem 0;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+            outline: none;
+            list-style: none;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        summary::after {
+            content: " ▼ הצג פתרון מלא";
+            font-size: 0.9rem;
+        }
+
+        details[open] summary::after {
+            content: " ▲ הסתר פתרון";
+        }
+
+        .solution-body {
+            background-color: #fafafa;
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: #333;
+            border-right: 3px solid #ccc;
+        }
+
+        /* רספונסיביות */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(100%);
+                width: 85%;
+                transition: transform 0.3s ease;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-right: 0;
+                padding: 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 2000;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.6rem 1rem;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* הדגשות בתוך טקסט */
+        strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        ul,
+        ol {
+            padding-right: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* מצב כהה */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --theory-bg: #1a237e;
+            --algo-bg: #4a3a2a;
+            --example-bg: #1a3a3a;
+        }
+
+        body.dark-mode #sidebar {
+            background-color: #1e1e1e;
+            border-left: 1px solid #333;
+        }
+
+        body.dark-mode .chapter,
+        body.dark-mode .exercise {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border-color: #333;
+        }
+
+        body.dark-mode .nav-links li a {
+            color: #bbb;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .nav-links li a:hover {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        body.dark-mode .solution-body {
+            background-color: #252525;
+            color: #ccc;
+        }
+
+        body.dark-mode strong,
+        body.dark-mode .box-title {
+            color: #fff;
+        }
+
+        /* כפתור החלפת ערכת נושא */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 5rem;
+            z-index: 2000;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* כפתור נוסחאון צף */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 2000;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* מודאל נוסחאון */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        .close-modal {
+            position: absolute;
+            left: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .formula-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        body.dark-mode .formula-item {
+            border-bottom-color: #333;
+        }
+
+        .formula-item:last-child {
+            border-bottom: none;
+        }
+
+        .math-display {
+            background: #f9f9f9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        body.dark-mode .math-display {
+            background: #252525;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('active')">תפריט</button>
+    <button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')"
+        title="החלף מצב תצוגה">🌓</button>
+    <button class="fab" onclick="openFormulaSheet()" title="נוסחאון מהיר">Σ</button>
+
+    <!-- מודאל נוסחאון -->
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFormulaSheet()">&times;</span>
+            <h2 id="modalTitle">נוסחאון מהיר</h2>
+            <div id="formulaContainer">
+                <!-- נוסחאות יוטענו כאן דינמית -->
+            </div>
+        </div>
+    </div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>פונקציות מרוכבות</h1>
+            <p>המדריך השלם</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html"
+                    style="background-color: var(--accent-color); color: white; text-align: center; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.1);">🏠
+                    חזרה למאגר הקורסים</a></li>
+            <li><a href="#ch1">1. מספרים מרוכבים</a></li>
+            <li><a href="#ch2">2. גזירות, C-R והרמוניות</a></li>
+            <li><a href="#ch3">3. פונקציות אלמנטריות</a></li>
+            <li><a href="#ch4">4. אינטגרלים קווים</a></li>
+            <li><a href="#ch5">5. נוסחאות האינטגרל של קושי</a></li>
+            <li><a href="#ch6">6. טורים (טיילור ולורן)</a></li>
+            <li><a href="#ch7">7. נקודות סינגולריות ושאריות</a></li>
+            <li><a href="#ch8">8. שימושי משפט השאריות</a></li>
+            <li><a href="#ch9">9. עקרון הארגומנט ורושה</a></li>
+            <li><a href="#ch10">10. משוואות דיפרנציאליות</a></li>
+            <li><a href="#ch11">11. העתקות קונפורמיות ומוביוס</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+        <!-- פרק 1 -->
+        <section id="ch1" class="chapter">
+            <h2>פרק 1: מספרים מרוכבים - הבסיס</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום (Cheat Sheet)</span>
+                <p><strong>הגדרה אינטואיטיבית:</strong> מספר מרוכב $z$ הוא הרחבה של המספרים הממשיים, המאפשרת הוצאת שורש
+                    למספרים שליליים. הוא מוגדר כ-$z = x + iy$, כאשר $x,y$ ממשיים ו-$i$ הוא היחידה המדומה המקיימת $i^2 =
+                    -1$. גיאומטרית, מספר מרוכב הוא נקודה (או וקטור) במישור דו-ממדי (מישור גאוס), שם ציר ה-$x$ הוא הממשי
+                    ($Re$) וציר ה-$y$ הוא המדומה ($Im$).</p>
+                <p><strong>נוסחאות מפתח:</strong></p>
+                <ul>
+                    <li><strong>הצגות המספר:</strong>
+                        <ul>
+                            <li>אלגברית: $z = x + iy$</li>
+                            <li>פולרית (קוטבית): $z = r(\cos\theta + i\sin\theta) = r \text{cis}\theta$</li>
+                            <li>אקספוננציאלית (אוילר): $z = r e^{i\theta}$</li>
+                        </ul>
+                    </li>
+                    <li><strong>מעברים:</strong>
+                        $r = |z| = \sqrt{x^2 + y^2}$ (מודול/ערך מוחלט),
+                        $\theta = \arg(z)$ (זווית/ארגומנט). מחושבת ע"י $\tan\theta = \frac{y}{x}$ (יש לשים לב לרביע!).
+                    </li>
+                    <li><strong>משפט דה-מואבר (De Moivre):</strong>
+                        חזקה: $(r \text{cis}\theta)^n = r^n \text{cis}(n\theta)$.
+                    </li>
+                    <li><strong>שורשים:</strong> הפתרונות למשוואה $w^n = z$ הם $n$ שורשים שונים:
+                        $$w_k = \sqrt[n]{r} \cdot \text{cis}\left( \frac{\theta + 2\pi k}{n} \right), \quad k = 0, 1,
+                        ..., n-1$$
+                    </li>
+                    <li><strong>צמוד קומפלקסי:</strong> אם $z = x+iy$, אז $\bar{z} = x-iy$. תכונה חשובה: $z \cdot
+                        \bar{z} = |z|^2 = x^2+y^2$.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: מציאת שורשים ($z^n = w$)</span>
+                <ol>
+                    <li><strong>העברה:</strong> וודא שהמספר $w$ באגף ימין כתוב בהצגה פולרית ($r \text{cis}\theta$).</li>
+                    <li><strong>זיהוי:</strong> זהה את רדיוס המספר ($r$) ואת הזווית שלו ($\theta$). זהה את סדר השורש
+                        המבוקש ($n$).</li>
+                    <li><strong>הצבה:</strong> הצב בנוסחת השורשים.</li>
+                    <li><strong>ריצה:</strong> הצב את האינדקס $k$ מ-$0$ ועד $n-1$ כדי לקבל את כל הפתרונות.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> פתור את המשוואה $z^3 = 8i$.</p>
+                <p><strong>פתרון:</strong></p>
+                <p>נעביר את $8i$ להצגה פולרית: $r=8$, הזווית היא $90^\circ$ (על הציר המדומה החיובי), כלומר
+                    $\frac{\pi}{2}$.<br>
+                    $$z^3 = 8 \text{cis}\left(\frac{\pi}{2}\right)$$
+                    לפי הנוסחה:
+                    $$z_k = \sqrt[3]{8} \text{cis}\left(\frac{\pi/2 + 2\pi k}{3}\right) = 2
+                    \text{cis}\left(\frac{\pi}{6} + \frac{2\pi k}{3}\right)$$
+                    נציב $k=0,1,2$:
+                <ul>
+                    <li>$k=0 \Rightarrow z_0 = 2 \text{cis}(\frac{\pi}{6}) = 2(\frac{\sqrt{3}}{2} + \frac{1}{2}i) =
+                        \sqrt{3} + i$</li>
+                    <li>$k=1 \Rightarrow z_1 = 2 \text{cis}(\frac{5\pi}{6}) = 2(-\frac{\sqrt{3}}{2} + \frac{1}{2}i) =
+                        -\sqrt{3} + i$</li>
+                    <li>$k=2 \Rightarrow z_2 = 2 \text{cis}(\frac{9\pi}{6}) = 2 \text{cis}(\frac{3\pi}{2}) = -2i$</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 2: התרגול (Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>נתונים המספרים $z_1 = 2+3i$ ו-$z_2 = 4-5i$. חשב את $z_1 \cdot z_2$ ואת $\frac{z_1}{z_2}$ (התוצאה
+                    צריכה להיות מהצורה $x+iy$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>כפל:</strong><br>
+                            $z_1 \cdot z_2 = (2+3i)(4-5i) = 8 - 10i + 12i - 15i^2$<br>
+                            מכיוון ש-$i^2=-1$, נקבל: $8 + 2i + 15 = \mathbf{23 + 2i}$.</p>
+                        <p><strong>חילוק:</strong> (נכפול בצמוד של המכנה)<br>
+                            $\frac{2+3i}{4-5i} = \frac{(2+3i)(4+5i)}{(4-5i)(4+5i)} = \frac{8 + 10i + 12i + 15i^2}{16 -
+                            25i^2}$<br>
+                            $\frac{8 + 22i - 15}{16 + 25} = \frac{-7 + 22i}{41} = \mathbf{-\frac{7}{41} +
+                            \frac{22}{41}i}$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>כתוב את המספרים הבאים בהצגה פולרית ($r \text{cis}\theta$):<br>
+                    א. $z = -1 + i$<br>
+                    ב. $z = -5i$</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>א. $z = -1 + i$:</strong><br>
+                            $r = \sqrt{(-1)^2 + 1^2} = \sqrt{2}$.<br>
+                            הנקודה $(-1, 1)$ נמצאת ברביע השני. $\tan\alpha = |\frac{1}{-1}| = 1 \Rightarrow \alpha =
+                            45^\circ$.<br>
+                            ברביע השני: $\theta = 180^\circ - 45^\circ = 135^\circ = \frac{3\pi}{4}$.<br>
+                            תשובה: $\mathbf{\sqrt{2} \text{cis}\frac{3\pi}{4}}$.</p>
+                        <p><strong>ב. $z = -5i$:</strong><br>
+                            הנקודה נמצאת על הציר המדומה השלילי (למטה).<br>
+                            $r = 5$.<br>
+                            $\theta = 270^\circ = \frac{3\pi}{2}$.<br>
+                            תשובה: $\mathbf{5 \text{cis}\frac{3\pi}{2}}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>חשב באמצעות משפט דה-מואבר את $(1+i\sqrt{3})^{6}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>המספר הוא $z = 1 + i\sqrt{3}$.<br>
+                            $r = \sqrt{1+3} = 2$.<br>
+                            $\theta$: רביע ראשון, $\tan\theta = \sqrt{3} \Rightarrow \theta = 60^\circ =
+                            \frac{\pi}{3}$.<br>
+                            לפי דה מואבר:<br>
+                            $z^6 = (2 \text{cis}\frac{\pi}{3})^6 = 2^6 \text{cis}(6 \cdot \frac{\pi}{3}) = 64
+                            \text{cis}(2\pi)$<br>
+                            מכיוון ש-$\text{cis}(2\pi) = 1$, התשובה היא $\mathbf{64}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>פתור את המשוואה $z^4 + 16 = 0$. שרטט את הפתרונות במישור המרוכב.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$z^4 = -16$.<br>
+                            נעביר לפולרי: $-16 = 16 \text{cis}(180^\circ) = 16 \text{cis}(\pi)$.<br>
+                            נוסחת השורשים: $z_k = \sqrt[4]{16} \text{cis}\left(\frac{\pi + 2\pi k}{4}\right) = 2
+                            \text{cis}\left(\frac{\pi}{4} + \frac{\pi k}{2}\right)$.<br>
+                            הפתרונות ($k=0,1,2,3$):<br>
+                            $z_0 = 2 \text{cis}(\frac{\pi}{4}) = \sqrt{2} + i\sqrt{2}$<br>
+                            $z_1 = 2 \text{cis}(\frac{3\pi}{4}) = -\sqrt{2} + i\sqrt{2}$<br>
+                            $z_2 = 2 \text{cis}(\frac{5\pi}{4}) = -\sqrt{2} - i\sqrt{2}$<br>
+                            $z_3 = 2 \text{cis}(\frac{7\pi}{4}) = \sqrt{2} - i\sqrt{2}$<br>
+                            שרטוט: ריבוע שקודקודיו על מעגל ברדיוס 2, מסובב ב-45 מעלות.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא את המקום הגיאומטרי של הנקודות $z$ המקיימות את המשוואה: $|z - 2| = |z + 4|$. מהי המשמעות
+                    הגיאומטרית?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$|z - 2| = |z - (-4)|$.<br>
+                            גיאומטרית, זהו האנך האמצעי לקטע המחבר בין $(2,0)$ ל-$(-4,0)$.<br>
+                            אלגברית: נעלה בריבוע ונציב $z=x+iy$:<br>
+                            $(x-2)^2 + y^2 = (x+4)^2 + y^2$<br>
+                            $x^2 - 4x + 4 = x^2 + 8x + 16$<br>
+                            $-12x = 12 \Rightarrow \mathbf{x = -1}$<br>
+                            זהו ישר אנכי העובר ב $x=-1$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>פתור את המשוואה הריבועית (עם מקדמים מרוכבים): $z^2 - (2+i)z + (3+i) = 0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נוסחת השורשים:<br>
+                            $z_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$<br>
+                            $b = -(2+i), \quad a=1, \quad c=3+i$<br>
+                            נחשב דלתא:<br>
+                            $\Delta = (2+i)^2 - 4(1)(3+i) = (4 + 4i - 1) - 12 - 4i = -9$.<br>
+                            השורש של הדלתא הוא $\pm 3i$.<br>
+                            פתרונות:<br>
+                            $z_{1,2} = \frac{2+i \pm 3i}{2}$<br>
+                            $z_1 = \frac{2+4i}{2} = \mathbf{1+2i}$<br>
+                            $z_2 = \frac{2-2i}{2} = \mathbf{1-i}$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>הוכח את הזהות: $|z_1 + z_2|^2 + |z_1 - z_2|^2 = 2(|z_1|^2 + |z_2|^2)$. (זהו "כלל המקבילית").</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נשתמש בתכונה $|w|^2 = w \cdot \bar{w}$.<br>
+                            אגף שמאל:<br>
+                            $|z_1+z_2|^2 + |z_1-z_2|^2 = (z_1+z_2)(\overline{z_1+z_2}) +
+                            (z_1-z_2)(\overline{z_1-z_2})$<br>
+                            $= (z_1\bar{z}_1 + z_1\bar{z}_2 + z_2\bar{z}_1 + z_2\bar{z}_2) + (z_1\bar{z}_1 -
+                            z_1\bar{z}_2 - z_2\bar{z}_1 + z_2\bar{z}_2)$<br>
+                            האיברים המעורבים ($z_1\bar{z}_2$ וכו') מצטמצמים. נשארנו עם:<br>
+                            $= 2z_1\bar{z}_1 + 2z_2\bar{z}_2 = 2|z_1|^2 + 2|z_2|^2$. מ.ש.ל.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>תהי המשוואה $(z-1)^3 = -8$. מצא את כל פתרונות המשוואה והראה שסכומם הוא 3.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נסמן $w = z-1$. המשוואה היא $w^3 = -8$.<br>
+                            $-8 = 8 \text{cis}(180^\circ)$.<br>
+                            שורשי $w$:<br>
+                            $w_0 = 2 \text{cis}(60^\circ) = 1 + i\sqrt{3}$<br>
+                            $w_1 = 2 \text{cis}(180^\circ) = -2$<br>
+                            $w_2 = 2 \text{cis}(300^\circ) = 1 - i\sqrt{3}$<br>
+                            כעת נמצא את $z$ (כי $z = w+1$):<br>
+                            $z_0 = 2 + i\sqrt{3}$<br>
+                            $z_1 = -1$<br>
+                            $z_2 = 2 - i\sqrt{3}$<br>
+                            סכום הפתרונות: $(2 + i\sqrt{3}) + (-1) + (2 - i\sqrt{3}) = 2 - 1 + 2 = \mathbf{3}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>נתון התחום $D = \{ z \in \mathbb{C} \mid |z| < 1, \quad 0 < \arg(z) < \frac{\pi}{4} \}$.<br>
+                        שרטט את התחום $D$ ואת התחום המתקבל תחת ההעתקה $f(z) = z^3$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>התחום $D$: "פיצה" ברדיוס 1, זווית בין 0 ל-45 מעלות.<br>
+                            ההעתקה $f(z) = z^3$.<br>
+                            אם $z = r \text{cis}\theta$, אז $z^3 = r^3 \text{cis}(3\theta)$.<br>
+                            הרדיוס: $0 \le r < 1 \Rightarrow 0 \le r^3 < 1$ (נשאר מעגל יחידה).<br>
+                                הזווית: $0 < \theta < \frac{\pi}{4} \Rightarrow 0 < 3\theta < \frac{3\pi}{4}$.<br>
+                                    תשובה: התחום המתקבל הוא גזרת מעגל היחידה הנפרשת בין הזוויות 0 ל-135 מעלות.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מצא את כל הפתרונות של המשוואה $z^6 = 1$. נסמן את הפתרונות ב-$w_0, w_1, ..., w_5$. חשב את הסכום $S =
+                    \sum_{k=0}^5 (1 + w_k)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>השורשים $w_k$ הם שורשי המשוואה $z^6-1=0$.<br>
+                            סכום שורשי היחידה מסדר $n$ תמיד שווה ל-0 (המקדם של $z^{n-1}$ בפולינום $z^n-1$ הוא 0).<br>
+                            כלומר $\sum w_k = 0$.<br>
+                            הסכום המבוקש:<br>
+                            $S = \sum_{k=0}^{5} (1 + w_k) = \sum 1 + \sum w_k = 6 \cdot 1 + 0 = \mathbf{6}$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 2 -->
+        <section id="ch2" class="chapter">
+            <h2>פרק 2: גזירות, משוואות קושי-רימן ופונקציות הרמוניות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. גזירות (Differentiability):</strong> פונקציה $f(z)$ גזירה בנקודה $z_0$ אם קיים הגבול
+                    $f'(z_0) = \lim_{\Delta z \to 0} \frac{f(z_0 + \Delta z) - f(z_0)}{\Delta z}$. בניגוד למקרה הממשי,
+                    כאן הגבול חייב להיות זהה מכל כיוון במישור המרוכב.</p>
+
+                <p><strong>2. משוואות קושי-רימן (C-R Equations):</strong>
+                    תהי $f(z) = u(x,y) + i v(x,y)$. תנאי <strong>הכרחי</strong> לגזירות בנקודה $(x_0, y_0)$ הוא קיום
+                    משוואות קושי-רימן:
+                    $$\mathbf{u_x = v_y}, \quad \mathbf{u_y = -v_x}$$
+                    תנאי <strong>מספיק</strong> לגזירות: משוואות C-R מתקיימות בנקודה, והנגזרות החלקיות $u_x, u_y, v_x,
+                    v_y$ <strong>רציפות</strong> בסביבת הנקודה.</p>
+
+                <p><strong>3. קושי-רימן בצורה פולרית (Polar C-R):</strong>
+                    אם $f(r, \theta) = u(r, \theta) + i v(r, \theta)$, המשוואות הן:
+                    $$\mathbf{u_r = \frac{1}{r} v_\theta}, \quad \mathbf{v_r = -\frac{1}{r} u_\theta}$$
+                    והנגזרת: $f'(z) = e^{-i\theta}(u_r + i v_r)$.</p>
+
+                <p><strong>4. אנליטיות (Analyticity):</strong> פונקציה נקראת אנליטית בנקודה $z_0$ אם היא גזירה ב-$z_0$
+                    וגם בכל נקודה בתוך סביבה כלשהי של $z_0$. פונקציה אנליטית בכל המישור נקראת <strong>שלמה
+                        (Entire)</strong>.</p>
+
+                <p><strong>5. פונקציות הרמוניות וצמודות:</strong>
+                    פונקציה $u(x,y)$ היא הרמונית אם $\Delta u = u_{xx} + u_{yy} = 0$.
+                    אם $f = u + iv$ אנליטית, אז $u$ ו-$v$ הן <strong>הרמוניות צמודות</strong>. המשמעות הגיאומטרית היא
+                    שקווי הגובה שלהן ($u=c_1, v=c_2$) מאונכים זה לזה.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: מציאת פונקציה אנליטית (שיטת מילן-תומסון)</span>
+                <p>זוהי שיטה מהירה למציאת $f(z)$ ישירות מתוך $u(x,y)$ ללא צורך באינטגרציה של $v$:</p>
+                <ol>
+                    <li>חשב את הנגזרות החלקיות $u_x(x,y)$ ו-$u_y(x,y)$.</li>
+                    <li>נשתמש בנוסחה: $f'(z) = u_x(z,0) - i u_y(z,0)$.</li>
+                    <li>בצע אינטגרציה לפי $z$ כדי לקבל את $f(z) + iC$.</li>
+                    <li>(אם נתון $v$, התהליך דומה: $f'(z) = v_y(z,0) + i v_x(z,0)$).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה ברמת מבחן</span>
+                <p><strong>שאלה:</strong> מצא פונקציה אנליטית $f(z)$ שחלקה הממשי הוא $u = e^x(x\cos y - y\sin y)$
+                    ומתקיים $f(0)=0$.</p>
+                <p><strong>פתרון בשיטת מילן-תומסון:</strong></p>
+                <ol>
+                    <li>נגזור לפי $x$: $u_x = e^x(x\cos y - y\sin y) + e^x(\cos y) = e^x(x\cos y - y\sin y + \cos y)$.
+                    </li>
+                    <li>נגזור לפי $y$: $u_y = e^x(-x\sin y - \sin y - y\cos y)$.</li>
+                    <li>נציב $x=z, y=0$:
+                        <ul>
+                            <li>$u_x(z,0) = e^z(z \cdot 1 - 0 \cdot 0 + 1) = e^z(z+1)$.</li>
+                            <li>$u_y(z,0) = e^z(-z \cdot 0 - 0 - 0) = 0$.</li>
+                        </ul>
+                    </li>
+                    <li>נרכיב את הנגזרת: $f'(z) = u_x(z,0) - i u_y(z,0) = (z+1)e^z$.</li>
+                    <li>אינטגרציה (לפי חלקים): $\int (z+1)e^z dz = (z+1)e^z - \int e^z dz = (z+1)e^z - e^z + C = ze^z +
+                        C$.</li>
+                    <li>נציב תנאי התחלה: $f(0) = 0 \cdot e^0 + C = 0 \Rightarrow C = 0$.</li>
+                </ol>
+                <p><strong>תשובה סופית:</strong> $f(z) = ze^z$.</p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>בדוק האם הפונקציה $f(z) = z \cdot Re(z)$ גזירה בראשית? האם היא גזירה בנקודות אחרות? האם היא אנליטית?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נכתוב את הפונקציה: $f(z) = (x+iy)x = x^2 + ixy$.<br>
+                            לכן $u = x^2, v = xy$.</p>
+                        <p><strong>בדיקת C-R:</strong><br>
+                            $u_x = 2x, v_y = x$. נדרש $2x = x \Rightarrow \mathbf{x = 0}$.<br>
+                            $u_y = 0, v_x = y$. נדרש $0 = -y \Rightarrow \mathbf{y = 0}$.</p>
+                        <p><strong>מסקנה:</strong> משוואות C-R מתקיימות <strong>רק</strong> בנקודה $(0,0)$. מכיוון
+                            שהנגזרות החלקיות רציפות בכל מקום, הפונקציה <strong>גזירה בראשית בלבד</strong>. היא אינה
+                            גזירה בשום נקודה אחרת, ולכן <strong>אינה אנליטית באף מקום</strong> (כי אין לה סביבה של
+                            גזירות).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 (קוטבי)</div>
+                <p>הוכח שהפונקציה $f(z) = \frac{1}{z^n}$ אנליטית בכל מקום פרט לראשית, באמצעות שימוש במשוואות C-R
+                    פולריות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>בהצגה פולרית: $z = re^{i\theta} \Rightarrow f(z) = (re^{i\theta})^{-n} = r^{-n} e^{-in\theta}
+                            = r^{-n}(\cos(-n\theta) + i\sin(-n\theta))$.<br>
+                            לכן: $u = r^{-n}\cos(n\theta)$ ו-$v = -r^{-n}\sin(n\theta)$.</p>
+                        <p><strong>גזירה:</strong><br>
+                            $u_r = -nr^{-n-1}\cos(n\theta)$, $\frac{1}{r}v_\theta = \frac{1}{r}(-r^{-n} \cdot n
+                            \cos(n\theta)) = -nr^{-n-1}\cos(n\theta)$. (שווים!)<br>
+                            $v_r = nr^{-n-1}\sin(n\theta)$, $-\frac{1}{r}u_\theta = -\frac{1}{r}(r^{-n} \cdot
+                            (-n\sin(n\theta))) = nr^{-n-1}\sin(n\theta)$. (שווים!)</p>
+                        <p><strong>סיכום:</strong> המשוואות מתקיימות לכל $r \neq 0$. הפונקציה אנליטית בתחום $\mathbb{C}
+                            \setminus \{0\}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>נתונה הפונקציה $u(x,y) = \sinh x \sin y$.<br>
+                    א. הראה כי $u$ הרמונית במישור כולו.<br>
+                    ב. מצא הרמונית צמודה $v$ כך ש-$v(0,0)=2$.<br>
+                    ג. בטא את $f=u+iv$ כפונקציה של $z$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>א. $u_x = \cosh x \sin y \Rightarrow u_{xx} = \sinh x \sin y$.<br>
+                            $u_y = \sinh x \cos y \Rightarrow u_{yy} = -\sinh x \sin y$.<br>
+                            $u_{xx} + u_{yy} = 0 \Rightarrow$ הרמונית.</p>
+                        <p>ב. לפי C-R: $v_y = u_x = \cosh x \sin y \Rightarrow v = \int \cosh x \sin y dy = -\cosh x
+                            \cos y + h(x)$.<br>
+                            נגזור לפי $x$: $v_x = -\sinh x \cos y + h'(x)$. נשווה ל-$-u_y = -\sinh x \cos y$.<br>
+                            נקבל $h'(x) = 0 \Rightarrow h(x) = C$.<br>
+                            $v(0,0) = -\cosh(0)\cos(0) + C = -1 + C = 2 \Rightarrow C = 3$.<br>
+                            לכן $v = 3 - \cosh x \cos y$.</p>
+                        <p>ג. נשתמש בזהויות: $f(z) = \sinh x \sin y + i(3 - \cosh x \cos y)$.<br>
+                            לפי מילן תומסון: $f'(z) = u_x(z,0) - i u_y(z,0) = \cosh z \sin(0) - i \sinh z \cos(0) = -i
+                            \sinh z$.<br>
+                            אינטגרל: $f(z) = -i \cosh z + C'$. בגלל $v(0,0)=2, u(0,0)=0$, נקבל $f(0)=2i$.<br>
+                            $-i \cosh(0) + C' = 2i \Rightarrow -i + C' = 2i \Rightarrow C' = 3i$.<br>
+                            לכן $\mathbf{f(z) = -i \cosh z + 3i}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>תהי $f(z)$ אנליטית בתחום $D$. הוכח שאם $Re(f(z))$ קבוע ב-$D$, אז $f(z)$ קבועה ב-$D$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>אם $u(x,y) = C$, אז $u_x = 0$ ו-$u_y = 0$.<br>
+                            לפי משוואות קושי-רימן:<br>
+                            $v_y = u_x = 0$ ו-$v_x = -u_y = 0$.<br>
+                            מכיוון שהנגזרות החלקיות של $v$ הן 0 בכל התחום הקישור $D$, גם $v$ חייבת להיות קבועה.<br>
+                            מכיוון ש-$u$ ו-$v$ קבועות, $f = u+iv$ קבועה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>האם קיימת פונקציה אנליטית $f=u+iv$ כך ש-$u = x^2 + y^2$? נמק.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נגזור פעמיים:<br>
+                            $u_x = 2x \Rightarrow u_{xx} = 2$.<br>
+                            $u_y = 2y \Rightarrow u_{yy} = 2$.<br>
+                            לפלסיאן: $\Delta u = 2 + 2 = 4 \neq 0$.<br>
+                            מכיוון ש-$u$ אינה פונקציה הרמונית, היא לא יכולה להיות חלק ממשי של פונקציה אנליטית.
+                            <strong>תשובה: לא.</strong>
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב את הנגזרת של $f(z) = \ln|z| + i \arg(z)$ בתחום $\mathbb{C} \setminus (-\infty, 0]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>זוהי פונקציית הלוגריתם הראשי $\text{Log}(z)$.<br>
+                            בצורה פולרית: $u = \ln r, v = \theta$.<br>
+                            $u_r = 1/r, v_\theta = 1$. מתקיים $u_r = \frac{1}{r}v_\theta$.<br>
+                            $u_\theta = 0, v_r = 0$. מתקיים $v_r = -\frac{1}{r}u_\theta$.<br>
+                            הנגזרת: $f'(z) = e^{-i\theta}(u_r + i v_r) = e^{-i\theta}(1/r + 0) = \frac{1}{re^{i\theta}}
+                            = \mathbf{\frac{1}{z}}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא את הערך של הקבוע $a$ עבורו הפונקציה $v(x,y) = ax^2y - y^3$ היא הרמונית, וממצא לה צמודה $u$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$v_x = 2axy \Rightarrow v_{xx} = 2ay$.<br>
+                            $v_y = ax^2 - 3y^2 \Rightarrow v_{yy} = -6y$.<br>
+                            נדרוש $2ay - 6y = 0 \Rightarrow \mathbf{a = 3}$.<br>
+                            כעת נחפש $u$ (נזכור $v$ הוא החלק המדומה):<br>
+                            $u_x = v_y = 3x^2 - 3y^2 \Rightarrow u = x^3 - 3xy^2 + h(y)$.<br>
+                            $u_y = -6xy + h'(y) = -v_x = -6xy \Rightarrow h'(y)=0$.<br>
+                            תשובה: $\mathbf{u = x^3 - 3xy^2 + C}$. (זוהי הפונקציה $f(z) = z^3$)</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 (ברמת מבחן)</div>
+                <p>תהי $f(z)$ אנליטית כך ש-$|f(z)|$ קבוע. הוכח ש-$f(z)$ קבועה. (רמז: השתמש ב-$u^2 + v^2 = C$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>אם $|f(z)|=0$, אז $f(z)=0$ והיא קבועה. נניח $|f(z)|^2 = u^2 + v^2 = C > 0$.<br>
+                            נגזור לפי $x$: $2uu_x + 2vv_x = 0 \Rightarrow uu_x + vv_x = 0$.<br>
+                            נגזור לפי $y$: $2uu_y + 2vv_y = 0$. נשתמש ב-C-R ($u_y=-v_x, v_y=u_x$):<br>
+                            $-uv_x + vu_x = 0$.<br>
+                            קיבלנו מערכת משוואות על $u_x, v_x$:<br>
+                            1) $u \cdot u_x + v \cdot v_x = 0$<br>
+                            2) $v \cdot u_x - u \cdot v_x = 0$<br>
+                            הדטרמיננטה היא $-u^2-v^2 = -C \neq 0$.<br>
+                            לכן הפתרון היחיד הוא $u_x = 0, v_x = 0$. באותו אופן $u_y=0, v_y=0$.<br>
+                            לכן הפונקציה קבועה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>הראה שהפונקציה $f(z) = \bar{z}^2$ אינה גזירה באף נקודה $z \neq 0$. האם היא גזירה ב-$z=0$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$f(z) = (x-iy)^2 = x^2 - y^2 - 2ixy$.<br>
+                            $u = x^2 - y^2, \quad v = -2xy$.<br>
+                            C-R:<br>
+                            $u_x = 2x, \quad v_y = -2x$. שוויון רק אם $2x = -2x \Rightarrow \mathbf{x = 0}$.<br>
+                            $u_y = -2y, \quad v_x = -2y$. שוויון רק אם $-2y = 2y \Rightarrow \mathbf{y = 0}$.<br>
+                            המשוואות מתקיימות רק בראשית. מכיוון שהחלקיות רציפות, היא <strong>גזירה ב-$z=0$
+                                בלבד</strong>.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מצא פונקציה שלמה $f(z)$ המקיימת $Re(f') = 3x^2 - 4y - 3y^2$ ו-$f(0)=i$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נסמן $f'(z) = U + iV$. נתון $U = 3x^2 - 3y^2 - 4y$.<br>
+                            נשתמש במילן-תומסון על $f'(z)$ כדי למצוא את $f'(z)$ עצמה:<br>
+                            $U_x = 6x, \quad U_y = -6y - 4$.<br>
+                            הנגזרת של הפונקציה $f'$ (כלומר $f''$):<br>
+                            $f''(z) = U_x(z,0) - i U_y(z,0) = 6z - i(-4) = 6z + 4i$.<br>
+                            נבצע אינטגרציה למציאת $f'(z)$:<br>
+                            $f'(z) = 3z^2 + 4iz + C_1$.<br>
+                            נבצע אינטגרציה נוספת למציאת $f(z)$:<br>
+                            $f(z) = z^3 + 2iz^2 + C_1 z + C_2$.<br>
+                            מכיוון ש-$Re(f')$ נתון במדויק (ללא קבוע חופשי ב-$x,y$), הקבוע $C_1$ חייב להיות מדומה טהור,
+                            נניח $Ki$.<br>
+                            אבל $Re(3z^2 + 4iz) = Re(3(x+iy)^2 + 4i(x+iy)) = 3x^2-3y^2-4y$, שזה בדיוק $U$. לכן $C_1$
+                            יכול להיות כל קבוע מדומה, אך בדרך כלל במבחן מצפים ל-$C_1=0$ אלא אם צוין אחרת.<br>
+                            נציב $f(0)=i \Rightarrow C_2 = i$.<br>
+                            תשובה: $\mathbf{f(z) = z^3 + 2iz^2 + i}$ (או בתוספת $Kiz$).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 3 -->
+        <!-- פרק 3 -->
+        <section id="ch3" class="chapter">
+            <h2>פרק 3: פונקציות אלמנטריות - אקספוננט, לוגריתם וחזקות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Elementary Functions)</span>
+                <p><strong>1. האקספוננט המרוכב ($e^z$):</strong> מוגדר כ-$e^z = e^x(\cos y + i \sin y)$.
+                <ul>
+                    <li><strong>מחזוריות:</strong> $e^z$ היא פונקציה מחזורית עם מחזור $2\pi i$. כלומר $e^{z+2\pi i k} =
+                        e^z$.</li>
+                    <li><strong>תמונה:</strong> הפונקציה "מכסה" את כל המישור פרט ל-0 ($e^z \neq 0$ לכל $z$).</li>
+                </ul>
+                </p>
+                <p><strong>2. הלוגריתם המרוכב ($\log z$):</strong> הפתרון של $e^w = z$.
+                <ul>
+                    <li><strong>הגדרה כללית:</strong> $\log z = \ln|z| + i(\arg z + 2\pi k), \quad k \in \mathbb{Z}$.
+                        זוהי פונקציה <strong>רב-ערכית</strong>.</li>
+                    <li><strong>הענף הראשי ($\text{Log } z$):</strong> הערך בו הארגומנט בטווח $(-\pi, \pi]$. הוא אנליטי
+                        במישור כולו פרט לחתך לאורך ציר ה-$x$ השלילי ($(-\infty, 0]$).</li>
+                </ul>
+                </p>
+                <p><strong>3. פונקציות טריגונומטריות והיפרבוליות:</strong>
+                    $$\cos z = \frac{e^{iz} + e^{-iz}}{2}, \quad \sin z = \frac{e^{iz} - e^{-iz}}{2i}$$
+                    $$\cosh z = \frac{e^z + e^{-z}}{2}, \quad \sinh z = \frac{e^z - e^{-z}}{2}$$
+                    <strong>חשוב:</strong> במישור המרוכב, $\sin z$ ו-$\cos z$ אינן חסומות! (הן יכולות לשאוף לאינסוף ככל
+                    ש-$|y| \to \infty$).
+                </p>
+                <p><strong>4. חזקה כללית:</strong> מוגדרת באמצעות הלוגריתם: $z^c = e^{c \log z}$. זהו ביטוי רב-ערכי בדרך
+                    כלל.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: פתרון משוואות עם פונקציות אלמנטריות</span>
+                <p>כדי לפתור משוואה מהצורה $f(z) = w$:</p>
+                <ol>
+                    <li><strong>משוואת אקספוננט:</strong> $e^z = w \Rightarrow z = \ln|w| + i(\text{Arg } w + 2\pi k)$.
+                    </li>
+                    <li><strong>משוואה טריגונומטרית ($\sin z = w$):</strong>
+                        <ul>
+                            <li>המר לאקספוננטים: $\frac{e^{iz} - e^{-iz}}{2i} = w$.</li>
+                            <li>סמן $t = e^{iz}$, תקבל משוואה ריבועית: $t^2 - 2iw t - 1 = 0$.</li>
+                            <li>מצא את $t$, ואז פתור $iz = \log t$.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: חזקות ורב-ערכיות</span>
+                <p><strong>שאלה:</strong> מצא את כל הערכים של $i^{1-i}$. מהו הערך הראשי?</p>
+                <p><strong>פתרון:</strong>
+                    לפי ההגדרה: $i^{1-i} = e^{(1-i)\log i}$.<br>
+                    נמצא את $\log i$: $|i|=1, \arg i = \pi/2 + 2\pi k$.<br>
+                    $\log i = \ln 1 + i(\pi/2 + 2\pi k) = i(\pi/2 + 2\pi k)$.<br>
+                    נכפיל במעריך: $(1-i) \cdot i(\pi/2 + 2\pi k) = (i - i^2)(\pi/2 + 2\pi k) = (1+i)(\pi/2 + 2\pi
+                    k)$.<br>
+                    לכן: $i^{1-i} = e^{(\pi/2 + 2\pi k) + i(\pi/2 + 2\pi k)} = e^{\pi/2 + 2\pi k} \cdot e^{i(\pi/2 +
+                    2\pi k)}$.<br>
+                    נשתמש בזהות אוילר: $e^{i(\pi/2 + 2\pi k)} = \cos(\pi/2) + i\sin(\pi/2) = i$.<br>
+                    <strong>תשובה כללית:</strong> $i \cdot e^{\pi/2 + 2\pi k}$.<br>
+                    <strong>ערך ראשי ($k=0$):</strong> $i \cdot e^{\pi/2}$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את כל פתרונות המשוואה $\sin z = 3$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נציב $t=e^{iz}$. המשוואה הריבועית: $t^2 - 2i(3)t - 1 = 0 \Rightarrow t^2 - 6it - 1 = 0$.<br>
+                            לפי נוסחת השורשים: $t = \frac{6i \pm \sqrt{-36 + 4}}{2} = \frac{6i \pm \sqrt{-32}}{2} =
+                            \frac{6i \pm 4\sqrt{2}i}{2} = (3 \pm 2\sqrt{2})i$.<br>
+                            כעת נפתור $iz = \log t$:<br>
+                            אפשרות 1: $iz = \text{Log}((3+2\sqrt{2})i) + 2\pi k i = \ln(3+2\sqrt{2}) + i(\pi/2 + 2\pi
+                            k)$.<br>
+                            נחלק ב-$i$: $z = \pi/2 + 2\pi k - i\ln(3+2\sqrt{2})$.<br>
+                            אפשרות 2 (באופן דומה): $z = \pi/2 + 2\pi k - i\ln(3-2\sqrt{2})$.<br>
+                            <strong>תשובה:</strong> $z = 2\pi k + \pi/2 \pm i\ln(3+2\sqrt{2})$.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את הערך הראשי של $(\sqrt{3}+i)^{12}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>נעבור להצגה פולרית: $z = 2e^{i\pi/6}$.<br>
+                            לכן $z^{12} = (2e^{i\pi/6})^{12} = 2^{12} e^{i(12\pi/6)} = 4096 e^{2\pi i} = 4096 \cdot
+                            1$.<br>
+                            <strong>תשובה: 4096.</strong>
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מצא את כל הערכים של $\log(1-i)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$|1-i| = \sqrt{2}$. $\arg(1-i) = -\pi/4 + 2\pi k$.<br>
+                            $\log(1-i) = \ln\sqrt{2} + i(-\pi/4 + 2\pi k) = \frac{1}{2}\ln 2 + i(2k - 1/4)\pi$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>הוכח כי $\cos(iz) = \cosh(z)$ ו-$\sin(iz) = i\sinh(z)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>לפי הגדרה: $\cos(iz) = \frac{e^{i(iz)} + e^{-i(iz)}}{2} = \frac{e^{-z} + e^{z}}{2} = \cosh
+                            z$.<br>
+                            $\sin(iz) = \frac{e^{i(iz)} - e^{-i(iz)}}{2i} = \frac{e^{-z} - e^{z}}{2i} = \frac{-(e^z -
+                            e^{-z})}{2i} = \frac{i(e^z - e^{-z})}{2} = i\sinh z$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>פתור את המשוואה $e^z = e^{i\pi}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>לפי מחזוריות האקספוננט: $z = i\pi + 2\pi k i = (2k+1)\pi i$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מצא את תמונת הקו הממשי $y=c$ תחת ההעתקה $f(z) = e^z$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$z = x + ic \Rightarrow w = e^x \cdot e^{ic}$.<br>
+                            מכיוון ש-$x$ נע מ-$-\infty$ ל-$\infty$, הרדיוס $|w| = e^x$ נע מ-0 ל-$\infty$.<br>
+                            הארגומנט קבוע ושווה ל-$c$.<br>
+                            <strong>תשובה: קרן היוצאת מהראשית בזווית $c$ (לא כולל הראשית).</strong>
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>סווג את כל פתרונות המשוואה $\cos z = 0$. האם יש פתרונות שאינם ממשיים?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$\frac{e^{iz} + e^{-iz}}{2} = 0 \Rightarrow e^{iz} = -e^{-iz} \Rightarrow e^{2iz} = -1$.<br>
+                            $2iz = \log(-1) = i(\pi + 2\pi k) \Rightarrow z = \pi/2 + \pi k$.<br>
+                            <strong>מסקנה:</strong> כל הפתרונות הם מהצורה $\pi/2 + \pi k$. כולם מספרים ממשיים.
+                            <strong>אין פתרונות מרוכבים טהורים.</strong>
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את הערך הראשי של $(-1)^{-i}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$e^{-i \text{Log}(-1)} = e^{-i(i\pi)} = e^{\pi}$.<br>
+                            שים לב: חזקה מרוכבת של מספר שלילי יכולה לתת תוצאה ממשית!</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מצא היכן הפונקציה $h(z) = \text{Log}(z^2+1)$ אינה אנליטית.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>הפונקציה אינה אנליטית כאשר $z^2+1 \in (-\infty, 0]$.<br>
+                            נסמן $z^2+1 = -a$ (כאשר $a \ge 0$).<br>
+                            $z^2 = -a-1 \Rightarrow z = \pm i\sqrt{a+1}$.<br>
+                            מכיוון ש-$a \ge 0$, הביטוי $\sqrt{a+1}$ נע בטווח $[1, \infty)$.<br>
+                            <strong>תשובה:</strong> הפונקציה אינה אנליטית על הקרניים המדומות $\{ iy : y \ge 1 \}$ ו- $\{
+                            iy : y \le -1 \}$.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>נתונה הפונקציה $f(z) = \cosh^2 z - \sinh^2 z$. פשט אותה ככל הניתן.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>זהה לזהות הפיתגוראית ההיפרבולית הממשית: $\cosh^2 z - \sinh^2 z = 1$ לכל $z \in
+                            \mathbb{C}$.<br>
+                            הפונקציה היא למעשה הפונקציה הקבועה 1.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 4 -->
+        <section id="ch4" class="chapter">
+            <h2>פרק 4: אינטגרלים קוויים ומשפטי קושי</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. הגדרת האינטגרל הקווי:</strong> עבור מסלול $\gamma$ המוגדר ע"י $z(t) = x(t) + iy(t)$ בתחום
+                    $[a,b]$:
+                    $$\int_\gamma f(z) dz = \int_a^b f(z(t)) \cdot z'(t) \, dt$$
+                    התוצאה תלויה בדרך אם הפונקציה אינה אנליטית, אך אינה תלויה בפרמטריזציה (כל עוד הכיוון נשמר).
+                </p>
+
+                <p><strong>2. משפט קושי-גורסה (Cauchy-Goursat):</strong> אם $f(z)$ אנליטית בתחום **פשוט קשר** $D$, אז
+                    לכל מסלול סגור $\gamma$ בתוכו:
+                    $$\oint_\gamma f(z) dz = 0$$
+                    **הרחבה למסלולים מרובי קשר:** אם $f$ אנליטית בתחום שבין שתי עקומות סגורות $\gamma_1$ ו-$\gamma_2$
+                    (כאשר $\gamma_2$ בתוך $\gamma_1$), אז האינטגרל עליהן באותו כיוון שווה.
+                </p>
+
+                <p><strong>3. אי-תלות במסלול ופונקציה קדומה:</strong>
+                    האינטגרל $\int_{z_1}^{z_2} f(z) dz$ אינו תלוי במסלול אם ורק אם קיימת ל-$f$ פונקציה קדומה $F$ (כך
+                    ש-$F'=f$) בתחום. במקרה זה:
+                    $$\int_{z_1}^{z_2} f(z) dz = F(z_2) - F(z_1)$$
+                    זה נכון לכל פונקציה אנליטית בתחום פשוט קשר.
+                </p>
+
+                <p><strong>4. אי-שוויון ML (אומדן האינטגרל):</strong>
+                    אם $|f(z)| \le M$ לכל $z \in \gamma$, ואורך המסלול הוא $L$, אז:
+                    $$\left| \int_\gamma f(z) dz \right| \le M \cdot L$$
+                    שימושי מאוד להוכחת התאפסות אינטגרלים כאשר רדיוס המסלול שואף לאינפור.
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: בחירת שיטה לחישוב אינטגרל</span>
+                <ol>
+                    <li>**האם המסלול סגור?**
+                        <ul>
+                            <li>כן, והפונקציה אנליטית בפנים -> 0 (קושי-גורסה).</li>
+                            <li>כן, ויש נקודות "בעייתיות" בפנים -> השתמש בנוסחת קושי (פרק 5) או משפט השאריות (פרק 7).
+                            </li>
+                        </ul>
+                    </li>
+                    <li>**האם הפונקציה "פשוטה" (פולינום, $e^z$, $\sin z$)?** השתמש בפונקציה קדומה.</li>
+                    <li>**האם מופיעים צמוד ($\bar{z}$), חלק ממשי ($Re(z)$) או $|z|$?** חובה להשתמש בהגדרה (פרמטריזציה).
+                    </li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: חישוב ישיר</span>
+                <p><strong>שאלה:</strong> חשב את $\int_\gamma \bar{z} dz$ כאשר $\gamma$ הוא חצי מעגל היחידה העליון
+                    מהנקודה 1 לנקודה -1.</p>
+                <p><strong>פתרון:</strong>
+                    1. פרמטריזציה: $z = e^{it}$ עבור $t \in [0, \pi]$.<br>
+                    2. נגזרת: $dz = ie^{it} dt$.<br>
+                    3. הצבה: $\bar{z} = \overline{e^{it}} = e^{-it}$.<br>
+                    4. אינטגרל: $\int_0^\pi e^{-it} (ie^{it}) dt = \int_0^\pi i dt = [it]_0^\pi = \pi i$.<br>
+                    <strong>שים לב:</strong> לו הפונקציה הייתה $z$ (אנליטית), התוצאה הייתה $z^2/2|_1^{-1} = 0$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\int_\gamma \pi e^{\pi \bar{z}} dz$ על ריבוע היחידה ($0 \to 1 \to 1+i \to i \to 0$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\int_0^1 \pi e^{\pi t} dt + \int_0^1 \pi e^{\pi(1-it)} idt + \int_1^0 \pi e^{\pi(t-i)} dt +
+                        \int_1^0 \pi e^{i\pi t} idt$.<br>
+                        לאחר חישוב כל הקטעים מתקבל: $2(e^\pi - 1)(i-1)$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את $\oint_\gamma \frac{1}{z} dz$ במסלול סגור המקיף את הראשית פעם אחת.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z = Re^{it} \Rightarrow dz = iRe^{it}dt$.<br>
+                        $\int_0^{2\pi} \frac{1}{Re^{it}} iRe^{it} dt = 2\pi i$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>אומדן ML: הוכח ש-$|\int_{|z|=R} \frac{z+1}{z^4+1} dz| \to 0$ כש-$R \to \infty$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $L = 2\pi R$. $M = \frac{R+1}{R^4-1}$.<br>
+                        $|I| \le \frac{2\pi R(R+1)}{R^4-1} \propto \frac{1}{R^2} \to 0$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>חשב את $\int_\gamma (z^2 + 2z) dz$ מ-0 ל-1+i.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        קדומה: $z^3/3 + z^2$.<br>
+                        $(1+i)^3/3 + (1+i)^2 = \frac{2i-2}{3} + 2i = \frac{-2 + 8i}{3}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>חשב $\oint_{|z|=1} \frac{1}{z^2} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        ל-$z^{-2}$ יש קדומה $-z^{-1}$ בתחום המנוקב. לכן במעגל סגור האינטגרל הוא 0.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב את $\int_\gamma \text{Re}(z) dz$ על הקטע מ-0 ל-1+i.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z(t)=t+it \Rightarrow dz = (1+i)dt$. $Re(z)=t$.<br>
+                        $\int_0^1 t(1+i)dt = (1+i)/2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>חשב את $\int_\gamma |z|^2 dz$ מ-0 ל-1+i.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z(t)=t+it \Rightarrow |z|^2 = 2t^2$.<br>
+                        $\int_0^1 2t^2(1+i)dt = \frac{2}{3}(1+i)$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את $\oint_{|z|=1} \bar{z}^2 dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        במעגל היחידה $\bar{z} = 1/z \Rightarrow \bar{z}^2 = 1/z^2$.<br>
+                        האינטגרל של $1/z^2$ הוא 0.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב את $\oint_\gamma \text{Im}(z) dz$ על שפת המשולש $0, 1, i$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        קטע 1 ($0 \to 1$): $y=0 \to 0$.<br>
+                        קטע 2 ($1 \to i$): $z=1-t+it, dz=(-1+i)dt \to \int_0^1 t(-1+i)dt = (i-1)/2$.<br>
+                        קטע 3 ($i \to 0$): $z=(1-t)i, dz=-idt \to \int_0^1(1-t)(-i)dt = -i/2$.<br>
+                        סה"כ: -1/2.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>חשב את $\oint_{|z|=R} z^n dz$ לכל $n \in \mathbb{Z}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        אם $n \neq -1$, יש קדומה $z^{n+1}/(n+1)$, לכן 0.<br>
+                        אם $n = -1$, התוצאה היא $2\pi i$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 5 -->
+        <section id="ch5" class="chapter">
+            <h2>פרק 5: נוסחאות האינטגרל של קושי ותוצאותיהן</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. נוסחת האינטגרל של קושי (CIF):</strong>
+                    אם $f(z)$ אנליטית בתחום פשוט קשר המכיל עקומה סגורה $\gamma$ ונקודה $z_0$ בתוכה, אז:
+                    $$f(z_0) = \frac{1}{2\pi i} \oint_\gamma \frac{f(z)}{z - z_0} dz$$
+                    **משמעות:** ערך הפונקציה בנקודה פנימית נקבע לחלוטין ע"י ערכיה על השפה!
+                </p>
+
+                <p><strong>2. נוסחת הנגזרות הכללית:</strong>
+                    הפונקציה $f(z)$ גזירה אינסוף פעמים בתוך התחום, ונגזרותיה נתונות ע"י:
+                    $$f^{(n)}(z_0) = \frac{n!}{2\pi i} \oint_\gamma \frac{f(z)}{(z - z_0)^{n+1}} dz$$
+                    זהו כלי חזק ביותר לחישוב אינטגרלים עם מכנים בחזקה גבוהה.
+                </p>
+
+                <p><strong>3. משפט ליוביל (Liouville's Theorem):</strong>
+                    פונקציה שלמה (אנליטית בכל המישור) שהיא **חסומה** ($|f(z)| \le M$) חייבת להיות **קבועה**.
+                    *יישום:* הוכחת המשפט היסודי של האלגברה.
+                </p>
+
+                <p><strong>4. עקרון המקסימום המודולרי:</strong>
+                    אם $f(z)$ אנליטית ולא קבועה בתחום חסום $D$, המקסימום של $|f(z)|$ מתקבל רק על **השפה** של $D$.
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: חישוב אינטגרלים באמצעות CIF</span>
+                <ol>
+                    <li>זהה את הנקודות בהן המכנה מתאפס (נקודות סינגולריות).</li>
+                    <li>בדוק אילו מהנקודות נמצאות **בתוך** המסלול $\gamma$.</li>
+                    <li>עבור כל נקודה בפנים $z_0$:
+                        <ul>
+                            <li>בודד את הפונקציה "הטובה" (האנליטית) $f(z)$ כך שהאינטגרל יראה כמו $\int
+                                \frac{f(z)}{(z-z_0)^{k+1}}$.</li>
+                            <li>גזור את $f(z)$ בדיוק $k$ פעמים.</li>
+                            <li>הצב בנוסחה: $I = 2\pi i \frac{f^{(k)}(z_0)}{k!}$.</li>
+                        </ul>
+                    </li>
+                    <li>אם יש מספר נקודות בפנים, פצל לשברים חלקיים או השתמש במספר מסלולים קטנים.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: נגזרות גבוהות</span>
+                <p><strong>שאלה:</strong> חשב את $I = \oint_{|z|=2} \frac{e^{2z}}{(z-1)^4} dz$.</p>
+                <p><strong>פתרון:</strong>
+                    1. הנקודה הבעייתית היא $z_0 = 1$. היא נמצאת בתוך המעגל $|z|=2$.<br>
+                    2. הפונקציה האנליטית היא $f(z) = e^{2z}$. החזקה במכנה היא 4, לכן נצטרך נגזרת שלישית ($n=3$).<br>
+                    3. נגזור: $f'(z)=2e^{2z}, f''(z)=4e^{2z}, f'''(z)=8e^{2z}$.<br>
+                    4. נציב $z=1$: $f'''(1) = 8e^2$.<br>
+                    5. לפי הנוסחה: $I = \frac{2\pi i}{3!} \cdot 8e^2 = \frac{2\pi i}{6} \cdot 8e^2 = \frac{8\pi e^2
+                    i}{3}$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\oint_{|z|=1} \frac{\sin z}{z} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $f(z) = \sin z$ אנליטית. $z_0=0$ בפנים.<br>
+                        לפי CIF: $2\pi i \cdot \sin(0) = 0$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את $\oint_{|z|=2} \frac{z^2+1}{z^2-1} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        המכנה מתאפס ב-$z=1, -1$. שניהם בתוך המעגל.<br>
+                        נשתמש בשברים חלקיים: $\frac{z^2+1}{z^2-1} = 1 + \frac{2}{z^2-1} = 1 + \frac{1}{z-1} -
+                        \frac{1}{z+1}$.<br>
+                        האינטגרל: $0 + 2\pi i f_1(1) + 2\pi i f_2(-1) = 2\pi i(1) - 2\pi i(1) = 0$.<br>
+                        **דרך נוספת:** הפונקציה זוגית, המכנה זוגי... (לא תמיד עוזר).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>חשב את $\oint_{|z|=1} \frac{\cos z}{z^3} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z_0=0, n=2$. $f(z)=\cos z$.<br>
+                        $f'(z)=-\sin z, f''(z)=-\cos z$.<br>
+                        $f''(0)=-1$.<br>
+                        התוצאה: $\frac{2\pi i}{2!} (-1) = -\pi i$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>הוכח באמצעות משפט ליוביל: אם $f(z)$ שלמה ו- $Re(f(z)) \le M$ לכל $z$, אז $f(z)$ קבועה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נגדיר $g(z) = e^{f(z)}$.<br>
+                        $|g(z)| = |e^{u+iv}| = e^u = e^{Re(f(z))} \le e^M$.<br>
+                        $g(z)$ שלמה וחסומה, לכן קבועה. מכאן ש-$f(z)$ קבועה.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא את הערך המקסימלי של $|z^2-3z+2|$ בעיגול היחידה $|z| \le 1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        לפי עקרון המקסימום, הוא מתקבל על השפה $|z|=1$.<br>
+                        על השפה $z=e^{it}$. נבדוק $|(z-1)(z-2)|$.<br>
+                        המקסימום מתקבל ב-$z=-1$: $|(-1-1)(-1-2)| = |-2 \cdot -3| = 6$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב $\oint_{|z|=3} \frac{e^z}{z(z-2)} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשתמש בשיטת "כיסוי" (שברים חלקיים מהירים):<br>
+                        $\frac{1}{z(z-2)} = \frac{-1/2}{z} + \frac{1/2}{z-2}$.<br>
+                        האינטגרל: $2\pi i [(-1/2)e^0 + (1/2)e^2] = \pi i (e^2 - 1)$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>חשב $\oint_{|z-i|=1} \frac{dz}{z^2+1}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z^2+1 = (z-i)(z+i)$. רק $z=i$ בתוך המעגל $|z-i|=1$.<br>
+                        נגדיר $f(z) = \frac{1}{z+i}$ (אנליטית בסביבת $i$).<br>
+                        התוצאה: $2\pi i f(i) = 2\pi i \frac{1}{2i} = \pi$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>שתמש ב-CIF כדי לחשב את $\int_0^{2\pi} e^{\cos t} \cos(\sin t) dt$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשים לב שזה החלק הממשי של $\oint_{|z|=1} \frac{e^z}{z} dz$.<br>
+                        האינטגרל המרוכב הוא $2\pi i e^0 = 2\pi i$.<br>
+                        $\int_0^{2\pi} e^{\cos t + i\sin t} i dt = i \int_0^{2\pi} e^{\cos t}(\cos(\sin t)+i\sin(\sin
+                        t)) dt = 2\pi i$.<br>
+                        נשווה חלקים מדומים: $\int_0^{2\pi} e^{\cos t} \cos(\sin t) dt = 2\pi$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב את הנגזרת ה-10 של $g(z) = \oint_{|w|=4} \frac{e^w}{(w-z)^2} dw$ בנקודה $z=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        לפי הגדרת CIF לנגזרות, הביטוי בתוך האינטגרל הוא נגזרת של $e^w$.<br>
+                        $g(z) = 2\pi i f'(z) = 2\pi i e^z$.<br>
+                        הנגזרת ה-10 היא $2\pi i e^z$. ב-$z=0$ הערך הוא $2\pi i$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הוכח כי פונקציה אנליטית ולא קבועה לא יכולה לקבל מינימום של המודול בתוך התחום, אלא אם המינימום הוא 0.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        אם $f(z) \neq 0$ בתחום, נגדיר $h(z) = 1/f(z)$. היא אנליטית.<br>
+                        לפי עקרון המקסימום, המקסימום של $|h|$ על השפה, לכן המינימום של $|f|$ על השפה.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 6 -->
+        <section id="ch6" class="chapter">
+            <h2>פרק 6: טורי חזקות, טורי טיילור ולורן</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Series and Convergence)</span>
+                <p><strong>1. טורי חזקות:</strong> טור מהצורה $\sum a_n (z-z_0)^n$. רדיוס ההתכנסות $R$ נקבע לפי נוסחת
+                    קושי-הדמר: $1/R = \limsup \sqrt[n]{|a_n|}$.
+                <ul>
+                    <li>בתוך העיגול $|z-z_0| < R$: הטור מתכנס בהחלט ובמידה שווה.</li>
+                    <li>מחוץ לעיגול: הטור מתבדר.</li>
+                    <li>הטור מייצג פונקציה אנליטית בתוך עיגול ההתכנסות.</li>
+                </ul>
+                </p>
+
+                <p><strong>2. טורי טיילור:</strong> אם $f(z)$ אנליטית בנקודה $z_0$, היא ניתנת לפיתוח יחיד לטור חזקות:
+                    $$f(z) = \sum_{n=0}^\infty \frac{f^{(n)}(z_0)}{n!} (z-z_0)^n$$
+                    רדיוס ההתכנסות הוא המרחק מהנקודה $z_0$ לסינגולריות הקרובה ביותר.
+                </p>
+
+                <p><strong>3. טורי לורן (Laurent Series):</strong> אם $f(z)$ אנליטית בטבעת (Annulus) $r < |z-z_0| < R$,
+                        היא ניתנת לפיתוח: $$f(z)=\underbrace{\sum_{n=0}^\infty a_n (z-z_0)^n}_{\text{Analytic part}} +
+                        \underbrace{\sum_{n=1}^\infty \frac{b_n}{(z-z_0)^n}}_{\text{Principal part}}$$ טור לורן משמש
+                        לסיווג נקודות סינגולריות ולחישוב שאריות. </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: פיתוח לטור לורן בטבעות שונות</span>
+                <p>כאשר נתונה פונקציה רציונלית ונקודת סינגולריות (למשל $z=a$), ורוצים פיתוח סביב 0:</p>
+                <ol>
+                    <li>**בחר את האיבר הדומיננטי:**
+                        <ul>
+                            <li>בטבעת "פנימית" ($|z| < |a|$): הוצא את הקבוע $a$ מחוץ לסוגריים כדי לקבל ביטוי מהצורה
+                                    $\frac{1}{1 - (z/a)}$.</li>
+                            <li>בטבעת "חיצונית" ($|z| > |a|$): הוצא את $z$ מחוץ לסוגריים כדי לקבל ביטוי מהצורה
+                                $\frac{1}{1 - (a/z)}$.</li>
+                        </ul>
+                    </li>
+                    <li>השתמש בטור הגיאומטרי: $\frac{1}{1-q} = \sum_{n=0}^\infty q^n$ (מתכנס רק עבור $|q|<1$).< /li>
+                    <li>שלב איברים באמצעות שברים חלקיים אם יש מספר קטבים.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: שלוש טבעות שונות</span>
+                <p><strong>שאלה:</strong> פתח את $f(z) = \frac{1}{(z-1)(z-2)}$ לטור לורן סביב $z=0$.</p>
+                <p><strong>פתרון:</strong> נשתמש בשברים חלקיים: $f(z) = \frac{1}{z-2} - \frac{1}{z-1}$.<br>
+                    1. **טבעת $|z|<1$:** הטור מתכנס סביב הראשית (טור טיילור).<br>
+                        $\frac{1}{z-2} = \frac{-1}{2} \cdot \frac{1}{1-z/2} = -\sum \frac{z^n}{2^{n+1}}$.<br>
+                        $\frac{-1}{z-1} = \frac{1}{1-z} = \sum z^n$. סה"כ: $\sum (1 - 2^{-(n+1)})z^n$.<br>
+                        2. **טבעת $1<|z|<2$:** כאן $|1/z|<1$ ו-$|z/2|<1$.<br>
+                            $\frac{1}{z-1} = \frac{1}{z(1-1/z)} = \sum z^{-(n+1)}$. לכן: $-\sum 2^{-(n+1)}z^n - \sum
+                            z^{-(n+1)}$.<br>
+                            3. **טבעת $|z|>2$:** שניהם מפותחים עם $1/z$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את רדיוס ההתכנסות של $\sum_{n=1}^\infty \frac{n!}{n^n} z^n$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשתמש במבחן המנה: $|\frac{a_{n+1}}{a_n}| = \frac{(n+1)!}{(n+1)^{n+1}} \cdot \frac{n^n}{n!} =
+                        \frac{n+1}{(n+1)^{n+1}} n^n = \frac{n^n}{(n+1)^n} = (\frac{1}{1+1/n})^n \to 1/e$.<br>
+                        לכן $R = e$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>פתח את $f(z) = \sin(z^2)$ לטור טיילור סביב $z=0$. מהו רדיוס ההתכנסות?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\sin w = \sum \frac{(-1)^n w^{2n+1}}{(2n+1)!}$. נציב $w=z^2$:<br>
+                        $\sum_{n=0}^\infty \frac{(-1)^n z^{4n+2}}{(2n+1)!} = z^2 - \frac{z^6}{6} + \frac{z^{10}}{120} -
+                        \dots$<br>
+                        הרדיוס $R = \infty$ כי הפונקציה שלמה.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מצא פיתוח לורן של $f(z) = z^2 e^{1/z}$ סביב $z=0$. סווג את הסינגולריות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $e^w = \sum \frac{w^n}{n!}$. נציב $w=1/z$:<br>
+                        $z^2 (1 + 1/z + \frac{1}{2z^2} + \frac{1}{6z^3} + \dots) = z^2 + z + \frac{1}{2} + \frac{1}{6z}
+                        + \frac{1}{24z^2} + \dots$<br>
+                        מכיוון שיש אינסוף איברים בחזקות שליליות, $z=0$ היא **סינגולריות עיקרית (Essential
+                        Singularity)**.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>פתח את $f(z) = \frac{1}{z^2+1}$ לטור לורן בתחום $|z|>1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\frac{1}{z^2(1+1/z^2)} = \frac{1}{z^2} \sum (-1/z^2)^n = \sum_{n=0}^\infty
+                        \frac{(-1)^n}{z^{2n+2}}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>הוכח כי $\frac{1}{\cos z}$ אינה יכולה להתפתח לטור חזקות סביב 0 עם רדיוס התכנסות גדול מ-$\pi/2$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        לפונקציה קטבים ב-$z = \pm \pi/2$. רדיוס התכנסות הוא המרחק לסינגולריות הקרובה ביותר, לכן $R =
+                        \pi/2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב את $\oint_{|z|=1} z^2 \sin(1/z) dz$ באמצעות פיתוח לטור.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\sin(1/z) = 1/z - 1/(6z^3) + 1/(120z^5) - \dots$<br>
+                        נכפיל ב-$z^2$: $z - 1/(6z) + 1/(120z^3) - \dots$<br>
+                        האינטגרל של טור הוא סכום האינטגרלים. האיבר היחיד שאינו 0 הוא $1/z$.<br>
+                        התרומה: $2\pi i \cdot (-1/6) = -\pi i / 3$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא פיתוח טיילור של $\text{Log}(z)$ סביב $z=1$ וקבע את רדיוס ההתכנסות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשתמש ב-$w = z-1 \Rightarrow z = 1+w$.<br>
+                        $\text{Log}(1+w) = \sum_{n=1}^\infty \frac{(-1)^{n+1}}{n} w^n$ (טור ידוע).<br>
+                        רדיוס ההתכנסות $R=1$ (מרחק ל-0, שם יש סינגולריות של לוגריתם).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>נתון הטור $\sum \frac{(z-i)^n}{n^2}$. האם הטור מתכנס בנקודה $z=1+i$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $|z-z_0| = |(1+i)-i| = |1| = 1$.<br>
+                        רדיוס ההתכנסות $R=1$. הטור על השפה הוא $\sum 1/n^2$, הוא מתכנס בהחלט.<br>
+                        **תשובה: כן.**
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מצא פיתוח לורן של $\frac{z}{(z-1)(z-3)}$ בטבעת $1 < |z| < 3$.</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                שברים חלקיים: $\frac{-1/2}{z-1} + \frac{3/2}{z-3}$.<br>
+                                1) ב-$|z|>1$: $\frac{-1}{2z(1-1/z)} = -\frac{1}{2} \sum z^{-(n+1)}$.<br>
+                                2) ב-$|z|<3$: $\frac{3}{2 \cdot -3(1-z/3)}=-\frac{1}{2} \sum (z/3)^n$.<br>
+                                    סה"כ: $-\frac{1}{2} (\sum z^{-(n+1)} + \sum \frac{z^n}{3^n})$.
+                            </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>פתח את $1/z^2$ לטור טיילור סביב $z=1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\frac{1}{(1 + (z-1))^2}$. נשתמש בבינום למעריך שלילי: $(1+w)^{-2} = \sum (n+1)(-w)^n$.<br>
+                        $\sum_{n=0}^\infty (n+1) (-1)^n (z-1)^n = 1 - 2(z-1) + 3(z-1)^2 - \dots$
+                    </div>
+                </details>
+            </div>
+        </section>
+        </section>
+
+        <!-- פרק 7 -->
+        <section id="ch7" class="chapter">
+            <h2>פרק 7: נקודות סינגולריות ומשפט השאריות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Singularities and Residues)</span>
+                <p><strong>1. סיווג נקודות סינגולריות מבודדות:</strong>
+                    תהי $z_0$ נקודה מבודדת בה $f(z)$ אינה אנליטית. נסתכל על החלק העיקרי של טור לורן $\sum_{n=1}^\infty
+                    \frac{b_n}{(z-z_0)^n}$:
+                <ul>
+                    <li>**סינגולריות סליקה (Removable):** אין חזקות שליליות ($b_n=0$ לכל $n$). הגבול $\lim_{z \to z_0}
+                        f(z)$ קיים וסופי.</li>
+                    <li>**קוטב (Pole):** מספר סופי של חזקות שליליות. אם החזקה הגבוהה ביותר היא $m$, זהו קוטב מסדר $m$.
+                    </li>
+                    <li>**סינגולריות עיקרית (Essential):** אינסוף חזקות שליליות. הגבול $\lim_{z \to z_0} f(z)$ לא קיים
+                        (משפט קסורטי-ויירשטראס).</li>
+                </ul>
+                </p>
+
+                <p><strong>2. הגדרת השארית (Residue):</strong>
+                    השארית של $f(z)$ בנקודה $z_0$ היא המקדם $b_1$ (מסומן כ-$a_{-1}$) בטור לורן:
+                    $$\text{Res}(f, z_0) = b_1$$
+                </p>
+
+                <p><strong>3. משפט השאריות (Residue Theorem):</strong>
+                    אם $f(z)$ אנליטית בתוך ועל עקומה סגורה $\gamma$ פרט למספר סופי של נקודות סינגולריות $z_1, \dots,
+                    z_n$ בתוכה, אז:
+                    $$\oint_\gamma f(z) dz = 2\pi i \sum_{k=1}^n \text{Res}(f, z_k)$$
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: שיטות לחישוב שאריות</span>
+                <ol>
+                    <li>**קוטב פשוט ($m=1$):**
+                        $$\text{Res}(f, z_0) = \lim_{z \to z_0} (z-z_0) f(z)$$
+                        אם $f(z) = \frac{P(z)}{Q(z)}$ ו-$Q'(z_0) \neq 0$: $\text{Res} = \frac{P(z_0)}{Q'(z_0)}$.
+                    </li>
+                    <li>**קוטב מסדר $m$:**
+                        $$\text{Res}(f, z_0) = \frac{1}{(m-1)!} \lim_{z \to z_0} \frac{d^{m-1}}{dz^{m-1}} \left[
+                        (z-z_0)^m f(z) \right]$$
+                    </li>
+                    <li>**סינגולריות עיקרית:** חובה לפתח לטור לורן ולמצוא את המקדם של $1/(z-z_0)$.</li>
+                    <li>**שארית באינסוף:** $\text{Res}(f, \infty) = \text{Res}\left( -\frac{1}{z^2} f(1/z), 0 \right)$.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: סכום שאריות</span>
+                <p><strong>שאלה:</strong> חשב את $\oint_{|z|=3} \frac{e^z}{z^2-z} dz$.</p>
+                <p><strong>פתרון:</strong>
+                    1. נקודות סינגולריות: $z=0, z=1$. שתיהן בתוך המעגל $|z|=3$.<br>
+                    2. שתיהן קטבים פשוטים ($Q'(z) = 2z-1$).<br>
+                    3. שארית ב-0: $\frac{e^0}{2(0)-1} = \frac{1}{-1} = -1$.<br>
+                    4. שארית ב-1: $\frac{e^1}{2(1)-1} = \frac{e}{1} = e$.<br>
+                    5. לפי משפט השאריות: $I = 2\pi i (-1 + e) = 2\pi i (e-1)$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את כל הנקודות הסינגולריות של $f(z) = \frac{1}{\sin(\pi/z)}$ וסווג אותן.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        הסינגולריות הן ב-$z$ עבורם $\sin(\pi/z)=0 \Rightarrow \pi/z = k\pi \Rightarrow z = 1/k$ לכל $k
+                        \in \mathbb{Z} \setminus \{0\}$.<br>
+                        אלו קטבים פשוטים. הנקודה $z=0$ היא נקודת הצטברות של קטבים, לכן היא **סינגולריות לא מבודדת**.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את השארית של $f(z) = \frac{z^2}{(z-1)^2(z+2)}$ ב-$z=1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        קוטב מסדר 2. נחשב $\lim_{z \to 1} \frac{d}{dz} [ (z-1)^2 f(z) ] = \lim_{z \to 1} \frac{d}{dz} [
+                        \frac{z^2}{z+2} ]$.<br>
+                        הנגזרת: $\frac{2z(z+2) - z^2}{(z+2)^2} = \frac{z^2+4z}{(z+2)^2}$.<br>
+                        ב-$z=1$: $\frac{1+4}{3^2} = 5/9$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>חשב את $\oint_{|z|=2} \exp(1/z) z^3 dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        סינגולריות עיקרית ב-0. נפתח לטור:<br>
+                        $z^3 (1 + 1/z + \frac{1}{2z^2} + \frac{1}{6z^3} + \frac{1}{24z^4} + \dots) = z^3 + z^2 +
+                        \frac{z}{2} + \frac{1}{6} + \frac{1}{24z} + \dots$<br>
+                        המקדם של $1/z$ הוא $1/24$.<br>
+                        האינטגרל: $2\pi i / 24 = \pi i / 12$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>חשב את $\oint_{|z|=1} \frac{dz}{z^2 \sin z}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $z=0$ הוא קוטב מסדר 3 (שכן $\sin z = z - z^3/6 + \dots$ במכנה).<br>
+                        נפתח לטור או נשתמש בנוסחה לנגזרת שנייה. פיתוח טור קל יותר:<br>
+                        $1/(z^2(z - z^3/6 + \dots)) = 1/z^3 (1 - z^2/6)^{-1} = 1/z^3 (1 + z^2/6 + \dots) = 1/z^3 +
+                        1/(6z) + \dots$<br>
+                        השארית היא $1/6$. האינטגרל $2\pi i / 6 = \pi i / 3$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>הוכח כי סכום כל השאריות של פונקציה רציונלית (כולל באינסוף) הוא 0.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נבצע אינטגרל על מעגל ענק $|z|=R$. מצד אחד הוא שווה ל-$2\pi i \sum \text{Res}(z_k)$.<br>
+                        מצד שני, לפי הגדרת שארית באינסוף, הוא שווה ל- $-2\pi i \text{Res}(f, \infty)$.<br>
+                        לכן סכום כל השאריות הוא 0.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב $\oint_{|z|=2} \frac{z}{\cos z} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        הקטבים הם ב-$z = \pm \pi/2$. שניהם בתוך המעגל $|z|=2$.<br>
+                        אלו קטבים פשוטים. שארית ב-$\pi/2$: $\frac{\pi/2}{-\sin(\pi/2)} = -\pi/2$.<br>
+                        שארית ב-$-\pi/2$: $\frac{-\pi/2}{-\sin(-\pi/2)} = \frac{-\pi/2}{1} = -\pi/2$.<br>
+                        האינטגרל: $2\pi i (-\pi/2 - \pi/2) = -2\pi^2 i$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא שארית ב-0 ל-$\frac{\cot z}{z^2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נפתח לטור: $\frac{1}{z^2} \frac{\cos z}{\sin z} = \frac{1}{z^2} \frac{1-z^2/2}{z-z^3/6} =
+                        \frac{1}{z^3} \frac{1-z^2/2}{1-z^2/6} = \frac{1}{z^3}(1-z^2/2)(1+z^2/6) = \frac{1}{z^3}(1 -
+                        z^2/3 + \dots)$.<br>
+                        השארית (מקדם $z^{-1}$) היא $-1/3$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את $\oint_{|z|=1} z^n e^{2/z} dz$ עבור $n \in \mathbb{N}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נפתח את $e^{2/z}$ לטור: $\sum \frac{2^k}{k! z^k}$.<br>
+                        כשנכפיל ב-$z^n$, נחפש איבר שבו $k = n+1$.<br>
+                        השארית היא $\frac{2^{n+1}}{(n+1)!}$. האינטגרל הוא $2\pi i \frac{2^{n+1}}{(n+1)!}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב $\oint_{|z|=10} \frac{dz}{z^2+z+1}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        כל הקטבים בפנים. סכום השאריות שווה למינוס השארית באינסוף.<br>
+                        באינסוף: $f(1/z) = \frac{1}{1/z^2 + 1/z + 1} = \frac{z^2}{1+z+z^2}$.<br>
+                        $\text{Res}(f, \infty) = \text{Res}(-1/z^2 \cdot \frac{z^2}{1+z+z^2}, 0) =
+                        \text{Res}(\frac{-1}{1+z+z^2}, 0) = -1$.<br>
+                        סכום השאריות בפנים הוא 0 בגלל שהשארית באינסוף של "סכום שאריות" היא תמיד 0... חכה.<br>
+                        לפי משפט: $\sum \text{Res} + \text{Res}(\infty) = 0$. כאן $\text{Res}(\infty) = 0$ (כי המעלה
+                        במכנה גדולה ב-2).<br>
+                        לכן האינטגרל הוא 0.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>סווג את $z=0$ ל-$f(z) = \frac{1}{\cos z - 1}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\cos z - 1 = -z^2/2 + z^4/24 - \dots$<br>
+                        מכיוון שהמכנה מתחיל ב-$z^2$, זהו קוטב מסדר 2.
+                    </div>
+                </details>
+            </div>
+        </section>
+        <!-- פרק 8 -->
+        <section id="ch8" class="chapter">
+            <h2>פרק 8: חישוב אינטגרלים ממשיים באמצעות שאריות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Real Integrals Classification)</span>
+                <p><strong>סוג א: אינטגרלים טריגונומטריים $\int_0^{2\pi} R(\cos \theta, \sin \theta) d\theta$</strong>
+                    מציבים $z = e^{i\theta}$. אז $\cos \theta = \frac{z+z^{-1}}{2}$, $\sin \theta =
+                    \frac{z-z^{-1}}{2i}$, ו-$d\theta = \frac{dz}{iz}$.
+                    האינטגרל הופך לאינטגרל מסלול על מעגל היחידה $|z|=1$.
+                </p>
+
+                <p><strong>סוג ב: אינטגרלים רציונליים $\int_{-\infty}^{\infty} \frac{P(x)}{Q(x)} dx$</strong>
+                    כאשר $Q(x) \neq 0$ לכל $x$ ממשי והמעלה של $Q$ גדולה מהמעלה של $P$ ב-2 לפחות.
+                    האינטגרל שווה ל-$2\pi i \sum \text{Res}(f, z_k)$ עבור כל הקטבים $z_k$ בחצי המישור העליון
+                    ($Im(z)>0$).
+                </p>
+
+                <p><strong>סוג ג: אינטגרלים עם פונקציות טריגונומטריות (פורייה) $\int_{-\infty}^{\infty} f(x) e^{iax}
+                        dx$</strong>
+                    משתמשים ב**למת ג'ורדן**: אם $|f(z)| \to 0$ כש-$|z| \to \infty$, אז האינטגרל על חצי המעגל העליון שואף
+                    ל-0 עבור $a>0$.
+                    האינטגרל הממשי שווה ל-$2\pi i \sum \text{Res}(f(z)e^{iaz}, z_k)$.
+                </p>
+
+                <p><strong>סוג ד: אינטגרלים עם קטבים על הציר הממשי (הערך העיקרי PV)</strong>
+                    אם יש קוטב פשוט ב-$x_0$ על ציר $x$, מבצעים "חריגה" (Indentation). תרומת החריגה היא $\pi i \cdot
+                    \text{Res}(f, x_0)$.
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: בחירת מסלול וחישוב</span>
+                <ol>
+                    <li>זהה את סוג האינטגרל (טריגונומטרי, רציונלי, פורייה).</li>
+                    <li>מצא את כל הקטבים של הפונקציה המרוכבת המתאימה.</li>
+                    <li>סנן רק את הקטבים שנמצאים בתוך המסלול (לרוב חצי מישור עליון).</li>
+                    <li>חשב את השאריות בנקודות אלו.</li>
+                    <li>הכפל ב-$2\pi i$ (ובסוג ג' אל תשכח לקחת בסוף רק חלק ממשי או מדומה אם ביקשו $\cos$ או $\sin$).
+                    </li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: סוג ג' (פורייה)</span>
+                <p><strong>שאלה:</strong> חשב את $I = \int_{-\infty}^{\infty} \frac{\cos x}{x^2+a^2} dx$ ($a>0$).</p>
+                <p><strong>פתרון:</strong>
+                    1. נסתכל על $f(z) = \frac{e^{iz}}{z^2+a^2}$.<br>
+                    2. קטבים: $z = \pm ai$. רק $z = ai$ בחצי המישור העליון.<br>
+                    3. שארית ב-$ai$: $\text{Res} = \frac{e^{i(ai)}}{2(ai)} = \frac{e^{-a}}{2ai}$.<br>
+                    4. אינטגרל מרוכב: $2\pi i \frac{e^{-a}}{2ai} = \frac{\pi e^{-a}}{a}$.<br>
+                    5. מכיוון שהתוצאה ממשית, היא שווה ל-$I$ (החלק הממשי של האינטגרל המרוכב).<br>
+                    **תשובה:** $\frac{\pi}{a e^a}$.
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\int_0^{2\pi} \frac{d\theta}{3 + \cos \theta}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נציב $z=e^{i\theta}, d\theta = dz/iz, \cos\theta = (z+1/z)/2$.<br>
+                        $\oint_{|z|=1} \frac{dz/iz}{3 + (z+1/z)/2} = \oint \frac{2 dz}{i(z^2+6z+1)}$.<br>
+                        שורשי $z^2+6z+1$: $z = -3 \pm \sqrt{8}$. רק $z = -3+\sqrt{8}$ בפנים.<br>
+                        שארית: $\frac{2}{i(2z+6)} = \frac{2}{i(2\sqrt{8})} = \frac{1}{i\sqrt{8}}$.<br>
+                        התוצאה: $2\pi i \cdot \frac{1}{2i\sqrt{2}} = \pi/\sqrt{2}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את $\int_0^\infty \frac{dx}{x^4+1}$. (רמז: הפונקציה זוגית).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נעבור ל-$\frac{1}{2} \int_{-\infty}^\infty$. קטבים ב- חצי מישור עליון: $e^{i\pi/4},
+                        e^{3i\pi/4}$.<br>
+                        שאריות לפי $1/Q'(z) = 1/(4z^3)$.<br>
+                        $\text{Res}_1 = \frac{1}{4e^{i3\pi/4}} = \frac{e^{-i3\pi/4}}{4}$.<br>
+                        סכום שאריות כפול $2\pi i$ וחלוקה ב-2 נותנת: $\frac{\pi\sqrt{2}}{4}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>חשב את $\int_{-\infty}^{\infty} \frac{x \sin x}{x^2+4} dx$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נחשב $Im \oint \frac{z e^{iz}}{z^2+4} dz$. קוטב ב-$2i$.<br>
+                        שארית ב-$2i$: $\frac{2i e^{-2}}{4i} = \frac{e^{-2}}{2}$.<br>
+                        אינטגרל: $2\pi i \frac{1}{2e^2} = \frac{\pi i}{e^2}$.<br>
+                        ניקח חלק מדומה: $\pi/e^2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>השתמש בחריגה כדי לחשב את אינטגרל דיריכלה: $\int_0^\infty \frac{\sin x}{x} dx$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נסתכל על $e^{iz}/z$. יש קוטב על הציר ב-0. נבצע חריגה בחצי מעגל קטן למטה.<br>
+                        האינטגרל על חצי המעגל הוא $\pi i \text{Res}(0) = \pi i \cdot 1 = \pi i$.<br>
+                        סה"כ: $PV \int + \pi i = 0 \Rightarrow PV = -\pi i$. (תלוי בכיוון).<br>
+                        התוצאה הידועה היא $\pi/2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>חשב את $\int_{-\infty}^{\infty} \frac{\cos(ax)}{x^2+1} dx$ עבור $a \in \mathbb{R}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        כמו בדוגמה הפתורה, התוצאה היא $\pi e^{-|a|}$. (יש להתייחס לערך המוחלט של $a$).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב את $\int_0^{2\pi} \sin^4 \theta d\theta$ באמצעות שאריות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\sin \theta = (z-z^{-1})/2i$. $\sin^4 \theta = \frac{1}{16} (z - 1/z)^4 = \frac{1}{16}(z^4 -
+                        4z^2 + 6 - 4/z^2 + 1/z^4)$.<br>
+                        האינטגרל הוא $\oint \frac{1}{16}(\dots) \frac{dz}{iz}$.<br>
+                        השארית היחידה מגיעה מהאיבר הקבוע 6, שנותן $6/iz$.<br>
+                        שארית: $6/i$. אינטגרל: $2\pi i (6/i \cdot 1/16) = \frac{12\pi}{16} = \frac{3\pi}{4}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>חשב את $\int_{-\infty}^{\infty} \frac{dx}{(x^2+1)^2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        קוטב מסדר 2 ב-$i$.<br>
+                        שארית: $\frac{d}{dz} \frac{1}{(z+i)^2} = \frac{-2}{(z+i)^3}$.<br>
+                        ב-$z=i$: $\frac{-2}{(2i)^3} = \frac{-2}{-8i} = \frac{1}{4i} = -i/4$.<br>
+                        אינטגרל: $2\pi i (-i/4) = \pi/2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את $\int_{-\infty}^{\infty} \frac{e^{ax}}{1+e^x} dx$ לכל $0 < a < 1$. (רמז: מסלול מלבני).</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                נשתמש במלבן בין $y=0$ ל-$y=2\pi$. קוטב ב-$z=\pi i$.<br>
+                                שארית: $\frac{e^{ai\pi}}{e^{i\pi}} = -e^{ia\pi}$.<br>
+                                מתקבל: $I(1-e^{i2\pi a}) = 2\pi i (-e^{ia\pi})$.<br>
+                                $I = \frac{\pi}{\sin(\pi a)}$.
+                            </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב את $\int_0^\infty \frac{x^2}{x^6+1} dx$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\frac{1}{2} \int_{-\infty}^\infty$. קטבים במישור עליון: $e^{i\pi/6}, e^{i\pi/2} = i,
+                        e^{i5\pi/6}$.<br>
+                        שאריות לפי $z^2/(6z^5) = 1/(6z^3)$.<br>
+                        ב-$i$: $1/(6i^3) = 1/(-6i) = i/6$.<br>
+                        הסכום הסופי הוא $\pi/6$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הסבר מתי משתמשים בלמת ג'ורדן לעומת אומדן ML רגיל.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        ML רגיל דורש שהפונקציה תשאף ל-0 מהר מספיק ($1/R^2$), ג'ורדן מאפשר פונקציות ששואפות לאט ($1/R$)
+                        בתנאי שיש אקספוננט תנודתי $e^{iaz}$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 9 -->
+        <section id="ch9" class="chapter">
+            <h2>פרק 9: עקרון הארגומנט ומשפט רושה</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Argument Principle and Rouche)</span>
+                <p><strong>1. עקרון הארגומנט:</strong>
+                    תהי $f(z)$ פונקציה מרומורפית (אנליטית פרט לקטבים) בתוך ועל עקומה סגורה $\gamma$. אם אין לה אפסים או
+                    קטבים על $\gamma$, אז:
+                    $$\frac{1}{2\pi i} \oint_\gamma \frac{f'(z)}{f(z)} dz = N(Z) - N(P)$$
+                    כאשר $N(Z)$ הוא מספר האפסים (כולל ריבוי) ו-$N(P)$ הוא מספר הקטבים (כולל ריבוי) בתוך $\gamma$.
+                    <br>**משמעות גיאומטרית:** האינטגרל סופר כמה פעמים המסלול $f(\gamma)$ מקיף את הראשית.
+                </p>
+
+                <p><strong>2. משפט רושה (Rouche's Theorem):</strong>
+                    אם $f(z)$ ו-$g(z)$ אנליטיות בתוך ועל $\gamma$, ומתקיים **$|g(z)| < |f(z)|$** על **השפה** $\gamma$,
+                        אז ל-$f(z)$ ול-$f(z) + g(z)$ יש אותו מספר אפסים בתוך $\gamma$. <br>**יישום נפוץ:** מציאת מספר
+                        השורשים של פולינומים בתחומים מסוימים.
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: שימוש במשפט רושה למציאת שורשים</span>
+                <ol>
+                    <li>**בחר את המסלול:** לרוב עיגול $|z|=R$.</li>
+                    <li>**פרק את הפונקציה:** כתוב את הפונקציה הנתונה כ-$f(z) + g(z)$.</li>
+                    <li>**בחר את האיבר הדומיננטי:** האיבר שיש לו הכי הרבה "כוח" על השפה יהיה $f(z)$.</li>
+                    <li>**בדוק את התנאי:** הוכח כי לכל $z$ על השפה $|g(z)| < |f(z)|$. <br>טיפ: השתמש בגרסה ההפוכה של
+                            אי-שוויון המשולש: $|a+b| \ge ||a|-|b||$.
+                    </li>
+                    <li>**סיכום:** מספר האפסים של הפונקציה המקורית שווה למספר האפסים של $f(z)$ שבחרת (שהוא בדרך כלל איבר
+                        פשוט כמו $a z^n$).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: מספר שורשים בטבעת</span>
+                <p><strong>שאלה:</strong> כמה שורשים יש ל-$P(z) = z^4 + 3z + 1$ בטבעת $1 < |z| < 2$?</p>
+                        <p><strong>פתרון:</strong>
+                            1. **נבדוק ב-$|z|<2$:** נבחר $f(z)=z^4$. על השפה $|z|=2$ מתקיים $|f(z)|=16$. השאר:
+                                $g(z)=3z+1 \Rightarrow |g(z)| \le 3(2)+1=7$. מכיוון ש-$7 < 16$, יש ל-$P(z)$ אותם מספר
+                                שורשים כמו ל-$z^4$, כלומר **4 שורשים** ב-$|z|<2$.<br>
+                                2. **נבדוק ב-$|z|<1$:** נבחר $f(z)=3z$. על השפה $|z|=1$ מתקיים $|f(z)|=3$. השאר:
+                                    $g(z)=z^4+1 \Rightarrow |g(z)| \le 1^4+1=2$. מכיוון ש-$2 < 3$, יש ל-$P(z)$ אותם מספר
+                                    שורשים כמו ל-$3z$, כלומר **שורש 1** ב-$|z|<1$.<br>
+                                    3. **סיכום:** בטבעת יש $4 - 1 = 3$ שורשים.
+                        </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\oint_{|z|=2} \frac{z+1}{z^2-1} dz$ באמצעות עקרון הארגומנט (אם אפשר) או משפט השאריות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        שימו לב: $f(z) = \frac{z+1}{(z-1)(z+1)} = \frac{1}{z-1}$.<br>
+                        הפונקציה היא בעלת קוטב פשוט ב-1 ואפס במינוס 1 (אבל הם מצטמצמים!).<br>
+                        עבור $1/(z-1)$: $N=0, P=1$. האינטגרל של $f'/f$ נותן $N-P$.<br>
+                        כאן האינטגרל הוא פשוט $2\pi i \cdot \text{Res}(1) = 2\pi i$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>כמה פתרונות יש למשוואה $z^7 - 5z^4 + z^2 - 2 = 0$ בתוך עיגול היחידה $|z|<1$?< /p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                נבחר $f(z) = -5z^4$. על $|z|=1$, $|f(z)| = 5$.<br>
+                                השאר $g(z) = z^7 + z^2 - 2 \Rightarrow |g(z)| \le |1|^7 + |1|^2 + |-2| = 4$.<br>
+                                מכיוון ש-$4 < 5$, יש 4 פתרונות. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>הוכח כי כל השורשים של $z^5 + 3z^2 + 1 = 0$ נמצאים בתוך העיגול $|z|<2$.< /p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                נבחר $f(z) = z^5$. על $|z|=2$, $|f(z)| = 32$.<br>
+                                $g(z) = 3z^2 + 1 \Rightarrow |g(z)| \le 3(4) + 1 = 13$.<br>
+                                $13 < 32$, לכן יש 5 שורשים בתוך $|z|<2$. מכיוון שהפולינום ממעלה 5, כל שורשיו שם. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>כמה שורשים יש ל-$z^4 - 6z + 3 = 0$ בטבעת $1 < |z| < 2$?</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                1) ב-$|z|<2$: $f=z^4$ ($16$), $g=-6z+3$ ($15$). $15<16 \Rightarrow 4$ שורשים.<br>
+                                    2) ב-$|z|<1$: $f=-6z$ ($6$), $g=z^4+3$ ($4$). $4<6 \Rightarrow 1$ שורש.<br>
+                                        תשובה: $4-1 = 3$.
+                            </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>השתמש במשפט רושה כדי להוכיח את **המשפט היסודי של האלגברה**.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        יהי $P(z) = a_n z^n + \dots + a_0$. נבחר $f(z) = a_n z^n$ ו-$g(z) = a_{n-1}z^{n-1} + \dots +
+                        a_0$.<br>
+                        עבור $R$ מספיק גדול, $|f(z)| = |a_n| R^n$ יהיה גדול יותר מ-$|g(z)|$ על השפה $|z|=R$.<br>
+                        לכן ל-$P(z)$ יש $n$ שורשים (כמו ל-$z^n$).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מצא את מספר השורשים של $e^z - 3z^n = 0$ בתוך $|z|<1$ (עבור $n \ge 1$).</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                נבחר $f(z) = -3z^n$. על $|z|=1$, $|f(z)| = 3$.<br>
+                                $g(z) = e^z \Rightarrow |e^z| = e^{Re(z)} \le e^1 \approx 2.718$.<br>
+                                $2.718 < 3$, לכן יש $n$ שורשים. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>האם למשוואה $z + e^{-z} = 2$ יש פתרון בחצי המישור הימני $Re(z)>0$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשתמש במסלול של חצי עיגול ענק מימין. על הציר המדומה ($z=iy$): $|iy + e^{-iy}| = |iy + \cos y - i
+                        \sin y| = \sqrt{\cos^2 y + (y-\sin y)^2}$.<br>
+                        זה תמיד $\ge 1$. בבחירה נכונה של $f(z)=z-2$ ניתן להראות שיש פתרון אחד.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>כמה שורשים יש ל-$z^6 - 5z^2 + 10 = 0$ בטבעת $1 < |z| < 2$?</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                1) ב-$|z|<1$: $f=10$ (אין שורשים), $g=z^6-5z^2$ (מקס 6). $6<10 \Rightarrow 0$
+                                    שורשים.<br>
+                                    2) ב-$|z|<2$: $f=z^6$ ($64$), $g=-5z^2+10$ ($30$). $30<64 \Rightarrow 6$ שורשים.<br>
+                                        תשובה: 6 שורשים.
+                            </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>תהי $f(z)$ אנליטית ב-$|z| \le 1$ כך ש-$|f(z)| < 1$ על המעגל. הוכח כי יש ל-$f(z)$ בדיוק נקודת שבת אחת
+                        ($f(z)=z$) בתוך המעגל.</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                נגדיר $H(z) = f(z) - z$. נרצה לבדוק אפסים ל-$H$.<br>
+                                נבחר $F(z) = -z$, $G(z) = f(z)$. על השפה $|G(z)| = |f(z)| < 1$ ו-$|F(z)|=1$.<br>
+                                    לכן $|G| < |F|$, ול-$f(z)-z$ יש אותו מספר אפסים כמו ל-$-z$, כלומר 1. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מה קורה אם האי שוויון $|g| < |f|$ הוא חלש ($\le$) או אם יש אפסים על השפה?</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                המשפט דורש אי-שוויון חזק על השפה. אם יש אפס על השפה, המשפט לא תקף ישירות (מספר האפסים
+                                בפנים עלול להשתנות בשינוי קטן של השפה).
+                            </div>
+                        </details>
+            </div>
+        </section>
+
+        <!-- פרק 10 -->
+        <section id="ch10" class="chapter">
+            <h2>פרק 10: פתרון משוואות דיפרנציאליות בעזרת טורים</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Differential Equations and Power Series)</span>
+                <p><strong>1. סיווג נקודות:</strong>
+                    עבור משוואה $P(x)y'' + Q(x)y' + R(x)y = 0$:
+                <ul>
+                    <li>**נקודה רגולרית (Ordinary):** $P(x_0) \neq 0$. ניתן למצוא שני פתרונות בלתי תלויים כטורי טיילור
+                        $\sum a_n (x-x_0)^n$.</li>
+                    <li>**נקודה סינגולרית רגולרית (Regular Singular Point):** $P(x_0) = 0$ אך הגבולות $p_0 = \lim_{x \to
+                        x_0} (x-x_0)\frac{Q(x)}{P(x)}$ ו-$q_0 = \lim_{x \to x_0} (x-x_0)^2\frac{R(x)}{P(x)}$ קיימים
+                        וסופיים.</li>
+                    <li>**נקודה סינגולרית עיקרית:** נקודה שאינה רגולרית ואינה סינגולרית רגולרית.</li>
+                </ul>
+                </p>
+
+                <p><strong>2. שיטת פרובניוס (Frobenius Method):</strong>
+                    סביב נקודה סינגולרית רגולרית $x_0$, מחפשים פתרון מהצורה:
+                    $$y(x) = (x-x_0)^r \sum_{n=0}^\infty a_n (x-x_0)^n = \sum_{n=0}^\infty a_n (x-x_0)^{n+r}$$
+                    הערך של $r$ נקבע ע"י **המשוואה האינדיסיאלית**: $r(r-1) + p_0 r + q_0 = 0$.
+                </p>
+
+                <p><strong>3. סוגי פתרונות (לפי שורשי האינדיסיאלית $r_1, r_2$):</strong>
+                <ul>
+                    <li>אם $r_1 - r_2 \notin \mathbb{Z}$: קיימים שני פתרונות בצורת טורי פרובניוס.</li>
+                    <li>אם $r_1 = r_2$: הפתרון השני יכיל איבר לוגריתמי $y_2 = y_1 \ln(x) + \dots$.</li>
+                    <li>אם $r_1 - r_2 \in \mathbb{Z}$: הפתרון השני עשוי להכיל איבר לוגריתמי.</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: פתרון בשיטת הטורים</span>
+                <ol>
+                    <li>בדוק את טיב הנקודה $x_0$ (לרוב $x_0=0$).</li>
+                    <li>הנח פתרון $y = \sum a_n x^{n+r}$ (אם רגולרית $r=0$).</li>
+                    <li>גזור ומצא ביטויים ל-$y'$ ו-$y''$.</li>
+                    <li>הצב במשוואה וסדר כך שכל האיברים יהיו תחת סכום אחד עם חזקה אחידה ($x^{n+k}$).</li>
+                    <li>השווה את מקדמי החזקה הנמוכה ביותר ל-0 למציאת המשוואה האינדיסיאלית (עבור $r$).</li>
+                    <li>מצא את **נוסחת הנסיגה** (Recurrence Relation) המקשרת בין $a_n$ ל-$a_{n-k}$.</li>
+                    <li>חשב את האיברים הראשונים של הטור עבור כל ערך של $r$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: שיטת הטורים (נקודה רגולרית)</span>
+                <p><strong>שאלה:</strong> מצא פתרון בטור ל-$y'' + y = 0$ סביב $x=0$.</p>
+                <p><strong>פתרון:</strong>
+                    1. הנקודה $x=0$ רגולרית. נציב $y = \sum_{n=0}^\infty a_n x^n$.<br>
+                    2. משוואה: $\sum n(n-1)a_n x^{n-2} + \sum a_n x^n = 0$.<br>
+                    3. הזזת אינדקס בראשון: $\sum (n+2)(n+1)a_{n+2} x^n + \sum a_n x^n = 0$.<br>
+                    4. נוסחת נסיגה: $a_{n+2} = \frac{-a_n}{(n+2)(n+1)}$.<br>
+                    5. עבור $a_0$: $a_2 = -a_0/2, a_4 = a_0/24 \dots \Rightarrow a_{2k} = \frac{(-1)^k a_0}{(2k)!}$
+                    (קוסינוס).<br>
+                    6. עבור $a_1$: $a_3 = -a_1/6, a_5 = a_1/120 \dots \Rightarrow a_{2k+1} = \frac{(-1)^k a_1}{(2k+1)!}$
+                    (סינוס).
+                </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מיין את הנקודה $x=0$ עבור המשוואות הבאות:<br>
+                    1. $x^2 y'' + xy' + (x^2-1)y = 0$ (משוואת בסל)<br>
+                    2. $x^3 y'' + y' + y = 0$</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        1. $P=x^2, Q=x, R=x^2-1$. גבולות $p_0 = \lim x(x/x^2) = 1, q_0 = \lim x^2(x^2-1)/x^2 = -1$.
+                        **סינגולרית רגולרית**.<br>
+                        2. $P=x^3, Q=1$. גבול $p_0 = \lim x(1/x^3) = \infty$. **סינגולרית עיקרית**.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא את המשוואה האינדיסיאלית ושורשיה עבור $3x^2 y'' + 2xy' + x^2 y = 0$ סביב $x=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $p_0 = \lim x(2x/3x^2) = 2/3$. $q_0 = \lim x^2(x^2/3x^2) = 0$.<br>
+                        משוואה: $r(r-1) + \frac{2}{3}r + 0 = 0 \Rightarrow r^2 - \frac{1}{3}r = 0$.<br>
+                        שורשים: $r_1 = 1/3, r_2 = 0$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>עבור $y'' - xy' - y = 0$, מצא את נוסחת הנסיגה סביב $x=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נציב טורי טיילור: $\sum (n+2)(n+1)a_{n+2} x^n - \sum n a_n x^n - \sum a_n x^n = 0$.<br>
+                        $(n+2)(n+1)a_{n+2} - (n+1)a_n = 0 \Rightarrow a_{n+2} = \frac{a_n}{n+2}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>הוכח כי לפתרון בטור של $y'' - xy' - y = 0$ עם $y(0)=1, y'(0)=0$ יש צורה סגורה $y = e^{x^2/2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        מהתרגיל הקודם: $a_{k+2} = a_k/(k+2)$. עם $a_1=0$, כל האיברים האי-זוגיים הם 0.<br>
+                        עבור הזוגיים: $a_0=1, a_2=1/2, a_4=1/(2 \cdot 4), a_6=1/(2 \cdot 4 \cdot 6) \dots a_{2k} =
+                        \frac{1}{2^k k!}$.<br>
+                        הטור: $\sum \frac{(x^2/2)^k}{k!} = e^{x^2/2}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>השתמש בשיטת פרובניוס למצוא את הפתרון הראשון של $2x^2 y'' - xy' + (1+x)y = 0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        משוואה אינדיסיאלית: $2r(r-1) - r + 1 = 0 \Rightarrow 2r^2 - 3r + 1 = 0 \Rightarrow r_1=1,
+                        r_2=1/2$.<br>
+                        נוסחת נסיגה עבור $r=1$: $a_n = \frac{-a_{n-1}}{(n+1)(2n+1)}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>משוואת לג'נדר: $(1-x^2)y'' - 2xy' + \alpha(\alpha+1)y = 0$. מצא נוסחת נסיגה ב-$x=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $a_{n+2} = \frac{n(n+1) - \alpha(\alpha+1)}{(n+2)(n+1)} a_n =
+                        \frac{(n-\alpha)(n+\alpha+1)}{(n+2)(n+1)} a_n$.<br>
+                        מכאן רואים שאם $\alpha$ מספר שלם, הטור נקטע והופך לפולינום (פולינומי לג'נדר).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>האם לכל משוואה לינארית מסדר 2 יש פתרון בטור חזקות סביב כל נקודה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        לא. בנקודה סינגולרית עיקרית (Irregular) לא תמיד קיים פתרון בצורת טור (גם לא פרובניוס).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מצא את רדיוס ההתכנסות המינימלי של פתרון בטור ל-$(x^2+4)y'' + y = 0$ סביב $x=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        הסינגולריות של המשוואה הן ב-$x = \pm 2i$.<br>
+                        רדיוס ההתכנסות הוא המרחק מהנקודה $0$ לסינגולריות הקרובה ביותר, לכן $R = |2i| = 2$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>עבור $x^2 y'' + xy' + x^2 y = 0$ (בסל מסדר 0), מהם שורשי המשוואה האינדיסיאלית?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $r(r-1) + r = 0 \Rightarrow r^2 = 0$. שורש כפול $r=0$.<br>
+                        זהו המקרה שבו הפתרון השני דורש איבר לוגריתמי.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מה קורה אם רדיוס ההתכנסות של הטור הוא 0?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זה אומר שהטור מתכנס רק בנקודת המרכז $x_0$, ולכן הוא לא מייצג פונקציה שימושית ואינו פתרון תקף
+                        למשוואה.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 11 -->
+        <section id="ch11" class="chapter">
+            <h2>פרק 11: העתקות קונפורמיות וטרנספורמציית מוביוס</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Conformal Mappings and Mobius)</span>
+                <p><strong>1. העתקה קונפורמית:</strong>
+                    העתקה $f: D \to \mathbb{C}$ נקראת קונפורמית בנקודה $z_0$ אם היא משמרת זוויות בין עקומות (הן בגודל
+                    והן בכיוון).
+                    <br>**תנאי הכרחי ומספיק:** אם $f(z)$ אנליטית ב-$z_0$ ו-$f'(z_0) \neq 0$, אז $f$ קונפורמית ב-$z_0$.
+                </p>
+
+                <p><strong>2. טרנספורמציית מוביוס:</strong>
+                    העתקה מהצורה $f(z) = \frac{az+b}{cz+d}$ עם $ad-bc \neq 0$.
+                <ul>
+                    <li>**תכונת המעגלים:** מוביוס מעבירה "מעגלים הכלליים" (מעגלים או ישרים) למעגלים הכלליים.</li>
+                    <li>**העתקה של 3 נקודות:** קיים מוביוס יחיד המעביר שלוש נקודות שונות $(z_1, z_2, z_3)$ לשלוש נקודות
+                        שונות אחרות $(w_1, w_2, w_3)$.</li>
+                    <li>**העתקות בסיסיות:**
+                        <ul>
+                            <li>הזזה: $z + b$</li>
+                            <li>סיבוב ומתיחה: $az$</li>
+                            <li>היפוך: $1/z$</li>
+                        </ul>
+                    </li>
+                </ul>
+                </p>
+
+                <p><strong>3. משפט ההעתקה של רימן:</strong>
+                    כל תחום פשוט קשר שאינו כל המישור ניתן להעתקה קונפורמית וחד-חד-ערכית על עיגול היחידה.
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: בניית העתקות מוביוס ותחומים</span>
+                <ol>
+                    <li>**מציאת העתקה ע"י 3 נקודות:** השתמש בנוסחת היחס הכפול (Cross-Ratio).
+                        $$\frac{w-w_1}{w-w_3} \cdot \frac{w_2-w_3}{w_2-w_1} = \frac{z-z_1}{z-z_3} \cdot
+                        \frac{z_2-z_3}{z_2-z_1}$$
+                    </li>
+                    <li>**העתקת חצי מישור לעיגול:** השתמש ב-$f(z) = e^{i\alpha} \frac{z-z_0}{z-\bar{z}_0}$ כאשר
+                        $Im(z_0)>0$. הנקודה $z_0$ עוברת למרכז העיגול (0).</li>
+                    <li>**העתקת עיגול לעיגול:** השתמש ב-$f(z) = e^{i\alpha} \frac{z-z_0}{1-\bar{z}_0 z}$ כאשר $|z_0|
+                        <1$.< /li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: שלבי העתקה</span>
+                <p><strong>שאלה:</strong> העתק את הגיזרה $\{ z : |z|<1, Im(z)>0 \}$ לעיגול היחידה $|w|<1$.< /p>
+                            <p><strong>פתרון:</strong>
+                                1. **ראשית:** השתמש ב-$w_1 = \frac{z+1}{1-z}$. זה מעביר את חצי העיגול לרביע הראשון
+                                (ישרים ב-90 מעלות).
+                                <br>2. **ריבוע:** $w_2 = w_1^2$ מעביר את הרביע הראשון לחצי המישור העליון ($Im(w)>0$).
+                                <br>3. **מוביוס סופי:** $w = \frac{w_2-i}{w_2+i}$ מעביר את חצי המישור העליון לעיגול
+                                היחידה.
+                            </p>
+            </div>
+
+            <h3>חלק 2: תרגול פרימיום (Mastery Drill)</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את כל הנקודות הקבועות (Fixed Points) של $f(z) = \frac{3z-4}{z-1}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $f(z) = z \Rightarrow 3z-4 = z^2-z \Rightarrow z^2-4z+4=0 \Rightarrow (z-2)^2=0$.<br>
+                        תשובה: $\mathbf{z=2}$ (נקודה קבועה יחידה).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא העתקת מוביוס המעבירה $(0, 1, \infty) \to (i, -1, -i)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\frac{w-i}{w+i} \cdot \frac{-1+i}{-1-i} = z \Rightarrow -i \frac{w-i}{w+i} = z$.<br>
+                        פתרון עבור $w$ נותן $w = \frac{z+i}{1+iz}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>לאיזה תחום מעבירה ההעתקה $f(z) = z^2$ את הרצועה $0 < Im(z) < 1, Re(z)>0$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        התחום הוא פנים הפרבולה $u = (v/2)^2 - 1$ בחצי המישור העליון ($v>0$).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>האם קיימת העתקת מוביוס המעבירה את $|z|<1$ ל-$|w|<1$ כך ש-$0 \to 0.5$ ו-$0.5 \to 0$?</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                כן. $f(z) = \frac{0.5-z}{1-0.5z}$.
+                            </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא את התמונה של הקו $x=1$ תחת ההעתקה $f(z) = 1/z$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        התמונה היא מעגל שמרכזו $(1/2, 0)$ ורדיוסו $1/2$ (ללא הראשית).
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב את היחס הכפול $(i, 1, 0, \infty)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $\frac{(i-1)(0-\infty)}{(i-\infty)(0-1)} = \frac{i-1}{-1} = \mathbf{1-i}$.
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא העתקה קונפורמית המעבירה את ה-sector $0 < \arg(z) < \pi/4$ לחצי המישור העליון.</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                $f(z) = z^4$ מכפילה את הזווית ב-4, נותפת $0 < \theta < \pi$. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>הראו כי ההעתקה $f(z) = \frac{z-1}{z+1}$ מעבירה את חצי המישור הימני ($Re(z)>0$) לעיגול היחידה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $Re(z)>0 \Rightarrow |z-1| < |z+1| \Rightarrow |\frac{z-1}{z+1}| < 1$. </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מצא את כל העתקות מוביוס המעבירה את העיגול $|z|<1$ לעצמו.</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                $f(z) = e^{i\theta} \frac{z-z_0}{1-\bar{z}_0 z}$ כאשר $|z_0|<1$. </div>
+                        </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מהו התנאי על המקדמים כדי שמוביוס יעביר את ציר ה-x לעצמו?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        ניתן לבחור $a,b,c,d \in \mathbb{R}$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 12: מסכם -->
+        <section id="ch12" class="chapter">
+            <h2>פרק 12: שאלות חזרה ומבחנים מסכמים</h2>
+            <div class="content-box theory">
+                <span class="box-title">טיפים למבחן</span>
+                <p>במבחן בדרך כלל יש שאלה אחת מכל נושא מרכזי: שורשים, משוואות C-R, אינטגרל קושי, שאריות ורושה.</p>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">שאלה מסכמת 1</div>
+                <p>חשב את $\oint_{|z|=2} \frac{\sin z}{z^2(z+i)} dz$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        שארית ב-0 (קוטב מסדר 1 כי סינוס מתאפס ב-0) ושארית ב- מינוס $i$.<br>
+                        השתמש בטור טיילור לסינוס או בגזירה.
+                    </div>
+                </details>
+            </div>
+            <!-- שאר השאלות יתווספו בהמשך -->
+        </section>
+
+    </main>
+
+    <script>
+        // מצב כהה
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // נתוני הנוסחאות לפי פרקים - גירסה מורחבת (נוסחאון מלא)
+        const formulaData = {
+            ch1: {
+                title: "פרק 1: מספרים מרוכבים - יסודות",
+                formulas: [
+                    { label: "הצגה אלגברית", math: "z = x + iy" },
+                    { label: "הצגה פולרית", math: "z = r(\\cos\\theta + i\\sin\\theta) = r e^{i\\theta}" },
+                    { label: "מודול (ערך מוחלט)", math: "|z| = \\sqrt{x^2 + y^2}" },
+                    { label: "צמוד מרוכב", math: "\\bar{z} = x - iy, \\quad z\\bar{z} = |z|^2, \\quad Re(z) = \\frac{z+\\bar{z}}{2}, \\quad Im(z) = \\frac{z-\\bar{z}}{2i}" },
+                    { label: "נוסחת דה-מואבר", math: "z^n = r^n e^{in\\theta}" },
+                    { label: "שורשים (De Moivre's Roots)", math: "w_k = \\sqrt[n]{r} \\exp\\left(i\\frac{\\theta + 2\\pi k}{n}\\right), \\quad k=0,1,\\dots,n-1" },
+                    { label: "אי שוויון המשולש", math: "|z_1 + z_2| \\le |z_1| + |z_2|, \\quad |z_1 + z_2| \\ge ||z_1| - |z_2||" }
+                ]
+            },
+            ch2: {
+                title: "פרק 2: גזירות, C-R והרמוניות",
+                formulas: [
+                    { label: "משוואות קושי-רימן (Cartesian)", math: "\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}, \\quad \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}" },
+                    { label: "נוסחת הנגזרת", math: "f'(z) = u_x + i v_x = v_y - i u_y" },
+                    { label: "C-R פולרי", math: "u_r = \\frac{1}{r}v_\\theta, \\quad v_r = -\\frac{1}{r}u_\\theta" },
+                    { label: "נגזרת בפולרי", math: "f'(z) = e^{-i\\theta}(u_r + i v_r)" },
+                    { label: "משוואת לפלס (Laplace)", math: "\\Delta \\phi = \\phi_{xx} + \\phi_{yy} = 0" },
+                    { label: "בדיקת הרמוניות", math: "u_{xx} + u_{yy} = 0" }
+                ]
+            },
+            ch3: {
+                title: "פרק 3: פונקציות אלמנטריות",
+                formulas: [
+                    { label: "אקספוננט מרוכב", math: "e^z = e^x(\\cos y + i \\sin y)" },
+                    { label: "Euler's Formula", math: "e^{i\\theta} = \\cos\\theta + i\\sin\\theta" },
+                    { label: "סינוס וקוסינוס", math: "\\sin z = \\frac{e^{iz}-e^{-iz}}{2i}, \\quad \\cos z = \\frac{e^{iz}+e^{-iz}}{2}" },
+                    { label: "זהויות טריגו", math: "\\sin^2 z + \\cos^2 z = 1, \\quad \\sin(iz) = i\\sinh(z), \\quad \\cos(iz) = \\cosh(z)" },
+                    { label: "פונקציות היפרבוליות", math: "\\sinh z = \\frac{e^z - e^{-z}}{2}, \\quad \\cosh z = \\frac{e^z + e^{-z}}{2}" },
+                    { label: "לוגריתם מרוכב", math: "\\log z = \\ln|z| + i(\\arg z + 2\\pi k)" },
+                    { label: "הענף הראשי", math: "Log(z) = \\ln|z| + i Arg(z), \\quad Arg(z) \\in (-\\pi, \\pi]" },
+                    { label: "חזקה מרוכבת", math: "z^w = e^{w \\log z}" }
+                ]
+            },
+            ch4: {
+                title: "פרק 4: אינטגרלים קווים",
+                formulas: [
+                    { label: "אינטגרל מסילה", math: "\\int_C f(z)dz = \\int_a^b f(z(t))z'(t)dt" },
+                    { label: "אומדן ML", math: "\\left| \\int_C f(z)dz \\right| \\le M \\cdot L" },
+                    { label: "משפט קושי-גורסה", math: "\\oint_C f(z)dz = 0 \\quad (\\text{f analytic in simply connected domain})" },
+                    { label: "אי תלות במסלול", math: "\\int_{z_1}^{z_2} f(z)dz = F(z_2) - F(z_1) \\quad (F' = f)" }
+                ]
+            },
+            ch5: {
+                title: "פרק 5: נוסחאות האינטגרל של קושי",
+                formulas: [
+                    { label: "נוסחת קושי", math: "f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz" },
+                    { label: "נוסחה לנגזרות", math: "f^{(n)}(z_0) = \\frac{n!}{2\\pi i} \\oint_C \\frac{f(z)}{(z-z_0)^{n+1}} dz" },
+                    { label: "אי-שוויון קושי", math: "|f^{(n)}(z_0)| \\le \\frac{n! M_R}{R^n}" },
+                    { label: "משפט ליוביל (Liouville)", math: "f \\text{ is entire and bounded } \\Rightarrow f \\equiv const" },
+                    { label: "משפט הערך הממוצע", math: "f(z_0) = \\frac{1}{2\\pi} \\int_0^{2\\pi} f(z_0 + Re^{it}) dt" }
+                ]
+            },
+            ch6: {
+                title: "פרק 6: טורי טיילור ולורן",
+                formulas: [
+                    { label: "טור טיילור", math: "f(z) = \\sum_{n=0}^\\infty a_n (z-z_0)^n, \\quad a_n = \\frac{f^{(n)}(z_0)}{n!}" },
+                    { label: "טור לורן", math: "f(z) = \\sum_{n=-\\infty}^\\infty a_n (z-z_0)^n, \\quad a_n = \\frac{1}{2\\pi i} \\oint \\frac{f(z)}{(z-z_0)^{n+1}} dz" },
+                    { label: "טורים ידועים", math: "\\frac{1}{1-z} = \\sum z^n, \\quad e^z = \\sum \\frac{z^n}{n!}, \\quad \\sin z = \\sum (-1)^n \\frac{z^{2n+1}}{(2n+1)!}" }
+                ]
+            },
+            ch7: {
+                title: "פרק 7: נקודות סינגולריות ושאריות",
+                formulas: [
+                    { label: "משפט השאריות", math: "\\oint_C f(z)dz = 2\\pi i \\sum \\text{Res}(f, z_k)" },
+                    { label: "שארית בקוטב פשוט", math: "Res(f, z_0) = \\lim_{z \\to z_0} (z-z_0)f(z)" },
+                    { label: "שארית בקוטב מסדר m", math: "Res(f, z_0) = \\frac{1}{(m-1)!} \\lim_{z \\to z_0} \\frac{d^{m-1}}{dz^{m-1}} \\left[ (z-z_0)^m f(z) \\right]" },
+                    { label: "שארית במנה p/q", math: "Res(p/q, z_0) = \\frac{p(z_0)}{q'(z_0)} \\quad (q(z_0)=0, q'(z_0) \\neq 0)" },
+                    { label: "שארית באינסוף", math: "Res(f, \\infty) = Res\\left(-\\frac{1}{z^2}f(\\frac{1}{z}), 0\\right)" }
+                ]
+            },
+            ch8: {
+                title: "פרק 8: חישוב אינטגרלים ממשיים",
+                formulas: [
+                    { label: "אינטגרלים טריגונומטריים", math: "z = e^{i\\theta}, \\quad \\cos\\theta = \\frac{z+z^{-1}}{2}, \\quad \\sin\\theta = \\frac{z-z^{-1}}{2i}, \\quad d\\theta = \\frac{dz}{iz}" },
+                    { label: "אינטגרלים לא אמיתיים", math: "\\int_{-\\infty}^\\infty f(x)dx = 2\\pi i \\sum Res(f, z_k) \\quad (Im(z_k)>0)" },
+                    { label: "למת ג'ורדן", math: "\\left| \\int_{C_R} f(z)e^{iaz} dz \\right| \\le \\frac{\\pi}{a} \\max |f(z)|" },
+                    { label: "ערך עיקרי (Principal Value)", math: "PV \\int_{-\\infty}^\\infty f(x)dx = 2\\pi i \\sum Res_{up} + i\\pi \\sum Res_{real}" }
+                ]
+            },
+            ch9: {
+                title: "פרק 9: עקרון הארגומנט ורושה",
+                formulas: [
+                    { label: "עקרון הארגומנט", math: "\\frac{1}{2\\pi i} \\oint_C \\frac{f'(z)}{f(z)} dz = N_Z - N_P" },
+                    { label: "משפט רושה", math: "|g(z)| < |f(z)| \\text{ on } C \\Rightarrow N_{f+g} = N_f" },
+                    { label: "מספר האפסים", math: "N = \\frac{1}{2\\pi} \\Delta_C \\arg f(z)" }
+                ]
+            },
+            ch10: {
+                title: "פרק 10: משוואות דיפרנציאליות",
+                formulas: [
+                    { label: "פתרון בטור טיילור", math: "y(x) = \\sum_{n=0}^\\infty a_n (x-x_0)^n" },
+                    { label: "שיטת פרובניוס (Frobenius)", math: "y(x) = (x-x_0)^r \\sum_{n=0}^\\infty a_n (x-x_0)^n" },
+                    { label: "משוואה אינדיסיאלית", math: "r(r-1) + p_0 r + q_0 = 0" }
+                ]
+            },
+            ch11: {
+                title: "פרק 11: העתקות קונפורמיות ומוביוס",
+                formulas: [
+                    { label: "העתקת מוביוס", math: "w = \\frac{az+b}{cz+d}, \\quad ad-bc \\neq 0" },
+                    { label: "יחס כפול (Cross-Ratio)", math: "\\frac{(w-w_1)(w_2-w_3)}{(w-w_3)(w_2-w_1)} = \\frac{(z-z_1)(z_2-z_3)}{(z-z_3)(z_2-z_1)}" },
+                    { label: "נקודות קבועות", math: "f(z) = z \\Rightarrow cz^2 + (d-a)z - b = 0" },
+                    { label: "העתקה לעיגול היחידה", math: "w = e^{i\\alpha} \\frac{z-z_0}{z-\\bar{z}_0} \\quad (Im(z_0)>0)" },
+                    { label: "העתקת ג'וקובסקי", math: "w = \\frac{1}{2}(z + 1/z)" }
+                ]
+            }
+        };
+
+        let currentActiveChapter = "ch1";
+
+        // מעקב אחרי הפרק הנראה לעין - הורדנו סף ל-0.1 עבור פרקים ארוכים
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentActiveChapter = entry.target.id;
+                }
+            });
+        }, observerOptions);
+
+        // רישום כל הפרקים למעקב
+        document.querySelectorAll('.chapter').forEach(chapter => {
+            observer.observe(chapter);
+        });
+
+        // בנייה ראשונית של כל הנוסחאות במודאל
+        function initFormulaSheet() {
+            const container = document.getElementById('formulaContainer');
+            if (!container) return;
+            container.innerHTML = "";
+
+            Object.keys(formulaData).forEach(key => {
+                const data = formulaData[key];
+                const section = document.createElement('div');
+                section.id = "modal-sec-" + key;
+                section.className = "formula-section";
+                section.innerHTML = `<h3 style="margin-top:2rem; color:var(--accent-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 5px;">${data.title}</h3>`;
+
+                data.formulas.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "formula-item";
+                    div.innerHTML = `
+                        <strong style="display:block; margin-bottom:5px;">${item.label}:</strong>
+                        <div class="math-display">
+                            $${item.math}$
+                        </div>
+                    `;
+                    section.appendChild(div);
+                });
+                container.appendChild(section);
+            });
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([container]).catch((err) => console.log('MathJax error:', err));
+            }
+        }
+
+        // קריאה ראשונית לבניית התוכן מיד עם טעינת הדף
+        document.addEventListener('DOMContentLoaded', initFormulaSheet);
+
+        function openFormulaSheet() {
+            const modal = document.getElementById('formulaModal');
+            if (!modal) return;
+
+            // וידוא שהתוכן קיים
+            if (document.getElementById('formulaContainer').innerHTML === "") {
+                initFormulaSheet();
+            }
+
+            modal.style.display = "block";
+
+            // קפיצה לפרק הרלוונטי
+            setTimeout(() => {
+                const targetSec = document.getElementById("modal-sec-" + currentActiveChapter);
+                if (targetSec) {
+                    targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50);
+        }
+
+        function closeFormulaSheet() {
+            const modal = document.getElementById('formulaModal');
+            if (modal) modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('formulaModal');
+            if (event.target == modal) {
+                closeFormulaSheet();
+            }
+        }
+    </script>
+</body>
+
+</html>

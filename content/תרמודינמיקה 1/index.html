@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תרמודינמיקה 1 - המדריך המלא</title>
+
+    <!-- גופנים -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #0d47a1;
+            --accent-color: #c2185b;
+            --bg-color: #f5f5f5;
+            --sidebar-width: 300px;
+            --text-color: #212121;
+            --theory-bg: #e8eaf6;
+            --algo-bg: #fff3e0;
+            --example-bg: #e0f2f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* סרגל צד */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #424242;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links li a:hover {
+            background-color: #e3f2fd;
+            color: var(--secondary-color);
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        /* תוכן ראשי */
+        #main-content {
+            margin-right: var(--sidebar-width);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .chapter {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary-color);
+        }
+
+        h2 {
+            font-family: 'Heebo', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.8rem;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        /* תיבות תוכן */
+        .content-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+
+        .theory {
+            background-color: var(--theory-bg);
+            border-right: 5px solid #3949ab;
+        }
+
+        .algorithm {
+            background-color: var(--algo-bg);
+            border-right: 5px solid #ff9800;
+        }
+
+        .example {
+            background-color: var(--example-bg);
+            border-right: 5px solid #009688;
+        }
+
+        .box-title {
+            display: block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #000;
+            font-family: 'Heebo', sans-serif;
+            text-decoration: underline;
+        }
+
+        /* תרגילים */
+        .exercise {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .ex-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* פתרונות */
+        details {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        summary {
+            padding: 0.8rem 0;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+            outline: none;
+            list-style: none;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        summary::after {
+            content: " ▼ הצג פתרון מלא";
+            font-size: 0.9rem;
+        }
+
+        details[open] summary::after {
+            content: " ▲ הסתר פתרון";
+        }
+
+        .solution-body {
+            background-color: #fafafa;
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: #333;
+            border-right: 3px solid #ccc;
+        }
+
+        /* רספונסיביות */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(100%);
+                width: 85%;
+                transition: transform 0.3s ease;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-right: 0;
+                padding: 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 2000;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.6rem 1rem;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* הדגשות בתוך טקסט */
+        strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        ul,
+        ol {
+            padding-right: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* מצב כהה */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --theory-bg: #1a237e;
+            --algo-bg: #4a3a2a;
+            --example-bg: #1a3a3a;
+        }
+
+        body.dark-mode #sidebar {
+            background-color: #1e1e1e;
+            border-left: 1px solid #333;
+        }
+
+        body.dark-mode .chapter,
+        body.dark-mode .exercise {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border-color: #333;
+        }
+
+        body.dark-mode .nav-links li a {
+            color: #bbb;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .nav-links li a:hover {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        body.dark-mode .solution-body {
+            background-color: #252525;
+            color: #ccc;
+        }
+
+        body.dark-mode strong,
+        body.dark-mode .box-title {
+            color: #fff;
+        }
+
+        /* כפתור החלפת ערכת נושא */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 5rem;
+            z-index: 2000;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* כפתור נוסחאון צף */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 2000;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* מודאל נוסחאון */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        .close-modal {
+            position: absolute;
+            left: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .formula-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        body.dark-mode .formula-item {
+            border-bottom-color: #333;
+        }
+
+        .formula-item:last-child {
+            border-bottom: none;
+        }
+
+        .math-display {
+            background: #f9f9f9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        body.dark-mode .math-display {
+            background: #252525;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('active')">תפריט</button>
+    <button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')"
+        title="החלף מצב תצוגה">🌓</button>
+    <button class="fab" onclick="openFormulaSheet()" title="נוסחאון מהיר">Σ</button>
+
+    <!-- מודאל נוסחאון -->
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFormulaSheet()">&times;</span>
+            <h2 id="modalTitle">נוסחאון מהיר</h2>
+            <div id="formulaContainer">
+                <!-- נוסחאות יוטענו כאן דינמית -->
+            </div>
+        </div>
+    </div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>תרמודינמיקה 1</h1>
+            <p>המדריך האינטראקטיבי</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html"
+                    style="background-color: var(--accent-color); color: white; text-align: center; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.1);">🏠
+                    חזרה למאגר הקורסים</a></li>
+            <li><a href="#ch1">1. מושגי יסוד וגז אידיאלי</a></li>
+            <li><a href="#ch2">2. חומרים טהורים וטבלאות</a></li>
+            <li><a href="#ch3">3. עבודה וחום (מערכות סגורות)</a></li>
+            <li><a href="#ch4">4. החוק הראשון (מערכות סגורות)</a></li>
+            <li><a href="#ch5">5. החוק הראשון (מערכות פתוחות)</a></li>
+            <li><a href="#ch6">6. החוק השני ואנטרופיה</a></li>
+            <li><a href="#ch7">7. תהליכים איזנטרופיים ונצילות</a></li>
+            <li><a href="#ch8">8. מחזורי כוח וקירור</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+        <!-- פרק 1 -->
+        <section id="ch1" class="chapter">
+            <h2>פרק 1: מושגי יסוד וגז אידיאלי</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>יחידות והמרות (קריטי!):</strong></p>
+                <ul>
+                    <li><strong>טמפרטורה:</strong> בתרמודינמיקה עובדים רק עם קלווין!
+                        <div class="math-display">$$T[K] = T[^\circ C] + 273.15$$</div>
+                    </li>
+                    <li><strong>לחץ ($P$):</strong> הכוח המופעל ליחידת שטח.
+                        <ul>
+                            <li>פסקל: $1[Pa] = 1[N/m^2]$</li>
+                            <li>קילו-פסקל: $1[kPa] = 1000[Pa]$</li>
+                            <li>בר: $1[bar] = 10^5[Pa] = 100[kPa]$</li>
+                            <li>אטמוספירה: $1[atm] = 101.325[kPa]$</li>
+                        </ul>
+                    </li>
+                    <li><strong>נפח ($V$):</strong>
+                        <ul>
+                            <li>$1[m^3] = 1000[Liter]$</li>
+                            <li>$1[Liter] = 10^{-3}[m^3]$</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>הגדרות חשובות:</strong></p>
+                <ul>
+                    <li><strong>לחץ אבסולוטי (מוחלט) vs. לחץ מנומטרי (Gage):</strong> משוואת המצב עובדת רק עם לחץ
+                        אבסולוטי.
+                        <div class="math-display">$$P_{abs} = P_{gage} + P_{atm}$$</div>
+                        (אם לא נתון אחרת, $P_{atm} \approx 100 kPa$ או $101.3 kPa$).
+                    </li>
+                    <li><strong>צפיפות ($\rho$) ונפח סגולי ($v$):</strong>
+                        <div class="math-display">$$v = \frac{V}{m} = \frac{1}{\rho}$$</div>
+                    </li>
+                </ul>
+                <p><strong>משוואת המצב של גז אידיאלי:</strong></p>
+                <div class="math-display">$$P \cdot V = m \cdot R \cdot T$$</div>
+                <ul>
+                    <li><strong>קבוע הגז הספציפי ($R$):</strong> $R = \bar{R}/M$. עבור אוויר (Air): $R \approx 0.287
+                        [kJ/kg\cdot K]$</li>
+                    <li><strong>גורם הדחיסות ($Z$):</strong> $PV = ZmRT$. אם $Z \approx 1$ הגז מתנהג כאידיאלי.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון ("המתכון")</span>
+                <ol>
+                    <li><strong>זיהוי ורישום נתונים:</strong> זהה את סוג הגז ומצא את $R$ שלו.</li>
+                    <li><strong>המרת יחידות:</strong> טמפרטורה ל-Kelvin, נפח ל-$m^3$, לחץ למוחלט ($P_{abs}$).</li>
+                    <li><strong>שרטוט מערכת:</strong> צייר את המיכל/בוכנה וסמן מצבים (1 ו-2).</li>
+                    <li><strong>זיהוי התהליך:</strong> $V=const$ (קשיח), $P=const$ (חופשית), $T=const$ (אמבט).</li>
+                    <li><strong>בחירת משוואה:</strong> $PV=mRT$ או $\frac{P_1 V_1}{T_1} = \frac{P_2 V_2}{T_2}$ (מסה
+                        קבועה).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: חמצן במיכל</span>
+                <p><strong>שאלה:</strong> מד לחץ המחובר למיכל חמצן בנפח $50 L$ מראה $4.5 bar$. $T=25^\circ C,
+                    P_{atm}=100 kPa$. הנח $R=0.26$.</p>
+                <p><strong>פתרון:</strong></p>
+                <ul>
+                    <li>לחץ מוחלט: $P = 450 + 100 = 550 kPa$</li>
+                    <li>נפח: $V = 0.05 m^3$</li>
+                    <li>טמפרטורה: $T = 298.15 K$</li>
+                    <li>מסה: $m = \frac{PV}{RT} = \frac{550 \cdot 0.05}{0.26 \cdot 298.15} \approx \mathbf{0.355 kg}$
+                    </li>
+                </ul>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מד לחץ המחובר למיכל חמצן בנפח $50$ ליטר מראה קריאה של $4.5$ bar. הטמפרטורה בחדר היא $25^\circ C$.
+                    הלחץ האטמוספרי הוא $100$ kPa. חשב את מסת החמצן במיכל. (הנח $R_{oxygen} = 0.26 [kJ/kg\cdot K]$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $V = 50 L = 0.05 m^3$, $P_{gage} = 4.5 bar = 450 kPa$, $T =
+                            25^\circ C = 298.15 K$, $P_{atm} = 100 kPa$, $R = 0.26 kJ/kgK$.</p>
+                        <p><strong>2. חישוב לחץ מוחלט:</strong> $P_{abs} = P_{gage} + P_{atm} = 450 + 100 = 550 kPa$.
+                        </p>
+                        <p><strong>3. משוואת המצב:</strong> $m = \frac{P \cdot V}{R \cdot T}$</p>
+                        <p>$$m = \frac{550 \cdot 0.05}{0.26 \cdot 298.15} = \frac{27.5}{77.52} \approx \mathbf{0.355
+                            kg}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את הצפיפות ($\rho$) של אוויר בלחץ של $1$ atm ובטמפרטורה של $-10^\circ C$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $P = 1 atm = 101.325 kPa$, $T = -10 + 273.15 = 263.15 K$. אוויר:
+                            $R=0.287$.</p>
+                        <p><strong>2. נוסחה:</strong> $\rho = \frac{P}{RT}$</p>
+                        <p><strong>3. חישוב:</strong> $$\rho = \frac{101.325}{0.287 \cdot 263.15} =
+                            \frac{101.325}{75.52} = \mathbf{1.34 kg/m^3}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מיכל קשיח וסגור מכיל אוויר בלחץ $200$ kPa ובטמפרטורה של $300$ K. מחממים את המיכל עד שהטמפרטורה מגיעה
+                    ל-$600$ K. מהו הלחץ הסופי במיכל?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. זיהוי:</strong> מיכל קשיח $\rightarrow V = const$. מערכת סגורה $\rightarrow m =
+                            const$.</p>
+                        <p><strong>2. יחסים:</strong> $\frac{P_1}{T_1} = \frac{P_2}{T_2} \Rightarrow P_2 = P_1 \cdot
+                            \frac{T_2}{T_1}$</p>
+                        <p><strong>3. חישוב:</strong> $$P_2 = 200 \cdot \frac{600}{300} = 200 \cdot 2 = \mathbf{400
+                            kPa}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>לחץ האוויר בצמיג רכב נמדד כ-$210$ kPa (מנומטרי) ב-$25^\circ C$. נפח הצמיג $0.025 m^3$. $P_{atm} = 100
+                    kPa$. הטמפרטורה עולה ל-$50^\circ C$, הנפח קבוע. <br> א. מהו הלחץ המוחלט החדש? <br> ב. מהו הלחץ
+                    המנומטרי החדש?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב 1:</strong> $T_1 = 298.15 K$, $P_{abs,1} = 210 + 100 = 310 kPa$.</p>
+                        <p><strong>2. מצב 2:</strong> $T_2 = 323.15 K$, $V=const$.</p>
+                        <p><strong>3. סעיף א (לחץ מוחלט):</strong> $$P_{abs,2} = P_{abs,1} \cdot \frac{T_2}{T_1} = 310
+                            \cdot \frac{323.15}{298.15} = \mathbf{336 kPa}$$</p>
+                        <p><strong>4. סעיף ב (לחץ מנומטרי):</strong> $$P_{gage,2} = P_{abs,2} - P_{atm} = 336 - 100 =
+                            \mathbf{236 kPa}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>בוכנה חופשית כולאת $0.5$ ק"ג אוויר. בהתחלה $T=27^\circ C$ ו-$V=0.1 m^3$. מחממים עד שהנפח מוכפל. <br>
+                    א. מהו הלחץ (הנח קבוע)? <br> ב. מהי הטמפרטורה הסופית?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. זיהוי:</strong> בוכנה חופשית $\rightarrow P=const$.</p>
+                        <p><strong>2. סעיף א (לחץ):</strong> $$P = \frac{mRT_1}{V_1} = \frac{0.5 \cdot 0.287 \cdot
+                            300}{0.1} = \mathbf{430.5 kPa}$$</p>
+                        <p><strong>3. סעיף ב (טמפרטורה):</strong> $T_2 = T_1 \cdot \frac{V_2}{V_1} = 300 \cdot 2 =
+                            \mathbf{600 K}$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>בהמשך לשאלה 4: לאחר שהטמפרטורה עלתה ל-$50^\circ C$, הנהג מוציא אוויר כדי להחזיר את הלחץ ל-$210$ kPa
+                    (מנומטרי). כמה מסה עליו להוציא?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מטרת מצב 3:</strong> $T_3 = 323.15 K$, $P_3 = 310 kPa$.</p>
+                        <p><strong>2. מסה התחלתית ($m_1$):</strong> $$m_1 = \frac{P_1 V}{R T_1} = \frac{310 \cdot
+                            0.025}{0.287 \cdot 298.15} = 0.0905 kg$$</p>
+                        <p><strong>3. מסה סופית ($m_3$):</strong> $$m_3 = \frac{P_3 V}{R T_3} = \frac{310 \cdot
+                            0.025}{0.287 \cdot 323.15} = 0.0835 kg$$</p>
+                        <p><strong>4. הפרש:</strong> $\Delta m = m_1 - m_3 = 0.0905 - 0.0835 = \mathbf{0.007 kg}$ (7
+                            גרם).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>בלון אלסטי ($P \propto D$). בהתחלה $m=1kg, P=200kPa, T=300K$. מחממים עד ש-$V_2 = 8V_1$. מהו הלחץ
+                    הסופי?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. קשר:</strong> $P \propto D$ ובנוסף $V \propto D^3 \rightarrow D \propto V^{1/3}$.
+                            לכן $P \propto V^{1/3}$.</p>
+                        <p><strong>2. יחס לחצים:</strong> $\frac{P_2}{P_1} = (\frac{V_2}{V_1})^{1/3} = 8^{1/3} = 2$</p>
+                        <p><strong>3. חישוב:</strong> $P_2 = 2 \cdot 200 = \mathbf{400 kPa}$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>גליל עם בוכנה וקפיץ לינארי. התחלה: בוכנה על מעצורים, $V=1.5 L, P=150 kPa$. סוף: $V=7 L, T=80^\circ C,
+                    P=400 kPa$. חשב את המסה בסוף.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים לסוף (2):</strong> $V_2 = 0.007 m^3, P_2 = 400 kPa, T_2 = 353.15 K$.</p>
+                        <p><strong>2. חישוב:</strong> $$m_2 = \frac{P_2 V_2}{R T_2} = \frac{400 \cdot 0.007}{0.287 \cdot
+                            353.15} = \mathbf{0.0276 kg}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מיכל A: $1m^3, 25^\circ C, 500kPa$. מיכל B: $5kg, 35^\circ C, 200kPa$. מחברים ומחכים לשיווי משקל עם
+                    הסביבה ($20^\circ C$). מהו הלחץ הסופי?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מסה במיכל A:</strong> $m_A = \frac{500 \cdot 1}{0.287 \cdot 298.15} = 5.84 kg$</p>
+                        <p><strong>2. נפח מיכל B:</strong> $V_B = \frac{5 \cdot 0.287 \cdot 308.15}{200} = 2.21 m^3$</p>
+                        <p><strong>3. מצב סופי:</strong> $m_{tot} = 10.84 kg, V_{tot} = 3.21 m^3, T_f = 293.15 K$.</p>
+                        <p><strong>4. לחץ סופי:</strong> $$P_f = \frac{10.84 \cdot 0.287 \cdot 293.15}{3.21} =
+                            \mathbf{284.1 kPa}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>בוכנה ומדרגה ב-$V_{stop}=0.2m^3$. התחלה: $T=500K, P=300kPa, V=0.5m^3$. לחץ להרמה $200kPa$. מקררים
+                    ל-$300K$. מהו הלחץ הסופי? האם הגיע למדרגה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מסה:</strong> $m = \frac{300 \cdot 0.5}{0.287 \cdot 500} = 1.045 kg$.</p>
+                        <p><strong>2. בדיקת נפח ציפה:</strong> ב-$P=200kPa, T=300K$: $V_{test} = \frac{1.045 \cdot 0.287
+                            \cdot 300}{200} = 0.45 m^3$.</p>
+                        <p><strong>3. מסקנה:</strong> מכיוון ש-$0.45 > 0.2$, הבוכנה לא מגיעה למדרגה. הלחץ נשאר $P =
+                            \mathbf{200 kPa}$ (לחץ הציפה).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 2 -->
+        <section id="ch2" class="chapter">
+            <h2>פרק 2: חומרים טהורים ושימוש בטבלאות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>המושגים הקריטיים (דיאגרמת הפאזות):</strong></p>
+                <ul>
+                    <li><strong>נוזל דחוס (Compressed Liquid):</strong> האזור שמשמאל לפעמון. מים במצב נוזלי מלא.</li>
+                    <li><strong>נוזל רווי (Saturated Liquid - $f$):</strong> הקו השמאלי של הפעמון. הטיפה הראשונה עומדת
+                        להתאדות.</li>
+                    <li><strong>אדים רוויים (Saturated Vapor - $g$):</strong> הקו הימני של הפעמון. הטיפה האחרונה התאדתה.
+                    </li>
+                    <li><strong>תערובת רוויה (Saturated Mixture):</strong> האזור בתוך הפעמון. יש גם נוזל וגם אדים.</li>
+                    <li><strong>אדים שחונים (Superheated Vapor):</strong> האזור מימין לפעמון. אדים חמים מאוד.</li>
+                </ul>
+                <p><strong>איכות ($x$):</strong> הפרמטר המגדיר כמה מהחומר הוא אדים (קיים רק בתערובת).
+                <div class="math-display">$$x = \frac{m_{vapor}}{m_{total}} = \frac{m_g}{m_f + m_g}$$</div>
+                </p>
+                <ul>
+                    <li>$x=0$: נוזל רווי ($f$).</li>
+                    <li>$x=1$: אדים רוויים ($g$).</li>
+                </ul>
+                <p><strong>נוסחת התערובת:</strong> לחישוב כל תכונה ($v, u, h, s$) בתערובת:
+                <div class="math-display">$$y = y_f + x \cdot y_{fg}$$</div>
+                </p>
+                <p><strong>אינטרפולציה לינארית:</strong> כשערך לא מופיע בדיוק בטבלה:
+                <div class="math-display">$$y = y_1 + \frac{(x_{given} - x_1)}{(x_2 - x_1)} \cdot (y_2 - y_1)$$</div>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: קביעת מצב ("איפה אני על המפה?")</span>
+                <ol>
+                    <li><strong>איסוף נתונים:</strong> לרוב יהיו 2 נתונים בלתי תלויים (למשל $P$ ו-$T$, או $P$ ו-$v$).
+                    </li>
+                    <li><strong>מבחן הכניסה (השוואה לרוויה):</strong> לך לטבלת הרוויה לפי $P$ או $T$.
+                        <ul>
+                            <li><strong>מקרה א: נתונים $P$ ו-$T$:</strong>
+                                <ul>
+                                    <li>אם $T < T_{sat}$: נוזל דחוס.</li>
+                                    <li>אם $T = T_{sat}$: תערובת (צריך נתון נוסף).</li>
+                                    <li>אם $T > T_{sat}$: אדים שחונים.</li>
+                                </ul>
+                            </li>
+                            <li><strong>מקרה ב: נתונים $P$ ו-$v$ (או $u, h$):</strong> השווה את התכונה הנתונה לערכי
+                                הרוויה ($y_f, y_g$).
+                                <ul>
+                                    <li>אם $v < v_f$: נוזל דחוס.</li>
+                                    <li>אם $v_f \le v \le v_g$: תערובת (חשב $x$!).</li>
+                                    <li>אם $v > v_g$: אדים שחונים.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>שליפת הנתונים:</strong> מהטבלה המתאימה ($A-4, A-5, A-6$).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: חישוב בתערובת</span>
+                <p><strong>שאלה:</strong> מים ב-$200 kPa$ עם איכות $x=0.7$. חשב $v, h$.</p>
+                <p><strong>פתרון:</strong> מהטבלה ב-$200 kPa$: $v_f=0.001061, v_g=0.8857, h_f=504.7, h_{fg}=2201.9$.</p>
+                <p>$$v = 0.001061 + 0.7(0.8857-0.001061) = \mathbf{0.6203 m^3/kg}$$</p>
+                <p>$$h = 504.7 + 0.7(2201.9) = \mathbf{2046.03 kJ/kg}$$</p>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>קבע את הפאזה של המים במצבים הבאים: <br> א. $P = 500 kPa, T = 150^\circ C$. <br> ב. $P = 500 kPa, T =
+                    200^\circ C$. <br> ג. $P = 5 MPa, T = 100^\circ C$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>א. ב-$500 kPa$, $T_{sat} = 151.86^\circ C$. מכיוון ש-$150 < 151.86 \rightarrow$ <strong>נוזל
+                                דחוס</strong>.</p>
+                        <p>ב. ב-$500 kPa$, $T_{sat} = 151.86^\circ C$. מכיוון ש-$200 > 151.86 \rightarrow$ <strong>אדים
+                                שחונים</strong>.</p>
+                        <p>ג. ב-$5 MPa$ ($5000 kPa$), $T_{sat} = 263.99^\circ C$. מכיוון ש-$100 < 263.99 \rightarrow$
+                                <strong>נוזל דחוס</strong>.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מיכל מכיל מים בלחץ $200 kPa$ עם איכות $x = 0.7$. חשב את הנפח הסגולי ($v$) ואת האנתלפיה הסגולית ($h$)
+                    של התערובת.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>מהטבלה (A-5) ללחץ $200 kPa$: $v_f = 0.001061, v_g = 0.8857, h_f = 504.7, h_{fg} = 2201.9$.
+                        </p>
+                        <p>$$v = v_f + x(v_g - v_f) = 0.001061 + 0.7(0.8857 - 0.001061) = \mathbf{0.6203 m^3/kg}$$</p>
+                        <p>$$h = h_f + x \cdot h_{fg} = 504.7 + 0.7(2201.9) = \mathbf{2046.03 kJ/kg}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מים בלחץ $1 MPa$ ובטמפרטורה $400^\circ C$. מהו הנפח הסגולי ($v$) ומהי האנרגיה הפנימית ($u$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>ב-$1 MPa$, $T_{sat} = 179.9^\circ C$. הנתון ($400$) גבוה יותר $\rightarrow$ <strong>אדים
+                                שחונים</strong>.</p>
+                        <p>מטבלה A-6 ב-$1.0 MPa, 400^\circ C$: $v = \mathbf{0.3066 m^3/kg}$, $u = \mathbf{2957.3
+                            kJ/kg}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מיכל קשיח $0.5 m^3$ מכיל $2 kg$ מים רוויים ($x=1$) ב-$200 kPa$. מקררים עד ש-$T=80^\circ C$. <br> א.
+                    מהו הלחץ הסופי? <br> ב. מהי האיכות הסופית? <br> ג. שרטט על דיאגרמת $T-v$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב 1:</strong> $v_1 = v_g @ 200 kPa = 0.8857 m^3/kg$.</p>
+                        <p><strong>2. תהליך:</strong> מיכל קשיח $\rightarrow v_2 = v_1 = 0.8857$.</p>
+                        <p><strong>3. מצב 2:</strong> ב-$80^\circ C$, $v_f=0.001029, v_g=3.407$. מכיוון ש-$v_f < v_2 <
+                                v_g \rightarrow$ <strong>תערובת</strong>.</p>
+                        <p><strong>4. חישובים:</strong> <br> א. $P_2 = P_{sat} @ 80^\circ C = \mathbf{47.39 kPa}$. <br>
+                            ב. $x_2 = \frac{v_2-v_f}{v_g-v_f} = \frac{0.8857-0.001029}{3.407-0.001029} =
+                            \mathbf{0.259}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מיכל $100 L$ מכיל תערובת ב-$90^\circ C$ עם $x=0.9$. חשב את נפח הנוזל ונפח האדים בנפרד (בליטרים).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>ב-$90^\circ C$: $v_f=0.001036, v_g=2.361$. $v_{avg} = v_f + x \cdot v_{fg} = 2.125 m^3/kg$.
+                        </p>
+                        <p>מסה כוללת: $m = V/v_{avg} = 0.1/2.125 = 0.047 kg$.</p>
+                        <p>$m_f = m(1-x) = 0.0047 kg, m_g = m \cdot x = 0.0423 kg$.</p>
+                        <p>$V_f = m_f \cdot v_f = 4.8 \cdot 10^{-6} m^3 \approx \mathbf{0.005 L}$ (5 מ"ל).</p>
+                        <p>$V_g = V_{tot} - V_f \approx \mathbf{99.995 L}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מצא $h$ של אדים שחונים ב-$1.5 MPa$ ו-$325^\circ C$ (בעזרת אינטרפולציה).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>ב-1.5 MPa: ב-$300^\circ C, h=3037.6$. ב-$350^\circ C, h=3147.4$.</p>
+                        <p>$$h = 3037.6 + \frac{325-300}{350-300}(3147.4-3037.6) = \mathbf{3092.5 kJ/kg}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>בוכנה ב-$1 MPa, 250^\circ C$ ($0.5 kg$). דוחסים איזובארית ($P=const$) עד לנוזל רווי ($x=0$). מהו
+                    $\Delta V$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>$v_1 = 0.2327$ (אדים שחונים), $v_2 = v_f @ 1 MPa = 0.001127$.</p>
+                        <p>$\Delta V = m(v_2-v_1) = 0.5(0.001127-0.2327) = \mathbf{-0.1158 m^3}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>בוכנה על מדרגות. $V=0.2 m^3, m=5 kg, P=100 kPa$. לחץ להרמה $300 kPa$. מחממים ל-$x=1$. האם התרוממה?
+                    ומה $T_1$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב 1:</strong> $v_1 = 0.2/5 = 0.04$. ב-$100 kPa, v_f=0.001, v_g=1.69 \rightarrow$
+                            <strong>תערובת</strong>. $T_1 = \mathbf{99.6^\circ C}$.
+                        </p>
+                        <p><strong>2. ניתוח:</strong> הלחץ יעלה ל-300 בנפח קבוע. ב-$300 kPa, v_g=0.6058$. מכיוון
+                            ש-$v_{final} = 0.6058 > 0.04$, הבוכנה בהחלט <strong>התרוממה</strong> ותמשיך ל-0.6058 בלחץ
+                            קבוע.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מיכל קשיח ב-$1.5 MPa, 280^\circ C$. מקררים ל-$0.5 MPa$. מצא $T, h$ סופיים.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב 1:</strong> $T_{sat}=198 \rightarrow$ שחונים. $v_1 = 0.1627$.</p>
+                        <p><strong>2. תהליך:</strong> $v_2 = v_1 = 0.1627$.</p>
+                        <p><strong>3. מצב 2:</strong> ב-$0.5 MPa, v_f=0.001093, v_g=0.3749 \rightarrow$
+                            <strong>תערובת</strong>.
+                        </p>
+                        <p>$T_2 = \mathbf{151.86^\circ C}$. $x_2 = 0.432 \rightarrow h_2 = h_f + 0.432 h_{fg} =
+                            \mathbf{1551.1 kJ/kg}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>סיר $10 L, 120^\circ C$. $V_{liq}=5 L, V_{vap}=5 L$. מצא $P, m_{tot}, x$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>א. $P = P_{sat} @ 120^\circ C = \mathbf{198.5 kPa}$.</p>
+                        <p>ב. $m_f = 0.005/0.00106 = 4.717 kg, m_g = 0.005/0.8919 = 0.0056 kg$. $m_{tot} = \mathbf{4.723
+                            kg}$.</p>
+                        <p>ג. $x = m_g/m_{tot} = \mathbf{0.00118}$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 3 -->
+        <section id="ch3" class="chapter">
+            <h2>פרק 3: עבודה וחום (מערכות סגורות)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>קונבנציית סימנים:</strong></p>
+                <ul>
+                    <li><strong>עבודה ($W$):</strong>
+                        <ul>
+                            <li>$W > 0$ (+): המערכת מבצעת עבודה (התפשטות).</li>
+                            <li>$W < 0$ (-): הסביבה מבצעת עבודה על המערכת (דחיסה).</li>
+                        </ul>
+                    </li>
+                    <li><strong>חום ($Q$):</strong>
+                        <ul>
+                            <li>$Q > 0$ (+): חום נכנס למערכת.</li>
+                            <li>$Q < 0$ (-): חום יוצא מהמערכת.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>עבודת גבול (Boundary Work):</strong> $W = \int P dV$</p>
+                <ul>
+                    <li><strong>איזובארי ($P=const$):</strong> $W = P(V_2 - V_1) = mP(v_2 - v_1)$</li>
+                    <li><strong>איזותרמי ($T=const$) בגז אידיאלי:</strong> $W = mRT \ln(V_2/V_1) = P_1V_1 \ln(V_2/V_1)$
+                    </li>
+                    <li><strong>פוליטרופי ($PV^n=C$):</strong> $W = \frac{P_2 V_2 - P_1 V_1}{1-n}$</li>
+                    <li><strong>קפיץ לינארי:</strong> $W = \frac{P_1 + P_2}{2}(V_2 - V_1)$</li>
+                </ul>
+                <p><strong>אנרגיה בגז אידיאלי ($C_v, C_p$):</strong></p>
+                <ul>
+                    <li>$\Delta U = m C_v (T_2 - T_1)$</li>
+                    <li>$\Delta H = m C_p (T_2 - T_1)$</li>
+                    <li>$C_p = C_v + R$ ; $k = C_p/C_v$ (עבור אוויר $k=1.4$).</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: חישוב עבודה</span>
+                <ol>
+                    <li><strong>שרטוט דיאגרמת $P-V$:</strong> סמן נקודות 1 ו-2. החץ יראה אם הנפח גדל ($W>0$) או קטן ($W
+                        < 0$).</li>
+                    <li><strong>זיהוי התהליך:</strong> לחץ קבוע (מלבן), קפיץ (טרפז), איזותרמי/פוליטרופי (עקומה).</li>
+                    <li><strong>חישוב $W$:</strong> השתמש בנוסחה המתאימה ($kPa \cdot m^3 = kJ$).</li>
+                    <li><strong>חישוב שינוי אנרגיה:</strong> גז אידיאלי ($C_v \Delta T$) או קיטור (טבלאות).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: עבודת קפיץ</span>
+                <p><strong>נתונים:</strong> $V_1=0.05 m^3, P_1=100 kPa$. $V_2=0.1 m^3, P_2=300 kPa$.</p>
+                <p><strong>פתרון:</strong> התהליך לינארי (קפיץ), לכן נשתמש בשטח טרפז:</p>
+                <p>$$W = \frac{P_1 + P_2}{2}(V_2 - V_1) = \frac{100+300}{2}(0.1-0.05) = 200 \cdot 0.05 = \mathbf{10
+                    kJ}$$</p>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>גז בתוך צילינדר מתפשט בלחץ קבוע של $300 kPa$ מנפח של $0.1 m^3$ לנפח של $0.3 m^3$. חשב את העבודה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. זיהוי:</strong> $P=const = 300 kPa$.</p>
+                        <p><strong>2. חישוב:</strong> $W = P(V_2 - V_1) = 300 \cdot (0.3 - 0.1) = \mathbf{60 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מיכל קשיח מכיל קיטור. מחממים את הקיטור כך שהלחץ עולה מ-$1 bar$ ל-$5 bar$. מהי העבודה שנעשתה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. זיהוי:</strong> מיכל קשיח $\rightarrow V = const \rightarrow \Delta V = 0$.</p>
+                        <p><strong>2. חישוב:</strong> $W = \int P dV = \mathbf{0}$. אין עבודת גבול.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>$2 kg$ אוויר ($C_v = 0.718 kJ/kgK$) מחוממים מ-$27^\circ C$ ל-$127^\circ C$. חשב $\Delta U$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. המרה לקלווין:</strong> $T_1 = 300 K, T_2 = 400 K$.</p>
+                        <p><strong>2. חישוב:</strong> $\Delta U = m C_v (T_2 - T_1) = 2 \cdot 0.718 \cdot 100 =
+                            \mathbf{143.6 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>דוחסים $0.5 kg$ אוויר ב-$T$ קבוע של $400 K$. $V_1=0.2, P_1=200$. הגז נדחס עד $P_2=600 kPa$. חשב את
+                    העבודה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מציאת $V_2$:</strong> $V_2 = V_1(P_1/P_2) = 0.0667 m^3$.</p>
+                        <p><strong>2. חישוב עבודה:</strong> $W = P_1 V_1 \ln(V_2/V_1) = 200 \cdot 0.2 \cdot
+                            \ln(0.0667/0.2) = \mathbf{-43.9 kJ}$.</p>
+                        <p><em>(הסימן שלילי כי זו דחיסה - הושקעה עבודה).</em></p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>התפשטות פוליטרופית $PV^{1.3} = const$. מצב 1: $P_1=1 MPa, V_1=0.1$. מצב 2: $P_2=100 kPa$. חשב עבודה.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מציאת $V_2$:</strong> $V_2 = V_1(P_1/P_2)^{1/1.3} = 0.5878 m^3$.</p>
+                        <p><strong>2. עבודה:</strong> $W = \frac{P_2 V_2 - P_1 V_1}{1 - n} = \frac{(100 \cdot 0.5878) -
+                            (1000 \cdot 0.1)}{1 - 1.3} = \frac{-41.22}{-0.3} = \mathbf{137.4 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>$1 kg$ מים רוויים ($x=1$) ב-$200 kPa$ מחוממים בלחץ קבוע ל-$300^\circ C$. חשב $W, \Delta U$ בעזרת
+                    טבלאות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>מצב 1:</strong> $v_1=0.8857, u_1=2529.1$. <strong>מצב 2:</strong> $v_2=1.3162,
+                            u_2=2808.8$.</p>
+                        <p>$W = m P (v_2 - v_1) = 1 \cdot 200 \cdot (1.3162 - 0.8857) = \mathbf{86.1 kJ}$.</p>
+                        <p>$\Delta U = m(u_2 - u_1) = \mathbf{279.7 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>בוכנה על קפיץ לינארי. $V_1=0.05, P_1=100$. מחממים עד $V_2=0.1, P_2=300$. חשב עבודה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>זיהוי:</strong> תהליך לינארי (קפיץ). $W = \frac{P_1 + P_2}{2}(V_2 - V_1)$.</p>
+                        <p>$$W = \frac{100+300}{2}(0.1-0.05) = 200 \cdot 0.05 = \mathbf{10 kJ}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מחזור: 1-2 התפשטות איזובארית ב-$200 kPa$ מ-$1 m^3$ ל-$2.5$. 2-3 קירור איזוכורי ל-$100 kPa$. 3-1 דחיסה
+                    לינארית חזרה. חשב $W_{net}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p>1-2: $W_{12} = 200(1.5) = 300 kJ$.</p>
+                        <p>2-3: $W_{23} = 0$.</p>
+                        <p>3-1: $W_{31} = \frac{100+200}{2}(1-2.5) = -225 kJ$.</p>
+                        <p>$W_{net} = 300 + 0 - 225 = \mathbf{75 kJ}$. (שטח המשולש הכלוא).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>בוכנה חופשית ($P=100$) עולה מ-$V=0.1$ עד שנוגעת בקפיץ ב-$V=0.2$. משם דוחסת קפיץ עד $P=500, V=0.25$.
+                    חשב עבודה כוללת.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>שלב א:</strong> חופשי. $W_{1-2} = 100(0.2-0.1) = 10 kJ$.</p>
+                        <p><strong>שלב ב:</strong> קפיץ. $W_{2-3} = \frac{100+500}{2}(0.25-0.2) = 15 kJ$.</p>
+                        <p>$W_{total} = \mathbf{25 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>חשב את השינוי באנתלפיה ($\Delta h$) עבור מים ב-$400^\circ C$ שנדחסים מ-$100 kPa$ ל-$1000 kPa$, כגז
+                    אידיאלי וכקיטור.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>גז אידיאלי:</strong> $\Delta T = 0 \rightarrow \Delta h = C_p \Delta T = \mathbf{0}$.
+                        </p>
+                        <p><strong>קיטור (טבלאות):</strong> $h_1 = 3278.6, h_2 = 3264.5 \rightarrow \Delta h =
+                            \mathbf{-14.1 kJ/kg}$.</p>
+                        <p><em>מסקנה: בטמפ' גבוהה המים קרובים לגז אידיאלי, אך לא בדיוק.</em></p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 4 -->
+        <section id="ch4" class="chapter">
+            <h2>פרק 4: החוק הראשון - מערכות סגורות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p>זהו הרגע שבו הכל מתחבר. בפרק הקודם למדנו לחשב עבודה ($W$) ולמצוא אנרגיה פנימית ($u$), ועכשיו נכניס
+                    אותם למשוואה אחת חזקה שפותרת 80% מהבעיות בתרמודינמיקה.</p>
+
+                <p><strong>המשוואה הגדולה (Energy Balance):</strong> עבור מערכת סגורה (אין כניסה/יציאה של מסה), שינוי
+                    האנרגיה הכוללת במערכת שווה לאנרגיה שנכנסה פחות האנרגיה שיצאה.</p>
+                <div class="math-display">$$Q - W = \Delta E$$</div>
+                <p>ברוב המוחלט של התרגילים המערכת נייחת (אין שינוי במהירות או גובה), ולכן מזניחים אנרגיה קינטית
+                    ופוטנציאלית ($\Delta KE = \Delta PE = 0$). המשוואה הופכת ל:</p>
+                <div class="math-display">$$Q - W = \Delta U$$</div>
+                <p>או בצורה סגולית (לכל ק"ג):</p>
+                <div class="math-display">$$q - w = \Delta u$$</div>
+
+                <ul>
+                    <li><strong>$Q$ (חום):</strong> חיובי כשנכנס למערכת, שלילי כשיוצא.</li>
+                    <li><strong>$W$ (עבודה):</strong> חיובי כשהמערכת מבצעת עבודה (התפשטות), שלילי כשמושקעת בה עבודה
+                        (דחיסה/ערבול/חשמל).</li>
+                    <li><strong>$\Delta U$:</strong> השינוי באנרגיה הפנימית ($U_2 - U_1$).</li>
+                </ul>
+
+                <p><strong>טיפ ה-Enthalpy ($H$) לתהליכים בלחץ קבוע:</strong> אם התהליך מתרחש בלחץ קבוע ($P=const$, למשל
+                    בוכנה חופשית), העבודה היא $W = P\Delta V$. אם נציב זאת בחוק הראשון, נקבל קיצור דרך קריטי:</p>
+                <div class="math-display">$$Q_{isobaric} = \Delta H = m(h_2 - h_1)$$</div>
+                <p>במילים: החום המועבר בתהליך בלחץ קבוע שווה לשינוי באנתלפיה.</p>
+
+                <p><strong>חישוב $\Delta u$ ו-$\Delta h$:</strong></p>
+                <ul>
+                    <li>עבור קיטור/קרר: משתמשים בטבלאות ($u_2 - u_1$).</li>
+                    <li>עבור גז אידיאלי:
+                        <ul>
+                            <li>$\Delta u = C_v (T_2 - T_1)$</li>
+                            <li>$\Delta h = C_p (T_2 - T_1)$</li>
+                        </ul>
+                    </li>
+                    <li>עבור מוצקים/נוזלים (Incompressible):
+                        <ul>
+                            <li>$\Delta u \approx \Delta h \approx C_{avg} (T_2 - T_1)$</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון ("מאזן האנרגיה")</span>
+                <ol>
+                    <li><strong>הגדרת המערכת:</strong> סמן בקו מקווקו את הגבול. האם המסה קבועה? (אם לא, זה פרק 5).</li>
+                    <li><strong>עבודת הכנה:</strong>
+                        <ul>
+                            <li>מציאת תכונות במצב 1 ($u_1, v_1, T_1$).</li>
+                            <li>מציאת תכונות במצב 2 ($u_2, v_2, T_2$).</li>
+                            <li>חישוב מסה ($m$) אם צריך.</li>
+                        </ul>
+                    </li>
+                    <li><strong>חישוב עבודה ($W$):</strong>
+                        <ul>
+                            <li>האם יש עבודת גבול ($Pdv$)?</li>
+                            <li>האם יש עבודה חשמלית/בוחשן (נתון בוואט/ג'אול)? הכנס אותה בסימן מינוס (עבודה מושקעת).</li>
+                        </ul>
+                    </li>
+                    <li><strong>הפעלת החוק הראשון:</strong>
+                        <div class="math-display">$$Q_{net} - W_{net} = \Delta U$$</div>
+                        חלץ את הנעלם (לרוב זה $Q$ או $T_2$).
+                    </li>
+                </ol>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מיכל קשיח מכיל קיטור רווי ($x=1$) בלחץ $300 kPa$. מחממים את המיכל עד שהלחץ עולה ל-$400 kPa$. האם
+                    נעשתה עבודה? חשב את חום שנכנס לק"ג קיטור ($q$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מערכת:</strong> מיכל קשיח $\rightarrow V=const \rightarrow W=0$.</p>
+                        <p><strong>2. חוק ראשון:</strong> $q - 0 = \Delta u = u_2 - u_1$.</p>
+                        <p><strong>3. מצב 1:</strong> $P=300 kPa, x=1$. טבלה A-5: $u_1 = u_g = 2543.6 kJ/kg, v_1 = v_g =
+                            0.6058$.</p>
+                        <p><strong>4. מצב 2:</strong> $v_2 = v_1 = 0.6058$, $P_2 = 400 kPa$.<br>
+                            ב-$400 kPa$, $v_g = 0.462$. מכיוון ש-$v_2 > v_g$ ($0.605 > 0.462$), אנחנו באדים שחונים.<br>
+                            נלך לטבלה A-6 בלחץ $0.4 MPa$. נחפש איפה $v \approx 0.605$.<br>
+                            ב-$300^\circ C$, $v=0.654$. ב-$200^\circ C$, $v=0.534$.<br>
+                            בביצוע אינטרפולציה למציאת $u_2$ נקבל: $u_2 \approx 2741 kJ/kg$.</p>
+                        <p><strong>5. סיום:</strong> $q = 2741 - 2543.6 = \mathbf{197.4 kJ/kg}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>קומקום חשמלי מכיל $3$ ק"ג מים בנוזל בטמפרטורה $12^\circ C$. גוף החימום בהספק $1200 W$ מחמם את המים
+                    ל-$95^\circ C$. הזנח איבוד חום לסביבה. כמה זמן ייקח החימום? (השתמש ב-$C_p = 4.18 kJ/kg^\circ C$).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מערכת:</strong> המים בקומקום.</p>
+                        <p><strong>2. חוק ראשון:</strong> $Q - W_{elec} = \Delta U$.<br>
+                            הנחה: הקומקום מבודד ($Q=0$). העבודה החשמלית נכנסת (שלילית): $W = -1.2 kW \cdot \Delta t
+                            (sec)$.<br>
+                            עבור נוזלים: $\Delta U = m C \Delta T$.<br>
+                            $0 - (-1.2 \cdot \Delta t) = m C (T_2 - T_1)$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $1.2 \cdot \Delta t = 3 \cdot 4.18 \cdot (95 - 12)$<br>
+                            $1.2 \Delta t = 12.54 \cdot 83 = 1040.8 kJ$<br>
+                            $\Delta t = 1040.8 / 1.2 = 867.35 seconds \approx \mathbf{14.5 min}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>דוחסים גז אידיאלי במיכל מבודד היטב (Adiabatic, $Q=0$). מושקעת עבודה של $50 kJ$. מהו השינוי באנרגיה
+                    הפנימית ($\Delta U$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. חוק ראשון:</strong> $Q - W = \Delta U$.</p>
+                        <p><strong>2. נתונים:</strong> $Q=0$ (מבודד). $W = -50 kJ$ (עבודה מושקעת/דחיסה).</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $0 - (-50) = \Delta U \Rightarrow \Delta U = \mathbf{50 kJ}$.<br>
+                            (כל העבודה שהושקעה הפכה לאנרגיה פנימית).</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>בוכנה חופשית מכילה $0.5$ ק"ג אוויר ב-$300 K$. מספקים לאוויר $50 kJ$ של חום בתהליך איזובארי (לחץ
+                    קבוע). חשב את הטמפרטורה הסופית של האוויר. (הנח $C_p = 1.005 kJ/kgK$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. זיהוי:</strong> בוכנה חופשית $\rightarrow P=const$.</p>
+                        <p><strong>2. קיצור דרך:</strong> בתהליך כזה $Q = \Delta H = m C_p (T_2 - T_1)$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $50 = 0.5 \cdot 1.005 \cdot (T_2 - 300)$<br>
+                            $100 = 1.005(T_2 - 300)$<br>
+                            $T_2 - 300 = 99.5 \Rightarrow T_2 = \mathbf{399.5 K}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מיכל קשיח מבודד מכיל גז חנקן. בוחשן (גלגל כפות) מסתובב בתוך המיכל ומשקיע עבודה של $20 kJ$. חשב את
+                    עליית הטמפרטורה אם מסת החנקן היא $2$ ק"ג ו-$C_v = 0.743 kJ/kgK$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מערכת:</strong> מיכל קשיח ($W_b = 0$). עבודת בוחשן ($W_{sh} = -20 kJ$). $Q=0$
+                            (מבודד).</p>
+                        <p><strong>2. חוק ראשון:</strong> $Q - (W_b + W_{sh}) = \Delta U$.<br>
+                            $0 - (0 - 20) = m C_v \Delta T$.<br>
+                            $20 = 2 \cdot 0.743 \cdot \Delta T$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $\Delta T = 20 / 1.486 = \mathbf{13.46 K}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>זורקים גוש פלדה במסה $2$ ק"ג ובטמפרטורה $850^\circ C$ לתוך מיכל מבודד המכיל $10$ ליטר מים ב-$20^\circ
+                    C$.
+                    מהי טמפרטורת שיווי המשקל הסופית? (נתון: $C_{steel} = 0.45, C_{water} = 4.18$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. המערכת:</strong> פלדה + מים. זוהי מערכת מבודדת ($Q=0, W=0$).</p>
+                        <p><strong>2. מאזן:</strong> סך השינוי באנרגיה אפס. האנרגיה שהפלדה איבדה = האנרגיה שהמים
+                            קיבלו.<br>
+                            $\Delta U_{steel} + \Delta U_{water} = 0$.<br>
+                            $m_s C_s (T_f - T_{si}) + m_w C_w (T_f - T_{wi}) = 0$.</p>
+                        <p><strong>3. הצבה:</strong> (נפח מים 10 ליטר = 10 ק"ג).<br>
+                            $2 \cdot 0.45 \cdot (T_f - 850) + 10 \cdot 4.18 \cdot (T_f - 20) = 0$.<br>
+                            $0.9 T_f - 765 + 41.8 T_f - 836 = 0$.<br>
+                            $42.7 T_f = 1601 \Rightarrow \mathbf{T_f = 37.5^\circ C}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>גז מתפשט בתהליך פוליטרופי $PV^{1.3}=C$ מ-$1 MPa, 1000 K$ ל-$100 kPa$. העבודה היא $W = 137.4 kJ/kg$.
+                    כעת,
+                    חשב את החום ($Q$) שהוחלף בתהליך עבור חנקן ($C_v = 0.743, R=0.297$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $W = 137.4 kJ/kg$. $T_1 = 1000 K$.</p>
+                        <p><strong>2. מציאת $T_2$:</strong><br>
+                            עבור גז אידיאלי: $T_2 = T_1 (P_2/P_1)^{(n-1)/n}$.<br>
+                            $T_2 = 1000 (100/1000)^{0.3/1.3} = 1000 (0.1)^{0.23} = 588.6 K$.</p>
+                        <p><strong>3. חישוב $\Delta u$:</strong><br>
+                            $\Delta u = C_v (T_2 - T_1) = 0.743 (588.6 - 1000) = -305.6 kJ/kg$.</p>
+                        <p><strong>4. חוק ראשון:</strong><br>
+                            $q = \Delta u + w = -305.6 + 137.4 = \mathbf{-168.2 kJ/kg}$. (חום נפלט).</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מיכל A ($1 m^3$) מכיל אוויר ב-$25^\circ C, 500 kPa$. מיכל B מכיל $5$ ק"ג אוויר ב-$35^\circ C, 200
+                    kPa$.
+                    פותחים ברז והמערכת מגיעה לשיווי משקל עם הסביבה ב-$20^\circ C$. חשב את החום ($Q$) שעברה לסביבה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. אסטרטגיה:</strong> המערכת כולה סגורה, הנפח הכולל קבוע ($W=0$).<br>
+                            $Q = \Delta U_{total} = m_A C_v (T_2 - T_{A1}) + m_B C_v (T_2 - T_{B1})$.</p>
+                        <p><strong>2. נתונים:</strong><br>
+                            $m_A = PV/RT = (500 \cdot 1)/(0.287 \cdot 298) = 5.84 kg$.<br>
+                            $m_B = 5 kg$. $T_2 = 20^\circ C$. $C_v = 0.718$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $Q = 5.84 \cdot 0.718 \cdot (20 - 25) + 5 \cdot 0.718 \cdot (20 - 35)$<br>
+                            $Q = -20.96 - 53.85 = \mathbf{-74.8 kJ}$. (יצא לסביבה).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>צילינדר סגור עם בוכנה וקפיץ מכיל אוויר בנפח $0.0015 m^3$ ובלחץ $150 kPa$. מחממים עד שהנפח מגיע
+                    ל-$0.007
+                    m^3$ והלחץ ל-$400 kPa$. חשב את $W, \Delta U, Q$. (הנח $C_v/R = 2.5$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עבודה ($W$):</strong> שטח הטרפז.<br>
+                            $W = \frac{150 + 400}{2} (0.007 - 0.0015) = 275 \cdot 0.0055 = \mathbf{1.5125 kJ}$.</p>
+                        <p><strong>2. שינוי אנרגיה ($\Delta U$):</strong><br>
+                            $\Delta U = \frac{C_v}{R} (P_2 V_2 - P_1 V_1) = 2.5 (400 \cdot 0.007 - 150 \cdot 0.0015) =
+                            2.5(2.8 - 0.225) = \mathbf{6.4375 kJ}$.</p>
+                        <p><strong>3. חום ($Q$):</strong><br>
+                            $Q = \Delta U + W = 6.4375 + 1.5125 = \mathbf{7.95 kJ}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>אדם שמסתו $68$ ק"ג עם חום גוף של $39^\circ C$ שותה ליטר מים קרים ב-$3^\circ C$. מה תהיה טמפרטורת הגוף
+                    הסופית? (הנח $C_{body} = 3.6, C_{water} = 4.18$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מאזן:</strong> $m_{man} C (T_f - 39) + m_{water} C_w (T_f - 3) = 0$.</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $68 \cdot 3.6 \cdot (T_f - 39) + 1 \cdot 4.18 \cdot (T_f - 3) = 0$.<br>
+                            $244.8 T_f - 9547.2 + 4.18 T_f - 12.54 = 0$.<br>
+                            $249 T_f = 9559.7 \Rightarrow \mathbf{T_f = 38.39^\circ C}$.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 5 -->
+        <section id="ch5" class="chapter">
+            <h2>פרק 5: החוק הראשון - מערכות פתוחות (נפח בקרה)</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p>הגענו לפרק שהוא הלחם והחמאה של המהנדס: מערכות פתוחות. עד עכשיו עסקנו בבוכנות ומיכלים סגורים. במציאות,
+                    רוב המכונות (מנועי סילון, תחנות כוח, מזגנים, רדיאטורים) הן מערכות שזורם נכנס ויוצא מהן כל הזמן.</p>
+
+                <p>בפרק הזה אנחנו עוברים מ"מסה קבועה" ($m$) ל"ספיקה מסית" ($\dot{m}$), ומאנרגיה ($E$) להספק ($\dot{E}$
+                    או $P$).</p>
+
+                <p><strong>הנחת היסוד: מצב מתמיד (SSSF):</strong> רוב התרגילים עוסקים ב-Steady State Steady Flow:
+                    1. התכונות בתוך הנפח לא משתנות בזמן.
+                    2. המסה לא מצטברת (נכנס = יוצא).</p>
+
+                <p><strong>משוואת הרציפות (שימור מסה):</strong></p>
+                <div class="math-display">$$\sum \dot{m}_{in} = \sum \dot{m}_{out}$$</div>
+                <div class="math-display">$$\dot{m} = \rho A V = \frac{A V}{v}$$</div>
+                <ul>
+                    <li>$\dot{m}$: ספיקה מסית [$kg/s$].</li>
+                    <li>$V$: מהירות הזורם [$m/s$] (גדולה). $v$ קטנה לנפח סגולי.</li>
+                    <li>$A$: שטח החתך [$m^2$].</li>
+                </ul>
+
+                <p><strong>החוק הראשון למערכות פתוחות (מאזן אנרגיה):</strong> סכום האנרגיות הנכנסות (חום + עבודה + מסה
+                    נכנסת) שווה ליוצאות.</p>
+                <div class="math-display">$$\dot{Q} - \dot{W} = \sum \dot{m}_{out} \left( h + \frac{V^2}{2} + gz
+                    \right)_{out} - \sum \dot{m}_{in} \left( h + \frac{V^2}{2} + gz \right)_{in}$$</div>
+
+                <p><strong>טיפ יחידות קריטי:</strong> $h$ נתון ב-$kJ/kg$, בעוד $\frac{V^2}{2}$ נותן $J/kg$. כדי לחבר
+                    ביניהם, חובה לחלק ב-2000:</p>
+                <div class="math-display">$$\frac{V^2}{2000} \rightarrow [kJ/kg]$$</div>
+
+                <p><strong>רכיבים נפוצים:</strong></p>
+                <ul>
+                    <li><strong>נחיר (Nozzle) / דיפיוזר:</strong> המרת לחץ למהירותולהיפך. $\dot{Q} \approx 0, \dot{W} =
+                        0, \Delta pe \approx 0$.
+                        <br> משוואה: $h_1 + \frac{V_1^2}{2} = h_2 + \frac{V_2^2}{2}$.
+                    </li>
+                    <li><strong>טורבינה (Turbine):</strong> ייצור עבודה ($\dot{W} > 0$) מהתפשטות גז.
+                        <br> משוואה: $\dot{W}_{out} = \dot{m}(h_{in} - h_{out})$.
+                    </li>
+                    <li><strong>מדחס (Compressor) / משאבה:</strong> העלאת לחץ ע"י השקעת עבודה ($\dot{W} < 0$). <br>
+                            משוואה: $\dot{W}_{in} = \dot{m}(h_{out} - h_{in})$.
+                    </li>
+                    <li><strong>מצערת (Throttling Valve):</strong> הורדת לחץ משמעותית. <strong>איזואנתלפי
+                            ($h=const$)</strong>.
+                    </li>
+                    <li><strong>מחליף חום (Heat Exchanger):</strong> העברת חום בין זורמים ללא ערבוב.
+                        <br> מאזן: $\dot{m}_A(h_{A,in} - h_{A,out}) = \dot{m}_B(h_{B,out} - h_{B,in})$.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון ("המתכון למערכות זרימה")</span>
+                <ol>
+                    <li><strong>שרטוט:</strong> צייר את הרכיב וסמן כניסות (1) ויציאות (2) בבירור.</li>
+                    <li><strong>רשימת נתונים:</strong> עשה טבלה עם $P, T, V$ לכל נקודה ונתוני $\dot{Q}, \dot{W}$.</li>
+                    <li><strong>מאזן מסה:</strong> חשב $\dot{m}$. אם נתון שטח ומהירות: $\dot{m} = \frac{AV}{v}$.</li>
+                    <li><strong>מציאת אנתלפיות ($h$):</strong> קיטור/קרר מטבלאות ($P, T, x$), גז אידיאלי $h = C_p T$.
+                    </li>
+                    <li><strong>מאזן אנרגיה:</strong> הצב במשוואה המלאה ומחק איברים זניחים (לרוב $Q, \Delta pe$).</li>
+                </ol>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>קיטור נכנס לנחיר אדיאבטי ב-$400^\circ C$ ו-$4 MPa$ במהירות זניחה ($V_1 \approx 0$). הקיטור יוצא
+                    ב-$300^\circ C$ ו-$2 MPa$. חשב את מהירות היציאה ($V_2$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מערכת:</strong> נחיר קיטור. אדיאבטי ($q=0$), אין עבודה ($w=0$).</p>
+                        <p><strong>2. משוואה:</strong> $V_2 = \sqrt{2000 \cdot (h_1 - h_2)}$.</p>
+                        <p><strong>3. ממצבים:</strong><br>
+                            $h_1 (4 MPa, 400^\circ C)$ מטבלה A-6: $3213.6 kJ/kg$.<br>
+                            $h_2 (2 MPa, 300^\circ C)$ מטבלה A-6: $3023.5 kJ/kg$.</p>
+                        <p><strong>4. חישוב:</strong><br>
+                            $V_2 = \sqrt{2000 \cdot (3213.6 - 3023.5)} = \sqrt{380200} = \mathbf{616.6 m/s}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>אוויר נכנס למדחס ב-$100 kPa$ ו-$27^\circ C$ בספיקה של $0.5 kg/s$, ויוצא ב-$600 kPa$ ו-$227^\circ C$.
+                    מהו ההספק הדרוש להפעלתו ($\dot{W}_{in}$)? ($C_p = 1.005$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מערכת:</strong> מדחס אדיאבטי.</p>
+                        <p><strong>2. משוואה:</strong> בגודל מוחלט $\dot{W}_{in} = \dot{m} C_p (T_2 - T_1)$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $\dot{W}_{in} = 0.5 \cdot 1.005 \cdot (227 - 27) = 0.5 \cdot 1.005 \cdot 200 = \mathbf{100.5
+                            kW}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>קרר R-134a נכנס למצערת כנוזל רווי בלחץ $1.2 MPa$. הוא יוצא בלחץ $0.2 MPa$. מהי האיכות ($x$) ביציאה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עקרון:</strong> $h_1 = h_2$.</p>
+                        <p><strong>2. מצבים:</strong><br>
+                            $h_1 = h_f @ 1.2 MPa \approx 117 kJ/kg$.<br>
+                            ב-$0.2 MPa: h_f \approx 38, h_g \approx 244 \Rightarrow h_{fg} \approx 206$.</p>
+                        <p><strong>3. חישוב איכות:</strong><br>
+                            $117 = 38 + x \cdot 206 \Rightarrow \mathbf{x = 0.38}$.<br>
+                            (כ-38% מהנוזל הפך לגז בירידת הלחץ).</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>טורבינת קיטור ב-$2 kg/s$. כניסה: $500^\circ C, 2 MPa$. יציאה: $100 kPa$ (אדים רוויים). הספק מופק:
+                    $1000 kW$. האם הטורבינה אדיאבטית? חשב את קצב איבוד החום ($\dot{Q}$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. חוק ראשון:</strong> $\dot{Q} = \dot{W} + \dot{m}(h_2 - h_1)$.</p>
+                        <p><strong>2. נתונים:</strong> $h_1 = 3467.6, h_2 = 2675.5$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $\dot{Q} = 1000 + 2(2675.5 - 3467.6) = 1000 - 1584.2 = \mathbf{-584.2 kW}$.</p>
+                        <p><strong>4. מסקנה:</strong> החום שלילי, כלומר חום יוצא מהטורבינה (הפסדי חום). היא לא אדיאבטית.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מים חמים ($80^\circ C$) מתערבבים עם מים קרים ($20^\circ C$) ליצירת $2 kg/s$ ב-$45^\circ C$. מהן
+                    הספיקות הנדרשות ($\dot{m}_h, \dot{m}_c$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מאזנים:</strong> $\dot{m}_h + \dot{m}_c = 2$ וגם $\dot{m}_h T_h + \dot{m}_c T_c =
+                            \dot{m}_{mix} T_{mix}$.</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $80 \dot{m}_h + 20(2 - \dot{m}_h) = 2 \cdot 45$<br>
+                            $60 \dot{m}_h = 50 \Rightarrow \mathbf{\dot{m}_h = 0.833 kg/s}$.</p>
+                        <p><strong>3. סיום:</strong> $\mathbf{\dot{m}_c = 1.167 kg/s}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>אוויר בצינור קבוע. כניסה: $P_1 = 200 kPa, T_1 = 300 K, V_1 = 20 m/s$. ביציאה: $P_2 = 180 kPa, T_2 =
+                    290 K$. חשב את מהירות היציאה ($V_2$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. רציפות:</strong> $V_2 = V_1 \frac{v_2}{v_1} = V_1 \frac{T_2 P_1}{T_1 P_2}$.</p>
+                        <p><strong>2. חישוב:</strong><br>
+                            $V_2 = 20 \cdot \frac{290 \cdot 200}{300 \cdot 180} = 20 \cdot 1.074 = \mathbf{21.48 m/s}$.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>דיפיוזר אוויר אדיאבטי. כניסה: $200 m/s, 300 K$. הוא יוצא במהירות נמוכה מאוד (הנח $0$). מהי הטמפרטורה
+                    ביציאה ($T_2$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מאזן:</strong> $C_p(T_2 - T_1) = V_1^2/2000$.</p>
+                        <p><strong>2. חישוב:</strong><br>
+                            $1.005(T_2 - 300) = 200^2/2000 = 20$.</p>
+                        <p><strong>3. פתרון:</strong> $T_2 = 300 + 19.9 = \mathbf{319.9 K}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מתקן מבודד לאוויר ($10 kg/s$). צד א: $1 bar, 600 K, 1000 m/s$. צד ב: $5 bar, 900 K, 5 m/s$. במוצא ציר
+                    מסתובב. קבע כיוון זרימה והספק ($\dot{W}$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. אנרגיה כוללת בכל צד:</strong> $e = h + V^2/2000$.<br>
+                            $e_a = 1.0 \cdot 600 + 1000^2/2000 = 1100 kJ/kg$.<br>
+                            $e_b = 1.0 \cdot 900 + 0 = 900 kJ/kg$.</p>
+                        <p><strong>2. כיוון הזרימה:</strong> האנרגיה יורדת מ-1100 ל-900, לכן הזרימה היא <strong>מצד א'
+                                לצד ב'</strong>.</p>
+                        <p><strong>3. הספק:</strong><br>
+                            $\dot{W} = \dot{m}(e_{in} - e_{out}) = 10 \cdot (1100 - 900) = \mathbf{2000 kW}$ (מופק).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מחליף חום. אוויר ($1 kg/s$) מתקרר מ-$90^\circ C$ ל-$25^\circ C$. מים נכנסים ב-$15^\circ C$ ויוצאים
+                    ב-$40^\circ C$. חשב $\dot{m}_w$. האם הלחץ משפיע?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מאזן:</strong> $\dot{m}_a C_p \Delta T_a = \dot{m}_w C_w \Delta T_w$.</p>
+                        <p><strong>2. חישוב:</strong><br>
+                            $1 \cdot 1.005 \cdot (90 - 25) = \dot{m}_w \cdot 4.18 \cdot (40 - 15) \Rightarrow
+                            \mathbf{\dot{m}_w = 0.625 kg/s}$.</p>
+                        <p><strong>3. הסבר:</strong> הלחץ לא משנה כי עבור גז אידיאלי האנתלפיה תלויה רק בטמפרטורה.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>נסיין מדד מנוע (טורבינה): חום נכנס $700 kW$, עבודה $300 kW$, חום נפלט $400 kW$. האם המדידות תקינות
+                    לפי חוק ראשון?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. בדיקה:</strong> האם כניסה = יציאה ($700 = 300 + 400$)?</p>
+                        <p><strong>2. מסקנה:</strong> כן, חוק שימור האנרגיה מתקיים והמדידות הגיוניות מבחינת החוק הראשון.
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 6 -->
+        <section id="ch6" class="chapter">
+            <h2>פרק 6: החוק השני ואנטרופיה בסיסית</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>מנועי חום (Heat Engines):</strong> מנוע הממיר חום ($Q_H$) לעבודה ($W$).</p>
+                <ul>
+                    <li>נצילות תרמית ($\eta_{th}$): $\eta_{th} = \frac{W_{net}}{Q_H} = 1 - \frac{Q_L}{Q_H}$</li>
+                    <li>$Q_H$: חום נכנס ממאגר חם. $Q_L$: חום נפלט למאגר קר.</li>
+                </ul>
+
+                <p><strong>מקררים ומשאבות חום:</strong> מכשירים שמשקיעים עבודה ($W$) כדי להעביר חום מהקר לחם.</p>
+                <ul>
+                    <li>מקדם ביצועים למקרר ($COP_R$): $COP_R = \frac{Q_L}{W_{in}} = \frac{Q_L}{Q_H - Q_L}$</li>
+                    <li>מקדם ביצועים למשאבת חום ($COP_{HP}$): $COP_{HP} = \frac{Q_H}{W_{in}} = \frac{Q_H}{Q_H - Q_L}$
+                    </li>
+                    <li>קשר שימושי: $COP_{HP} = COP_R + 1$</li>
+                </ul>
+
+                <p><strong>מחזור קרנו (Carnot) – הגבול העליון:</strong> המנוע היעיל ביותר האפשרי תיאורטית. משתמשים ביחסי
+                    טמפרטורות (בקלווין!).</p>
+                <ul>
+                    <li>$\eta_{Carnot} = 1 - \frac{T_L}{T_H}$</li>
+                    <li>$COP_{R,Carnot} = \frac{T_L}{T_H - T_L}$</li>
+                    <li>$COP_{HP,Carnot} = \frac{T_H}{T_H - T_L}$</li>
+                </ul>
+
+                <p><strong>אנטרופיה ($S$):</strong> מדד אי-הסדר.</p>
+                <ul>
+                    <li>אי-שוויון קלאוזיוס: $\oint \frac{\delta Q}{T} \le 0$ (0=הפיך, <0=בלתי הפיך,>0=בלתי אפשרי).</li>
+                    <li>עיקרון עליית האנטרופיה: $\Delta S_{gen} = \Delta S_{system} + \Delta S_{surr} \ge 0$.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: "הבלש התרמודינמי"</span>
+                <ol>
+                    <li><strong>זיהוי המתקן:</strong> מנוע, מקרר או משאבת חום? זהה את $T_H, T_L$ (המר לקלווין!).</li>
+                    <li><strong>חוק ראשון:</strong> וודא ש-$W = Q_H - Q_L$. אם לא - הממציא משקר.</li>
+                    <li><strong>ביצועים בפועל:</strong> חשב $\eta$ או $COP$ לפי $Q$ ו-$W$.</li>
+                    <li><strong>הגבול התיאורטי:</strong> חשב $\eta_{max}$ או $COP_{max}$ לפי טמפרטורות קרנו.</li>
+                    <li><strong>הכרעת הדין:</strong>
+                        <ul>
+                            <li>פועל > קרנו: בלתי אפשרי.</li>
+                            <li>פועל = קרנו: הפיך (אידיאלי).</li>
+                            <li>פועל < קרנו: אפשרי ובלתי הפיך (מציאותי).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: טענת הממציא (מנוע)</span>
+                <p><strong>שאלה:</strong> יזם טוען שפיתח מנוע בין $1000 K$ ל-$300 K$. נתונים: $Q_{in} = 100 kW, W_{out}
+                    = 75 kW, Q_{out} = 25 kW$. האם אפשרי?</p>
+                <p><strong>פתרון:</strong>
+                    1. חוק ראשון: $100 = 75 + 25$ (תקין).<br>
+                    2. נצילות מוצהרת: $\eta = 75/100 = 0.75$.<br>
+                    3. נצילות קרנו: $\eta_{max} = 1 - 300/1000 = 0.7$.<br>
+                    4. מסקנה: $0.75 > 0.7 \Rightarrow$ <strong>בלתי אפשרי!</strong>
+                </p>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מנוע חום מקבל $500 kJ$ של חום ממאגר ב-$600^\circ C$, ומייצר $200 kJ$ עבודה. שאר החום נפלט למאגר
+                    ב-$20^\circ C$.<br>
+                    א. כמה חום נפלט למאגר הקר?<br>
+                    ב. מהי הנצילות התרמית של המנוע?<br>
+                    ג. מהי נצילות קרנו המקסימלית האפשרית בתנאים אלו?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $Q_H = 500 kJ, W = 200 kJ$.<br>
+                            $T_H = 600+273.15 = 873.15 K$.<br>
+                            $T_L = 20+273.15 = 293.15 K$.</p>
+                        <p><strong>2. א. חום נפלט ($Q_L$):</strong><br>
+                            $W = Q_H - Q_L \Rightarrow Q_L = Q_H - W = 500 - 200 = \mathbf{300 kJ}$.</p>
+                        <p><strong>3. ב. נצילות תרמית ($\eta$):</strong><br>
+                            $$\eta = \frac{W}{Q_H} = \frac{200}{500} = \mathbf{0.4 \quad (40\%)}$$</p>
+                        <p><strong>4. ג. נצילות קרנו:</strong><br>
+                            $$\eta_{max} = 1 - \frac{T_L}{T_H} = 1 - \frac{293.15}{873.15} = 1 - 0.336 = \mathbf{0.664
+                            \quad (66.4\%)}$$<br>
+                            המסקנה: המנוע אפשרי (40% < 66.4%).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מזגן שומר על חדר ב-$20^\circ C$ כאשר בחוץ $35^\circ C$. המזגן סילק מהחדר $3 kW$ של חום (עומס הקירור).
+                    המדחס צורך $1 kW$ חשמל.<br>
+                    א. מהו ה-$COP$ של המזגן?<br>
+                    ב. מהו ה-$COP$ המקסימלי האפשרי (קרנו)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $Q_L = 3 kW, W = 1 kW$.<br>
+                            $T_H = 35+273 = 308 K$.<br>
+                            $T_L = 20+273 = 293 K$.</p>
+                        <p><strong>2. א. COP בפועל:</strong><br>
+                            $$COP = \frac{Q_L}{W} = \frac{3}{1} = \mathbf{3}$$</p>
+                        <p><strong>3. ב. COP קרנו:</strong><br>
+                            $$COP_{max} = \frac{T_L}{T_H - T_L} = \frac{293}{308 - 293} = \frac{293}{15} =
+                            \mathbf{19.53}$$<br>
+                            (המזגן שלנו רחוק מאוד מהאידיאל, וזה הגיוני).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>משאבת חום משמשת לחימום בית ($22^\circ C$) כשהחוץ קר ($2^\circ C$). הבית מאבד חום בקצב של $15 kW$
+                    ($Q_H$ דרוש).<br>
+                    אם המשאבה פועלת בביצועים של מחזור קרנו (אידיאלית), מהו ההספק החשמלי המינימלי ($\dot{W}_{min}$) הדרוש
+                    להפעלתה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מטרה:</strong> לחמם $\rightarrow Q_H = 15 kW$.</p>
+                        <p><strong>2. טמפרטורות:</strong> $T_H = 22+273 = 295 K$, $T_L = 2+273 = 275 K$.</p>
+                        <p><strong>3. COP קרנו (חימום):</strong><br>
+                            $$COP_{HP,max} = \frac{T_H}{T_H - T_L} = \frac{295}{295 - 275} = \frac{295}{20} = 14.75$$
+                        </p>
+                        <p><strong>4. חישוב עבודה מינימלית:</strong><br>
+                            $$W_{min} = \frac{Q_H}{COP_{max}} = \frac{15}{14.75} \approx \mathbf{1.02 kW}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>יזם טוען שפיתח מנוע הפועל בין מאגר ב-$1000 K$ למאגר ב-$300 K$.<br>
+                    לפי המדידות שלו: $Q_{in} = 100 kW, W_{out} = 75 kW, Q_{out} = 25 kW$.<br>
+                    האם המנוע אפשרי? נמק בעזרת החוק הראשון והחוק השני.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. בדיקת חוק ראשון:</strong><br>
+                            $Q_{in} = 100, W+Q_{out} = 75+25 = 100$.<br>
+                            חוק ראשון מתקיים (אין אנרגיה שנעלמה).</p>
+                        <p><strong>2. בדיקת חוק שני (נצילות):</strong><br>
+                            נצילות מוצהרת: $\eta = \frac{75}{100} = 0.75 (75\%)$.<br>
+                            נצילות קרנו: $T_H=1000, T_L=300$.<br>
+                            $$\eta_{max} = 1 - \frac{300}{1000} = 0.7 (70\%)$$</p>
+                        <p><strong>3. מסקנה:</strong><br>
+                            היזם טוען לנצילות של 75%, בעוד שהמקסימום התיאורטי הוא 70%.<br>
+                            <strong>המנוע בלתי אפשרי</strong>.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>ממציא מציע מקרר שצורך $1 kW$ חשמל ומסלק $10 kW$ חום מתא ההקפאה (שנמצא ב-$-10^\circ C$) אל המטבח
+                    (שנמצא ב-$25^\circ C$).<br>
+                    האם הטענה הגיונית?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $W=1, Q_L=10$. טמפרטורות: $T_L=263 K, T_H=298 K$.</p>
+                        <p><strong>2. COP מוצהר:</strong><br>
+                            $COP = \frac{10}{1} = 10$.</p>
+                        <p><strong>3. COP מקסימלי (קרנו):</strong><br>
+                            $$COP_{max} = \frac{263}{298 - 263} = \frac{263}{35} = \mathbf{7.51}$$</p>
+                        <p><strong>4. מסקנה:</strong><br>
+                            הממציא טוען ל-COP של 10, המקסימום הוא 7.5.<br>
+                            <strong>בלתי אפשרי</strong>.
+                        </p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>$2$ ק"ג של מים רותחים ($100^\circ C$) מתאדים לחלוטין בלחץ אטמוספרי ($1 atm$) והופכים לאדים
+                    רוויים.<br>
+                    החום הכמוס של אידוי המים הוא $h_{fg} = 2257 kJ/kg$.<br>
+                    חשב את השינוי באנטרופיה של המים ($\Delta S_{sys}$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. התהליך:</strong> אידוי בלחץ קבוע ובטמפרטורה קבועה ($T=100^\circ C = 373.15 K$).
+                        </p>
+                        <p><strong>2. חישוב:</strong> עבור תהליך הפיך איזותרמי: $\Delta S = \frac{Q}{T}$.<br>
+                            החום המושקע הוא האנתלפיה של האידוי: $Q = m \cdot h_{fg}$.<br>
+                            $$Q = 2 \cdot 2257 = 4514 kJ$$<br>
+                            $$\Delta S = \frac{4514}{373.15} = \mathbf{12.1 \frac{kJ}{K}}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מנוע חום מקבל $1000 kJ$ ב-$500 K$, פולט $600 kJ$ ב-$300 K$, ומייצר עבודה.<br>
+                    בדוק האם המחזור הוא הפיך, בלתי הפיך, או בלתי אפשרי באמצעות אינטגרל קלאוזיוס ($\oint \frac{\delta
+                    Q}{T}$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. הנוסחה:</strong> $\oint \frac{\delta Q}{T} = \frac{Q_{in}}{T_H} -
+                            \frac{Q_{out}}{T_L}$ (שים לב למינוס ב-$Q_{out}$).</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $\frac{1000}{500} - \frac{600}{300} = 2 - 2 = 0$.</p>
+                        <p><strong>3. מסקנה:</strong><br>
+                            התוצאה היא 0 בדיוק. זהו <strong>מחזור הפיך (קרנו)</strong>.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מיכל מבודד מכיל $5$ ק"ג מים ב-$20^\circ C$. שופכים לתוכו $5$ ק"ג מים רותחים ב-$100^\circ C$.<br>
+                    המערכת מגיעה לשיווי משקל (טמפרטורה סופית $60^\circ C$).<br>
+                    חשב את השינוי באנטרופיה של היקום ($\Delta S_{gen}$). האם התהליך הפיך?<br>
+                    (הנח $C_{water} = 4.18 kJ/kgK$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. המערכת:</strong> שני גושי המים יחד. מבודדת מהסביבה ($\Delta S_{surr} = 0$).<br>
+                            $\Delta S_{gen} = \Delta S_{sys}$.</p>
+                        <p><strong>2. חישוב $\Delta S$ לכל מסה:</strong><br>
+                            עבור נוזל: $\Delta S = m C \ln(\frac{T_2}{T_1})$.<br>
+                            מים קרים (A): $5 kg, 20 \rightarrow 60$. ($293K \rightarrow 333K$).<br>
+                            $\Delta S_A = 5 \cdot 4.18 \cdot \ln(\frac{333}{293}) = 2.675 kJ/K$.<br>
+                            מים חמים (B): $5 kg, 100 \rightarrow 60$. ($373K \rightarrow 333K$).<br>
+                            $\Delta S_B = 5 \cdot 4.18 \cdot \ln(\frac{333}{373}) = -2.368 kJ/K$.</p>
+                        <p><strong>3. סיכום:</strong><br>
+                            $$\Delta S_{gen} = \Delta S_A + \Delta S_B = 2.675 - 2.368 = \mathbf{+0.307 \frac{kJ}{K}}$$
+                        </p>
+                        <p><strong>4. מסקנה:</strong> האנטרופיה עלתה ($>0$), לכן התהליך <strong>בלתי הפיך</strong> (כמו
+                            כל תהליך ערבוב).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מנוע חום מקבל $2 MW$ חום ממאגר ב-$1200 K$ ופולט חום לאוויר הסביבה ב-$300 K$. המנוע מייצר עבודה בהספק
+                    של $800 kW$.<br>
+                    א. מהי נצילות המנוע?<br>
+                    ב. חשב את קצב שינוי האנטרופיה של המאגר החם ($\Delta \dot{S}_H$).<br>
+                    ג. חשב את קצב שינוי האנטרופיה של הסביבה ($\Delta \dot{S}_{surr}$).<br>
+                    ד. חשב את קצב ייצור האנטרופיה הכולל ($\dot{S}_{gen}$). האם המנוע אפשרי?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $Q_H = 2000 kW (2 MW), W = 800 kW$.<br>
+                            $Q_L = 2000 - 800 = 1200 kW$.<br>
+                            $T_H = 1200 K, T_L = 300 K$.</p>
+                        <p><strong>2. א. נצילות:</strong> $\eta = 800/2000 = \mathbf{0.4}$. (נצילות קרנו היא $1-300/1200
+                            = 0.75$, אז זה אפשרי).</p>
+                        <p><strong>3. ב. אנטרופיה מאגר חם:</strong> המאגר מאבד חום.<br>
+                            $$\dot{S}_H = \frac{-Q_H}{T_H} = \frac{-2000}{1200} = \mathbf{-1.67 \frac{kW}{K}}$$</p>
+                        <p><strong>4. ג. אנטרופיה סביבה (קר):</strong> הסביבה מקבלת חום.<br>
+                            $$\dot{S}_{surr} = \frac{+Q_L}{T_L} = \frac{1200}{300} = \mathbf{+4.0 \frac{kW}{K}}$$</p>
+                        <p><strong>5. ד. ייצור אנטרופיה:</strong><br>
+                            $\dot{S}_{gen} = \dot{S}_{surr} + \dot{S}_H + \Delta S_{engine} = 4.0 - 1.67 + 0 =
+                            \mathbf{+2.33 \frac{kW}{K}}$.<br>
+                            התוצאה חיובית, המנוע <strong>אפשרי ובלתי הפיך</strong>.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מנוע חום ($HE$) מפעיל מקרר ($R$).<br>
+                    המנוע מקבל חום $\dot{Q}_{H1}$ ממאגר ב-$1000 K$ ופולט חום ל-$300 K$.<br>
+                    המקרר מסלק חום $\dot{Q}_{L2}$ ממאגר ב-$250 K$ ופולט חום ל-$300 K$.<br>
+                    כל העבודה שמייצר המנוע מפעילה את המקרר ($\dot{W}_{net, total} = 0$).<br>
+                    מצא את היחס המקסימלי האפשרי בין החום שמסולק מהקור לחום שמושקע במנוע
+                    ($\frac{\dot{Q}_{L2}}{\dot{Q}_{H1}}$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. המנוע (HE):</strong> מייצר עבודה מקסימלית (קרנו).<br>
+                            $W_{max} = Q_{H1} \cdot \eta_{Car} = Q_{H1} (1 - \frac{300}{1000}) = 0.7 Q_{H1}$.</p>
+                        <p><strong>2. המקרר (R):</strong> דורש מינימום עבודה כדי לסלק חום (קרנו).<br>
+                            $W_{min} = \frac{Q_{L2}}{COP_{Car}}$.<br>
+                            $COP_{Car} = \frac{250}{300-250} = \frac{250}{50} = 5$.<br>
+                            לכן: $W = \frac{Q_{L2}}{5}$.</p>
+                        <p><strong>3. חיבור:</strong> כל העבודה מהמנוע הולכת למקרר.<br>
+                            $0.7 Q_{H1} = \frac{Q_{L2}}{5}$.</p>
+                        <p><strong>4. היחס:</strong><br>
+                            $$\frac{Q_{L2}}{Q_{H1}} = 0.7 \cdot 5 = \mathbf{3.5}$$</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 7 -->
+        <section id="ch7" class="chapter">
+            <h2>פרק 7: תהליכים איזנטרופיים ונצילות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>תהליך איזנטרופי ($s=const$):</strong> תהליך אדיאבטי והפיך. זהו המצב האידיאלי אליו משווים את
+                    המציאות.</p>
+
+                <p><strong>חישוב $\Delta s$ (שינוי אנטרופיה):</strong></p>
+                <ul>
+                    <li><strong>קיטור/קרר:</strong> מהטבלאות ($\Delta s = s_2 - s_1$).</li>
+                    <li><strong>נוזל/מוצק:</strong> $\Delta s = C \ln(T_2/T_1)$.</li>
+                    <li><strong>גז אידיאלי ($k$ קבוע):</strong> $s_2 - s_1 = C_p \ln(T_2/T_1) - R \ln(P_2/P_1)$.</li>
+                </ul>
+
+                <p><strong>יחסים איזנטרופיים (לגז אידיאלי בלבד):</strong></p>
+                <div class="math-display">$$\frac{T_2}{T_1} = \left(\frac{P_2}{P_1}\right)^{\frac{k-1}{k}} =
+                    \left(\frac{V_1}{V_2}\right)^{k-1}$$</div>
+
+                <p><strong>נצילות איזנטרופית ($\eta$):</strong></p>
+                <ul>
+                    <li><strong>טורבינה ($\eta_T$):</strong> $\eta_T = \frac{w_{actual}}{w_{isentropic}} = \frac{h_1 -
+                        h_{2a}}{h_1 - h_{2s}}$</li>
+                    <li><strong>מדחס/משאבה ($\eta_C$):</strong> $\eta_C = \frac{w_s}{w_a} = \frac{h_{2s} - h_1}{h_{2a} -
+                        h_1}$</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: שיטת ה-"s" וה-"a"</span>
+                <ol>
+                    <li><strong>מצב אידיאלי (s):</strong> הנח $s_{2s} = s_1$. מצא את $h_{2s}$ (או $T_{2s}$) בלחץ $P_2$.
+                    </li>
+                    <li><strong>מעבר למציאות:</strong> השתמש בנצילות ($\eta$) לחילוץ $h_{2a}$ האמיתי.
+                        <ul>
+                            <li>טורבינה: $h_{2a} = h_1 - \eta_T(h_1 - h_{2s})$</li>
+                            <li>מדחס: $h_{2a} = h_1 + (h_{2s} - h_1)/\eta_C$</li>
+                        </ul>
+                    </li>
+                    <li><strong>פתרון סופי (a):</strong> מצא את שאר התכונות ($T_{2a}, x_a$) לפי $h_{2a}, P_2$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: טורבינה לא אידיאלית</span>
+                <p><strong>שאלה:</strong> קיטור נכנס ב-$3 MPa, 400^\circ C$ ($h_1=3230.9, s_1=6.9212$) ויוצא ב-$50 kPa$.
+                    $\eta_T=0.85$. מצא $h_{2a}$.</p>
+                <p><strong>פתרון:</strong>
+                    1. אידיאלי ($2s$): ב-$50 kPa$ עם $s=6.9212 \Rightarrow x_s=0.896 \Rightarrow h_{2s}=2406.1
+                    kJ/kg$.<br>
+                    2. מציאות ($2a$): $h_{2a} = 3230.9 - 0.85 \cdot (3230.9 - 2406.1) = \mathbf{2529.8 kJ/kg}$.
+                </p>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>קיטור נכנס לטורבינה ב-$3 MPa$ ו-$400^\circ C$. הוא מתפשט איזנטרופית ללחץ של $50 kPa$.<br>
+                    א. מהי האנטרופיה בכניסה ($s_1$)?<br>
+                    ב. מהו המצב ביציאה (איכות $x$)?<br>
+                    ג. מהי האנתלפיה ביציאה ($h_2$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב 1:</strong> $3 MPa, 400^\circ C$. טבלה A-6:<br>
+                            $s_1 = \mathbf{6.9212 kJ/kgK}$, $h_1 = 3230.9 kJ/kg$.</p>
+                        <p><strong>2. תהליך:</strong> איזנטרופי $\rightarrow s_2 = s_1 = 6.9212$.</p>
+                        <p><strong>3. מצב 2:</strong> $P_2 = 50 kPa$.<br>
+                            טבלה A-5 ($50 kPa$): $s_f = 1.091$, $s_g = 7.5939$.<br>
+                            הערך שלנו (6.92) נמצא ביניהם $\rightarrow$ <strong>תערובת</strong>.</p>
+                        <p>$$x_2 = \frac{s_2 - s_f}{s_{fg}} = \frac{6.9212 - 1.091}{6.5029} = \mathbf{0.896}$$</p>
+                        <p><strong>4. חישוב $h_2$:</strong><br>
+                            $$h_{2s} = h_f + x_2 h_{fg} = 340.49 + 0.896(2305.4) = \mathbf{2406.1 kJ/kg}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>אוויר נדחס בתהליך איזנטרופי מ-$100 kPa, 25^\circ C$ ל-$1 MPa$.<br>
+                    חשב את הטמפרטורה הסופית ($T_2$) בהנחת קיבולי חום קבועים ($k=1.4$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נוסחה איזנטרופית:</strong> $T_2 = T_1 (\frac{P_2}{P_1})^{\frac{k-1}{k}}$.</p>
+                        <p><strong>2. הצבה:</strong> $T_1 = 298.15 K$, יחס לחצים 10. $k=1.4$.<br>
+                            $$T_2 = 298.15 (10)^{0.4/1.4} = 298.15 (10)^{0.2857} = 298.15 \cdot 1.93 = \mathbf{575.6
+                            K}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>בלוק ברזל ($C=0.45 kJ/kgK$) במסה $5$ ק"ג ב-$200^\circ C$ מתקרר באוויר עד ל-$25^\circ C$.<br>
+                    מהו שינוי האנטרופיה של הברזל ($\Delta S$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נוסחה:</strong> $\Delta S = m C \ln(T_2/T_1)$.</p>
+                        <p><strong>2. הצבה:</strong> $T_1 = 473.15 K$, $T_2 = 298.15 K$.<br>
+                            $$\Delta S = 5 \cdot 0.45 \cdot \ln(\frac{298.15}{473.15}) = 2.25 \cdot (-0.461) =
+                            \mathbf{-1.037 kJ/K}$$<br>
+                            (האנטרופיה ירדה כי הברזל התקרר ומסר חום).</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>חזור לשאלה 1 ($3 MPa, 400^\circ C \rightarrow 50 kPa$).<br>
+                    כעת נתון שנצילות הטורבינה היא $85\%$ ($\eta_T = 0.85$).<br>
+                    א. מהי האנתלפיה האמיתית ביציאה ($h_{2a}$)?<br>
+                    ב. מהו הספק הטורבינה אם הספיקה היא $2 kg/s$?<br>
+                    ג. מהי האיכות ($x$) האמיתית ביציאה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב אידיאלי ($2s$):</strong> כבר חישבנו בשאלה 1. $h_{2s} = 2406.1 kJ/kg$.<br>
+                            $h_1 = 3230.9$.<br>
+                            עבודה אידיאלית: $w_s = h_1 - h_{2s} = 3230.9 - 2406.1 = 824.8 kJ/kg$.</p>
+                        <p><strong>2. עבודה אמיתית:</strong><br>
+                            $w_a = \eta_T \cdot w_s = 0.85 \cdot 824.8 = 701.1 kJ/kg$.</p>
+                        <p><strong>3. א. אנתלפיה אמיתית:</strong><br>
+                            $w_a = h_1 - h_{2a} \Rightarrow h_{2a} = h_1 - w_a = 3230.9 - 701.1 = \mathbf{2529.8
+                            kJ/kg}$.</p>
+                        <p><strong>4. ב. הספק:</strong><br>
+                            $\dot{W} = \dot{m} w_a = 2 \cdot 701.1 = \mathbf{1402.2 kW}$.</p>
+                        <p><strong>5. ג. איכות אמיתית:</strong><br>
+                            יש לנו $h_{2a} = 2529.8$ בלחץ $50 kPa$.<br>
+                            ב-$50 kPa$: $h_f = 340.5, h_g = 2645.9$. (עדיין תערובת).<br>
+                            $$x_a = \frac{2529.8 - 340.5}{2305.4} = \mathbf{0.95}$$<br>
+                            (הנצילות גרמה ל"חימום" יחסי של הקיטור, פחות רטיבות ביציאה).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מדחס אוויר יונק אוויר ב-$100 kPa, 300 K$ ודוחס אותו ל-$800 kPa$.<br>
+                    נצילות המדחס היא $80\%$.<br>
+                    חשב את הטמפרטורה האמיתית ביציאה ($T_{2a}$) ואת עבודת המדחס הדרושה ($w_{comp,in}$).<br>
+                    (הנח $C_p = 1.005, k=1.4$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב אידיאלי ($2s$):</strong><br>
+                            יחס לחצים 8. $T_1 = 300 K$.<br>
+                            $T_{2s} = 300 (8)^{0.2857} = 543.4 K$.</p>
+                        <p><strong>2. עבודה אידיאלית:</strong><br>
+                            $w_s = C_p(T_{2s} - T_1) = 1.005(543.4 - 300) = 244.6 kJ/kg$.</p>
+                        <p><strong>3. עבודה אמיתית:</strong><br>
+                            $w_a = \frac{w_s}{\eta_C} = \frac{244.6}{0.80} = \mathbf{305.75 kJ/kg}$.</p>
+                        <p><strong>4. טמפרטורה אמיתית:</strong><br>
+                            $w_a = C_p(T_{2a} - T_1) \Rightarrow 305.75 = 1.005(T_{2a} - 300)$.<br>
+                            $$T_{2a} = 300 + \frac{305.75}{1.005} = 300 + 304.2 = \mathbf{604.2 K}$$<br>
+                            (החיכוך במדחס גורם ליציאת אוויר חם יותר מהרצוי).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חנקן נדחס מ-$100 kPa, 20^\circ C$ ל-$500 kPa, 150^\circ C$.<br>
+                    חשב את השינוי באנטרופיה הסגולית ($s_2 - s_1$).<br>
+                    האם התהליך אדיאבטי?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נוסחה:</strong> $\Delta s = C_p \ln(T_2/T_1) - R \ln(P_2/P_1)$.<br>
+                            חנקן: $R = 0.2968 kJ/kgK, C_p = 1.039$.</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $T_1 = 293 K, T_2 = 423 K$.<br>
+                            $P_1 = 100, P_2 = 500$.</p>
+                        <p><strong>3. חישוב:</strong><br>
+                            $\Delta s = 1.039 \ln(\frac{423}{293}) - 0.2968 \ln(\frac{500}{100})$.<br>
+                            $\Delta s = 1.039 \cdot 0.367 - 0.2968 \cdot 1.609$.<br>
+                            $\Delta s = 0.381 - 0.477 = \mathbf{-0.096 kJ/kgK}$.</p>
+                        <p><strong>4. ניתוח:</strong><br>
+                            $\Delta s < 0$. במערכת אדיאבטית האנטרופיה לעולם לא יורדת ($\Delta s \ge 0$).<br>
+                                <strong>מסקנה:</strong> חום חייב היה לצאת מהמערכת בתהליך הדחיסה (קירור). התהליך אינו
+                                אדיאבטי.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>משאבת מים דוחסת מים נוזליים מ-$100 kPa$ ל-$5 MPa$.<br>
+                    בהנחה שהתהליך איזנטרופי, חשב את העבודה הנדרשת למשאבה ליחידת מסה ($w_{pump,in}$) באמצעות הנוסחה $w
+                    \approx v\Delta P$.<br>
+                    (הנח צפיפות מים $1000 kg/m^3$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נתונים:</strong> $v = 1/\rho = 1/1000 = 0.001 m^3/kg$.<br>
+                            $\Delta P = P_2 - P_1 = 5000 kPa - 100 kPa = 4900 kPa$.</p>
+                        <p><strong>2. חישוב:</strong><br>
+                            $$w = v\Delta P = 0.001 \frac{m^3}{kg} \cdot 4900 kPa = 0.001 \cdot 4900 \frac{kJ}{m^3} =
+                            \mathbf{4.9 kJ/kg}$$</p>
+                        <p><strong>3. הערה:</strong> זוהי קירוב טוב עבור נוזלים בלתי דחיסים.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>אוויר נדחס איזנטרופית ביחס לחצים של 10. טמפרטורת הכניסה היא $300 K$.<br>
+                    חשב את טמפרטורת היציאה ($T_{2s}$) באמצעות טבלאות גז אידיאלי (לדוגמה, טבלה A-17).<br>
+                    (השווה לתוצאה משאלה 2).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב כניסה ($T_1=300 K$):</strong><br>
+                            מטבלה A-17 (אוויר): $P_{r1} = 1.386$.</p>
+                        <p><strong>2. מצב יציאה (איזנטרופי):</strong><br>
+                            $P_{r2} = P_{r1} \cdot \frac{P_2}{P_1} = 1.386 \cdot 10 = 13.86$.</p>
+                        <p><strong>3. מציאת $T_{2s}$ בטבלה:</strong><br>
+                            נחפש בטבלה A-17 את הטמפרטורה המתאימה ל-$P_r = 13.86$.<br>
+                            בין $570 K$ ($P_r=13.17$) ל-$580 K$ ($P_r=14.47$).<br>
+                            באינטרפולציה: $T_{2s} = 570 + (580-570) \cdot \frac{13.86-13.17}{14.47-13.17} = 570 + 10
+                            \cdot \frac{0.69}{1.3} = 570 + 5.3 = \mathbf{575.3 K}$.</p>
+                        <p><strong>4. השוואה:</strong> התוצאה קרובה מאוד ל-$575.6 K$ שקיבלנו בשאלה 2 באמצעות קיבולי חום
+                            קבועים. ההבדל נובע מכך שקיבולי החום אינם קבועים לחלוטין.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>גז אידיאלי (אוויר, $k=1.4$) נכנס לנחיר ב-$400 kPa, 1000 K$ ומתפשט ל-$100 kPa$.<br>
+                    נצילות הנחיר היא $92\%$ ($\eta_N = 0.92$).<br>
+                    חשב את מהירות היציאה האמיתית ($V_{2a}$).<br>
+                    (הנח מהירות כניסה זניחה).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. מצב אידיאלי ($2s$):</strong><br>
+                            $T_{2s} = T_1 (\frac{P_2}{P_1})^{\frac{k-1}{k}} = 1000 (\frac{100}{400})^{0.2857} = 1000
+                            (0.25)^{0.2857} = 1000 \cdot 0.673 = 673 K$.</p>
+                        <p><strong>2. עבודה אידיאלית (שינוי אנרגיה קינטית):</strong><br>
+                            $\frac{V_{2s}^2}{2} = C_p(T_1 - T_{2s})$.<br>
+                            $C_p = kR/(k-1) = 1.4 \cdot 0.287 / 0.4 = 1.005 kJ/kgK$.<br>
+                            $V_{2s} = \sqrt{2 C_p (T_1 - T_{2s})} = \sqrt{2 \cdot 1005 \frac{J}{kgK} (1000 - 673) K} =
+                            \sqrt{2010 \cdot 327} = \sqrt{657270} = 810.7 m/s$.</p>
+                        <p><strong>3. מהירות אמיתית:</strong><br>
+                            נצילות נחיר מוגדרת כ-$\eta_N = \frac{V_{2a}^2/2}{V_{2s}^2/2} =
+                            \frac{V_{2a}^2}{V_{2s}^2}$.<br>
+                            $V_{2a} = \sqrt{\eta_N} \cdot V_{2s} = \sqrt{0.92} \cdot 810.7 = 0.959 \cdot 810.7 =
+                            \mathbf{777.6 m/s}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>אוויר נדחס בתהליך אדיאבטי מ-$1 bar, 300 K$ ל-$4 bar, 420 K$.<br>
+                    האם תהליך זה אפשרי? נמק באמצעות שינוי האנטרופיה.<br>
+                    (הנח $C_p = 1.005 kJ/kgK, R = 0.287 kJ/kgK$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. חישוב שינוי אנטרופיה:</strong><br>
+                            עבור גז אידיאלי: $\Delta s = C_p \ln(T_2/T_1) - R \ln(P_2/P_1)$.<br>
+                            $T_1 = 300 K, T_2 = 420 K$.<br>
+                            $P_1 = 1 bar, P_2 = 4 bar$.</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $\Delta s = 1.005 \ln(\frac{420}{300}) - 0.287 \ln(\frac{4}{1})$.<br>
+                            $\Delta s = 1.005 \ln(1.4) - 0.287 \ln(4)$.<br>
+                            $\Delta s = 1.005 \cdot 0.336 - 0.287 \cdot 1.386$.<br>
+                            $\Delta s = 0.33768 - 0.397782 = \mathbf{-0.0601 kJ/kgK}$.</p>
+                        <p><strong>3. מסקנה:</strong><br>
+                            עבור תהליך אדיאבטי, החוק השני של התרמודינמיקה קובע ש-$\Delta s \ge 0$.<br>
+                            קיבלנו $\Delta s < 0$. לכן, התהליך המוצע <strong>בלתי אפשרי</strong>.</p>
+                        <p><strong>4. הסבר נוסף:</strong><br>
+                            אם התהליך היה איזנטרופי (הפיך ואדיאבטי), טמפרטורת היציאה הייתה:<br>
+                            $T_{2s} = T_1 (\frac{P_2}{P_1})^{\frac{k-1}{k}} = 300 (4)^{0.4/1.4} = 300 \cdot 1.486 =
+                            445.8 K$.<br>
+                            מכיוון שהטמפרטורה בפועל ($420 K$) נמוכה מהטמפרטורה האיזנטרופית ($445.8 K$), זה אומר שחום יצא
+                            מהמערכת במהלך הדחיסה, ולכן התהליך אינו אדיאבטי. אם הוא אדיאבטי, הוא בלתי אפשרי.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 8 -->
+        <section id="ch8" class="chapter">
+            <h2>פרק 8: מחזורי כוח וקירור</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">דף נוסחאות וסיכום (Cheat Sheet)</span>
+                <p><strong>מחזור אוטו (Otto):</strong> מנועי בנזין. בעירה בנפח קבוע ($v=const$).</p>
+                <ul>
+                    <li>יחס דחיסה ($r$): $r = V_1/V_2$.</li>
+                    <li>נצילות: $\eta_{Otto} = 1 - 1/r^{k-1}$.</li>
+                </ul>
+
+                <p><strong>מחזור דיזל (Diesel):</strong> בעירה בלחץ קבוע ($P=const$).</p>
+                <ul>
+                    <li>יחס ניתוק ($r_c$): $r_c = V_3/V_2 = T_3/T_2$.</li>
+                    <li>נצילות: $\eta_{Diesel} = 1 - \frac{1}{r^{k-1}} \left[ \frac{r_c^k - 1}{k(r_c - 1)} \right]$.
+                    </li>
+                </ul>
+
+                <p><strong>מחזור ברייטון (Brayton):</strong> טורבינות גז. מערכת פתוחה.</p>
+                <ul>
+                    <li>יחס לחצים ($r_p$): $r_p = P_2/P_1$.</li>
+                    <li>נצילות: $\eta_{Brayton} = 1 - 1/r_p^{(k-1)/k}$.</li>
+                    <li>יחס עבודה חוזרת: $BWR = w_{comp}/w_{turb}$.</li>
+                </ul>
+
+                <p><strong>מחזור קירור (Vapor Compression):</strong></p>
+                <ul>
+                    <li>מדחס $\rightarrow$ מעבה $\rightarrow$ מצערת ($h=const$) $\rightarrow$ מאייד.</li>
+                    <li>$COP = q_L/w_{in} = (h_1-h_4)/(h_2-h_1)$.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם: "טבלת המצבים"</span>
+                <ol>
+                    <li><strong>שרטוט:</strong> צייר דיאגרמת $P-v$ ו-$T-s$ להבנת התהליכים.</li>
+                    <li><strong>טבלת מצבים:</strong> מצא $P, T, v, h/u$ לכל נקודה (1, 2, 3, 4).</li>
+                    <li><strong>תהליכים:</strong>
+                        <ul>
+                            <li>איזנטרופי (1-2, 3-4): השתמש ביחסי $r$ או $r_p$.</li>
+                            <li>תוספת/פליטת חום (2-3, 4-1): השתמש ב-$C_p\Delta T$ או $C_v\Delta T$.</li>
+                        </ul>
+                    </li>
+                    <li><strong>ביצועים:</strong> חשב $w_{net}, q_{in} \Rightarrow \eta = w_{net}/q_{in}$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: מחזור אוטו</span>
+                <p><strong>שאלה:</strong> מנוע אוטו עם $r=8$. אוויר בכניסה: $100 kPa, 300 K$. חום מוסף: $800 kJ/kg$. מצא
+                    $\eta$.</p>
+                <p><strong>פתרון:</strong>
+                    1. נצילות: $\eta = 1 - 1/8^{0.4} = \mathbf{0.565 (56.5\%)}$.<br>
+                    2. עבודה: $w_{net} = 0.565 \cdot 800 = 452 kJ/kg$.
+                </p>
+            </div>
+
+            <h3>תרגול (Drill)</h3>
+
+            <!-- Level 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מנוע אוטו (Otto) פועל עם יחס דחיסה של $r=8$. אם חום של $2000 J$ מוכנס למערכת בכל מחזור, כמה עבודה
+                    תופק מהמנוע במחזור אחד?<br>
+                    (הנח אוויר סטנדרטי עם $k=1.4$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. חישוב נצילות אוטו:</strong><br>
+                            $$\eta_{Otto} = 1 - \frac{1}{r^{k-1}} = 1 - \frac{1}{8^{0.4}} = 1 - \frac{1}{2.3} = 1 -
+                            0.435 = 0.565 \quad (56.5\%)$$</p>
+                        <p><strong>2. חישוב עבודה:</strong><br>
+                            $\eta = \frac{W}{Q_{in}} \Rightarrow W = \eta \cdot Q_{in} = 0.565 \cdot 2000 J =
+                            \mathbf{1130 J}$.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מחזור ברייטון (Brayton) אידיאלי פועל עם יחס לחצים של $r_p = 12$.<br>
+                    מהי הנצילות התרמית של המחזור? ($k=1.4$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. נוסחת נצילות ברייטון:</strong><br>
+                            $$\eta_{Brayton} = 1 - \frac{1}{r_p^{(k-1)/k}}$$</p>
+                        <p><strong>2. הצבה:</strong><br>
+                            $$\eta = 1 - \frac{1}{12^{0.4/1.4}} = 1 - \frac{1}{12^{0.2857}} = 1 - \frac{1}{2.03} = 1 -
+                            0.492 = \mathbf{0.508 \quad (50.8\%)}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מקרר פועל על מחזור דחיסת אדים. נתונות האנתלפיות הבאות:<br>
+                    - כניסה למדחס (גז רווי): $h_1 = 230 kJ/kg$<br>
+                    - יציאה מהמדחס: $h_2 = 280 kJ/kg$<br>
+                    - יציאה מהמעבה (נוזל רווי): $h_3 = 100 kJ/kg$<br>
+                    מצא את מקדם הביצועים (COP) של המקרר.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. אנתלפיה בכניסה למאייד:</strong><br>
+                            במצערת האנתלפיה קבועה: $h_4 = h_3 = 100 kJ/kg$.</p>
+                        <p><strong>2. חום מסולק מהקור ($q_L$):</strong><br>
+                            $q_L = h_1 - h_4 = 230 - 100 = 130 kJ/kg$.</p>
+                        <p><strong>3. עבודת המדחס ($w_{in}$):</strong><br>
+                            $w_{in} = h_2 - h_1 = 280 - 230 = 50 kJ/kg$.</p>
+                        <p><strong>4. COP:</strong><br>
+                            $$COP_R = \frac{q_L}{w_{in}} = \frac{130}{50} = \mathbf{2.6}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מנוע אוטו ($r=8$) מתחיל את המחזור ב-$100 kPa$ ו-$300 K$.<br>
+                    החום המוסף למערכת במהלך הבעירה הוא $800 kJ/kg$.<br>
+                    חשב את הטמפרטורה המקסימלית במחזור ($T_3$).<br>
+                    (הנח $C_v = 0.718 kJ/kgK, k=1.4$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. טמפרטורה אחרי דחיסה ($T_2$):</strong><br>
+                            $T_2 = T_1 \cdot r^{k-1} = 300 \cdot 8^{0.4} = 300 \cdot 2.297 = 689.2 K$.</p>
+                        <p><strong>2. טמפרטורה אחרי בעירה ($T_3$):</strong><br>
+                            הבעירה בנפח קבוע: $q_{in} = C_v (T_3 - T_2)$.<br>
+                            $800 = 0.718 (T_3 - 689.2)$.<br>
+                            $T_3 - 689.2 = 800 / 0.718 = 1114.2$.<br>
+                            $$T_3 = 1114.2 + 689.2 = \mathbf{1803.4 K}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מנוע דיזל (Diesel) פועל עם יחס דחיסה $r=18$. האוויר בכניסה ב-$300 K$.<br>
+                    הטמפרטורה המקסימלית המותרת במחזור היא $2200 K$.<br>
+                    חשב את יחס הניתוק ($r_c$) הנדרש.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. טמפרטורה אחרי דחיסה ($T_2$):</strong><br>
+                            $T_2 = T_1 \cdot r^{k-1} = 300 \cdot 18^{0.4} = 300 \cdot 3.177 = 953.3 K$.</p>
+                        <p><strong>2. חישוב יחס ניתוק ($r_c$):</strong><br>
+                            בדיזל, הבעירה בלחץ קבוע: $r_c = V_3/V_2 = T_3/T_2$.<br>
+                            $$r_c = \frac{2200}{953.3} = \mathbf{2.308}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מחזור ברייטון אידיאלי עם אוויר. יחס לחצים $10$. טמפ' כניסה למדחס $300 K$, טמפ' כניסה לטורבינה $1200
+                    K$.<br>
+                    חשב את יחס העבודה החוזרת (Back Work Ratio - BWR).<br>
+                    (הנח $C_p = 1.005 kJ/kgK$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עבודת המדחס ($w_c$):</strong><br>
+                            $T_2 = 300 \cdot 10^{0.2857} = 579.2 K$.<br>
+                            $w_c = C_p (T_2 - T_1) = 1.005 (579.2 - 300) = 280.6 kJ/kg$.</p>
+                        <p><strong>2. עבודת הטורבינה ($w_t$):</strong><br>
+                            $T_4 = T_3 / (r_p^{(k-1)/k}) = 1200 / 1.93 = 621.8 K$.<br>
+                            $w_t = C_p (T_3 - T_4) = 1.005 (1200 - 621.8) = 581.1 kJ/kg$.</p>
+                        <p><strong>3. BWR:</strong><br>
+                            $$BWR = \frac{w_c}{w_t} = \frac{280.6}{581.1} = \mathbf{0.483}$$<br>
+                            (כ-48% מעבודת הטורבינה משמשת להפעלת המדחס).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מקרר ביתי משתמש ב-R-134a. המקרר פועל בין לחץ מאייד של $0.14 MPa$ ללחץ מעבה של $0.8 MPa$.<br>
+                    המדחס איזנטרופי, והקרר יוצא מהמעבה כנוזל רווי ומהמאייד כגז רווי.<br>
+                    מצא את ה-COP של המקרר.<br>
+                    נתונים מטבלאות R-134a:<br>
+                    ב-$0.14 MPa: h_1 = 239.16, s_1 = 0.9446$.<br>
+                    ב-$0.8 MPa: h_3 = 95.47$. אחרי מדחס ($s_2=s_1$): $h_2 \approx 286 kJ/kg$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עבודת מדחס:</strong> $w = h_2 - h_1 = 286 - 239.16 = 46.84 kJ/kg$.</p>
+                        <p><strong>2. חום מהקור:</strong> $q_L = h_1 - h_4 = h_1 - h_3 = 239.16 - 95.47 = 143.69 kJ/kg$.
+                        </p>
+                        <p><strong>3. COP:</strong><br>
+                            $$COP = \frac{143.69}{46.84} = \mathbf{3.07}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את המחזור של שאלה 6 (ברייטון), אך הפעם עם נצילויות איזנטרופיות:<br>
+                    $\eta_C = 0.82$ ו-$\eta_T = 0.88$. מהי הנצילות התרמית החדשה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עבודה אמיתית במדחס:</strong><br>
+                            $w_{c,a} = w_s / \eta_C = 280.6 / 0.82 = 342.2 kJ/kg$.</p>
+                        <p><strong>2. עבודה אמיתית בטורבינה:</strong><br>
+                            $w_{t,a} = w_s \cdot \eta_T = 581.1 \cdot 0.88 = 511.4 kJ/kg$.</p>
+                        <p><strong>3. עבודה נטו:</strong> $w_{net} = 511.4 - 342.2 = 169.2 kJ/kg$.</p>
+                        <p><strong>4. חום מוסף ($q_{in}$):</strong><br>
+                            $T_{2a} = T_1 + w_{c,a}/C_p = 300 + 342.2/1.005 = 640.5 K$.<br>
+                            $q_{in} = C_p(T_3 - T_{2a}) = 1.005(1200 - 640.5) = 562.3 kJ/kg$.</p>
+                        <p><strong>5. נצילות:</strong><br>
+                            $$\eta = \frac{169.2}{562.3} = \mathbf{0.301 \quad (30.1\%)}$$<br>
+                            (ירידה משמעותית לעומת כ-50% במחזור האידיאלי).</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מנוע אוטו ($r=8$) פועל עם אוויר. בכניסה $100 kPa$ ו-$300 K$. חום של $800 kJ/kg$ מוסף.<br>
+                    חשב את הלחץ הממוצע האפקטיבי (MEP).<br>
+                    (נתון: $R = 0.287 kJ/kgK$).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. עבודה נטו:</strong> כבר חישבנו (בדומה לשאלה 4), $\eta = 0.565$.<br>
+                            $w_{net} = 0.565 \cdot 800 = 452 kJ/kg$.</p>
+                        <p><strong>2. נפח סגולי מכסימלי ($v_1$):</strong><br>
+                            $v_1 = RT_1/P_1 = (0.287 \cdot 300)/100 = 0.861 m^3/kg$.</p>
+                        <p><strong>3. נפח סגולי מינימלי ($v_2$):</strong><br>
+                            $v_2 = v_1/r = 0.861/8 = 0.1076 m^3/kg$.</p>
+                        <p><strong>4. MEP:</strong><br>
+                            $$MEP = \frac{w_{net}}{v_1 - v_2} = \frac{452}{0.861 - 0.1076} = \frac{452}{0.7534} =
+                            \mathbf{600 kPa}$$</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>השווה בין מחזור אוטו למחזור דיזל עבור אותו יחס דחיסה ($r$) ואותה כמות חום מוספת ($q_{in}$).<br>
+                    מי מהם יהיה בעל נצילות תרמית גבוהה יותר? הסבר מדוע.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>1. תשובה:</strong> מחזור <strong>אוטו</strong> יעיל יותר בתנאים אלו.</p>
+                        <p><strong>2. הסבר:</strong> במחזור אוטו, כל החום מתווסף בנפח קבוע (בנקודת הלחץ המקסימלית), מה
+                            שגורם לטמפרטורה הממוצעת של הוספת החום להיות גבוהה יותר מאשר במחזור דיזל (שם חלק מהחום מתווסף
+                            תוך כדי התפשטות בלחץ קבוע). ככל שהטמפרטורה הממוצעת של הוספת החום גבוהה יותר, הנצילות גבוהה
+                            יותר (לפי עקרונות קרנו).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // פונקציות למודאל נוסחאון
+        function openFormulaSheet() {
+            const modal = document.getElementById('formulaModal');
+            const container = document.getElementById('formulaContainer');
+            const title = document.getElementById('modalTitle');
+
+            const chapters = document.querySelectorAll('.chapter');
+            let activeChapterId = 'ch1';
+
+            chapters.forEach(ch => {
+                const rect = ch.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 200) {
+                    activeChapterId = ch.id;
+                }
+            });
+
+            const formulas = {
+                'ch1': [
+                    { name: 'גז אידיאלי', math: 'P V = m R T' },
+                    { name: 'לחץ מוחלט', math: 'P_{abs} = P_{gage} + P_{atm}' },
+                    { name: 'קבוע גז', math: 'R = \\frac{\\bar{R}}{M}' }
+                ],
+                'ch2': [
+                    { name: 'איכות', math: 'x = \\frac{m_g}{m_t}' },
+                    { name: 'תכונה בתערובת', math: 'y = y_f + x(y_g - y_f)' }
+                ],
+                'ch3': [
+                    { name: 'עבודת גבול', math: 'W = \\int P dV' },
+                    { name: 'איזובארי', math: 'W = P(V_2 - V_1)' },
+                    { name: 'איזותרמי', math: 'W = mRT \\ln(V_2/V_1)' }
+                ],
+                'ch4': [
+                    { name: 'חוק ראשון', math: 'Q - W = \\Delta U' },
+                    { name: 'אנרגיה פנימית', math: '\\Delta U = m C_v \\Delta T' },
+                    { name: 'חום ב-P קבוע', math: 'Q = \\Delta H' }
+                ],
+                'ch5': [
+                    { name: 'ספיקה מסית', math: '\\dot{m} = \\frac{AV}{v}' },
+                    { name: 'מאזן אנרגיה', math: '\\dot{Q} - \\dot{W} = \\sum \\dot{m} (h + \\frac{V^2}{2})' }
+                ],
+                'ch6': [
+                    { name: 'נצילות', math: '\\eta = 1 - \\frac{Q_L}{Q_H}' },
+                    { name: 'נצילות קרנו', math: '\\eta_{max} = 1 - \\frac{T_L}{T_H}' },
+                    { name: 'COP קירור', math: 'COP_R = \\frac{Q_L}{W}' }
+                ],
+                'ch7': [
+                    { name: 'יחסי T-P (איזנטרופי)', math: '\\frac{T_2}{T_1} = (\\frac{P_2}{P_1})^{\\frac{k-1}{k}}' },
+                    { name: 'נצילות טורבינה', math: '\\eta_T = \\frac{h_1 - h_{2a}}{h_1 - h_{2s}}' }
+                ],
+                'ch8': [
+                    { name: 'יחס דחיסה', math: 'r = V_{max}/V_{min}' },
+                    { name: 'נצילות אוטו', math: '\\eta = 1 - r^{1-k}' },
+                    { name: 'BWR', math: 'BWR = w_{comp}/w_{turb}' }
+                ]
+            };
+
+            const names = {
+                'ch1': 'מושגי יסוד וגז אידיאלי',
+                'ch2': 'חומרים טהורים',
+                'ch3': 'עבודה וחום',
+                'ch4': 'חוק ראשון (סגורות)',
+                'ch5': 'חוק ראשון (פתוחות)',
+                'ch6': 'החוק השני',
+                'ch7': 'הפיכות ונצילות',
+                'ch8': 'מחזורים'
+            };
+
+            title.innerText = "נוסחאון: " + names[activeChapterId];
+            container.innerHTML = '';
+
+            formulas[activeChapterId].forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'formula-item';
+                div.innerHTML = `<strong>${f.name}:</strong> <div class="math-display">$$${f.math}$$</div>`;
+                container.appendChild(div);
+            });
+
+            modal.style.display = "block";
+            MathJax.typesetPromise();
+        }
+
+        function closeFormulaSheet() {
+            document.getElementById('formulaModal').style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('formulaModal');
+            if (event.target == modal) {
+                closeFormulaSheet();
+            }
+        }
+    </script>
+</body>
+
+</html>

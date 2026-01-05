@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אנליזה הרמונית - הספר המלא</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+        };
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('active')">תפריט</button>
+    <button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')"
+        title="החלף מצב תצוגה">🌓</button>
+    <button class="fab" onclick="openFormulaSheet()" title="נוסחאון מהיר">Σ</button>
+
+    <!-- Formula Modal -->
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFormulaSheet()">&times;</span>
+            <h2 id="modalTitle">נוסחאון מהיר</h2>
+            <div id="formulaContainer">
+                <div class="theory">
+                    <p><strong>מכפלה פנימית ב-$L^2[a,b]$:</strong> $$\langle f, g \rangle = \int_{a}^{b} f(x)
+                        \overline{g(x)} w(x) \, dx$$</p>
+                    <p><strong>טור פורייה:</strong> $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty [a_n \cos(nx) + b_n
+                        \sin(nx)]$$</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>אנליזה הרמונית</h1>
+            <p>המדריך השלם והמפורט</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html"
+                    style="background-color: var(--accent-color); color: white; text-align: center; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.1);">🏠
+                    חזרה למאגר הקורסים</a></li>
+            <li><a href="#ch1" class="active">1. מרחבי מכפלה פנימית</a></li>
+            <li><a href="#ch2">2. בעיות שטורם-ליוביל</a></li>
+            <li><a href="#ch3">3. טורי פורייה (ממשי)</a></li>
+            <li><a href="#ch4">4. טורי פורייה מרוכבים</a></li>
+            <li><a href="#ch5">5. התכנסות טורי פורייה</a></li>
+            <li><a href="#ch6">6. נורמה ומשפטי אנרגיה</a></li>
+            <li><a href="#ch7">7. התמרת פורייה - יסודות</a></li>
+            <li><a href="#ch8">8. התמרת פורייה - מתקדם</a></li>
+            <li><a href="#ch9">9. התמרת לפלס - יסודות</a></li>
+            <li><a href="#ch10">10. התמרת לפלס - מתקדם</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+        <!-- Chapter 1 -->
+        <section id="ch1" class="chapter">
+            <h2>פרק 1: מבוא והכנה: מרחבי מכפלה פנימית ואורתוגונליות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. הגדרה:</strong> מרחב מכפלה פנימית הוא מרחב וקטורי (בדרך כלל של פונקציות) שבו מוגדרת פעולה
+                    המקיימת את האקסיומות של המכפלה הפנימית: ליניאריות ברכיב הראשון, סימטריה הרמיטית, ואי-שליליות ($
+                    \langle f, f \rangle \ge 0 $).</p>
+
+                <p><strong>2. המכפלה הפנימית הסטנדרטית ב-$L^2[a,b]$:</strong>
+                    זוהי "המכפלה הסקלרית" של עולם הפונקציות. היא מוגדרת כאינטגרל של המכפלה בין הפונקציות:
+                    $$ \langle f, g \rangle = \int_{a}^{b} f(x) \overline{g(x)} \, dx $$
+                    אם מוגדרת פונקציית משקל $w(x) > 0$, המכפלה היא:
+                    $$ \langle f, g \rangle_w = \int_{a}^{b} f(x) \overline{g(x)} w(x) \, dx $$
+                </p>
+
+                <p><strong>3. נורמה (Norm):</strong> הכללה של מושג ה"אורך". הנורמה של פונקציה $f$ מוגדרת כשורש של המכפלה
+                    הפנימית שלה עם עצמה:
+                    $$ \|f\| = \sqrt{\langle f, f \rangle} = \sqrt{\int_{a}^{b} |f(x)|^2 \, dx} $$
+                    היא מייצגת במובנים רבים את ה"אנרגיה" של הפונקציה בתחום.</p>
+
+                <p><strong>4. אורתוגונליות:</strong> שתי פונקציות $f, g$ הן אורתוגונליות אם $\langle f, g \rangle = 0$.
+                    זהו מצב של "חוסר מתאם" מוחלט ביניהן.</p>
+
+                <p><strong>5. היטלים ומקדמי פורייה מוכללים:</strong> אם יש לנו קבוצה של פונקציות אורתוגונליות
+                    $\{\phi_n\}$, נוכל להטיל פונקציה $f$ עליהן. המקדם של $f$ ביחס ל-$\phi_n$ הוא:
+                    $$ c_n = \frac{\langle f, \phi_n \rangle}{\|\phi_n\|^2} $$
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: בדיקת אורתוגונליות ונרמול פונקציות</span>
+                <ol>
+                    <li><strong>זיהוי המכפלה:</strong> וודא מהו הקטע $[a,b]$ והאם קיימת פונקציית משקל $w(x)$.</li>
+                    <li><strong>חישוב האינטגרל:</strong> חשב את $\int_a^b f(x) \overline{g(x)} w(x) dx$.</li>
+                    <li><strong>מסקנה:</strong> אם התוצאה היא 0, הפונקציות אורתוגונליות.</li>
+                    <li><strong>נרמול (אם נדרש):</strong> חשב $\|f\|^2 = \int_a^b |f(x)|^2 w(x) dx$, הוצא שורש,
+                        והפונקציה המנורמלת היא $\tilde{f} = \frac{f}{\|f\|}$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> הראה ש-$f(x)=\sin(x)$ ו-$g(x)=\sin(2x)$ אורתוגונליות ב-$[0, \pi]$.</p>
+                <p><strong>פתרון:</strong>
+                    נחשב את המכפלה הפנימית:
+                    $$ \langle \sin x, \sin 2x \rangle = \int_0^\pi \sin x \sin 2x \, dx $$
+                    נשתמש בזהות $\sin 2x = 2 \sin x \cos x$:
+                    $$ \int_0^\pi 2 \sin^2 x \cos x \, dx = \left[ \frac{2 \sin^3 x}{3} \right]_0^\pi = 0-0 = 0 $$
+                    האינטגרל התאפס, לכן הן אורתוגונליות.
+                </p>
+            </div>
+
+            <h3>חלק 2: התרגול (Drill) - 10 תרגילים</h3>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\langle x, x^2 \rangle$ בקטע $[0,1]$. האם הן אורתוגונליות?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \int_0^1 x \cdot x^2 dx = \int_0^1 x^3 dx = 0.25 \neq 0 $$ לא
+                        אורתוגונליות.</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא את הנורמה בריבוע $\|f\|^2$ של $f(x)=e^x$ ב-$[0, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \int_0^1 (e^x)^2 dx = \int_0^1 e^{2x} dx = \frac{1}{2}(e^2 - 1) $$
+                    </div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מצא קבוע $a$ כך ש-$f(x)=1$ ו-$g(x)=x-a$ יהיו אורתוגונליות ב-$[0, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \int_0^1 1 \cdot (x-a) dx = 0.5 - a = 0 \Rightarrow a = 0.5 $$</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>חשב את המכפלה הפנימית של $f(x)=1, g(x)=x$ עם משקל $w(x)=x$ ב-$[0, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \langle 1, x \rangle_x = \int_0^1 1 \cdot x \cdot x dx = \int_0^1 x^2
+                        dx = 1/3 $$</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>הראה ש-$\{\sin(nx)\}_{n=1}^\infty$ אורתוגונלית ב-$[0, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">זהות טריגונומטרית ל-$\sin(nx)\sin(mx)$ ובדיקה עבור $n \neq m$.</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>נרמל את הפונקציה $f(x)=1$ בקטע $[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \|1\|^2 = \int_{-\pi}^\pi 1 dx = 2\pi \Rightarrow \hat{f} =
+                        \frac{1}{\sqrt{2\pi}} $$</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>חשב את $\| \sin x \|^2$ ב-$[0, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \int_0^\pi \sin^2 x dx = \pi/2 $$</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את ההיטל (מקדם) של $f(x)=x$ על $\phi(x)=1$ ב-$[-1, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \frac{\langle x, 1 \rangle}{\|1\|^2} = \frac{0}{2} = 0 $$</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>הוכח את "כלל המקבילית": $\|f+g\|^2 + \|f-g\|^2 = 2(\|f\|^2 + \|g\|^2)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">פתיחה לפי הגדרת המכפלה הפנימית.</div>
+                </details>
+            </div>
+
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מצא נורמה של $f(x)=i$ (קבוע מדומה) ב-$[0, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$$ \|i\|^2 = \int_0^1 i \cdot \overline{i} dx = \int_0^1 1 dx = 1
+                        \Rightarrow \|i\| = 1 $$</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section id="ch2" class="chapter">
+            <h2>פרק 2: בעיות שטורם-ליוביל (Sturm-Liouville)</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב</span>
+                <p><strong>1. המטרה:</strong> מציאת ערכים עצמיים ופונקציות עצמיות למשוואות דיפרנציאליות עם תנאי שפה. זהו
+                    הבסיס לפתרון משוואות חום וגלים.</p>
+                <p><strong>2. צורה קנונית:</strong> $(p(x)y')' + [q(x) + \lambda w(x)]y = 0$.</p>
+                <p><strong>3. משפטים מרכזיים:</strong>
+                <ul>
+                    <li>הערכים העצמיים $\lambda_n$ הם ממשיים וניתן לסדרם $\lambda_1 < \lambda_2 < \dots \to
+                            \infty$.</li>
+                    <li>לכל ע"ע יש פ"ע אחת (עד כדי קבוע).</li>
+                    <li>פ"ע השייכות לע"ע שונים הן אורתוגונליות ביחס למשקל $w(x)$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: מציאת ע"ע ופ"ע</span>
+                <ol>
+                    <li><strong>בדיקת $\lambda < 0$:</strong> הצב $\lambda = -k^2$. פתור את המד"ר וסיים עם תנאי השפה.
+                                בדרך כלל מתקבל פתרון טריוויאלי בלבד.</li>
+                    <li><strong>בדיקת $\lambda = 0$:</strong> פתור $y = Ax + B$. בדוק אם קיימים $A, B$ לא אפסיים
+                        המקיימים את השפה.</li>
+                    <li><strong>בדיקת $\lambda > 0$:</strong> הצב $\lambda = k^2$. פתור $y = A\cos(kx) + B\sin(kx)$. מצא
+                        את $k_n$ המקיים את השפה. אלו יהיו ה"צלילים" של המערכת.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> מצא ע"ע ופ"ע: $y'' + \lambda y = 0, y(0)=0, y(1)=0$.</p>
+                <p><strong>פתרון:</strong>
+                    עבור $\lambda = k^2$: $y = A\cos kx + B\sin kx$.
+                    מ-$y(0)=0 \Rightarrow A=0$.
+                    מ-$y(1)=0 \Rightarrow B\sin(k) = 0 \Rightarrow k_n = n\pi$.
+                    ע"ע: $\lambda_n = (n\pi)^2$. פ"ע: $y_n = \sin(n\pi x)$.
+                </p>
+            </div>
+
+            <h3>חלק 2: התרגול - 10 תרגילים</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>פתור: $y'' + \lambda y = 0, y'(0)=0, y'(\pi)=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lambda_n = n^2, y_n = \cos(nx), n=0,1,2...$</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>פתור: $y'' + \lambda y = 0, y(0)=0, y'(L)=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lambda_n = (\frac{(2n+1)\pi}{2L})^2, y_n = \sin(\frac{(2n+1)\pi
+                        x}{2L})$</div>
+                </details>
+            </div>
+            <!-- Additional drills following similar structure... -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>האם $\lambda = 0$ ע"ע בבעיה $y''+\lambda y=0, y(0)=0, y(1)+y'(1)=0$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לא, מתקבל רק $A=B=0$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>זהה את $p(x), q(x), w(x)$ במשוואה $xy'' + y' + \lambda x y = 0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$(xy')' + \lambda x y = 0 \Rightarrow p=x, q=0, w=x$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא ע"ע ל-$y'' + \lambda y = 0, y(0)=y(2\pi), y'(0)=y'(2\pi)$ (תנאי שפה מחזוריים).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lambda_n = n^2, y_n = \{ \cos(nx), \sin(nx) \}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>חשב $\|y_n\|^2_w$ עבור $y_n = \sin(n\pi x), w=1$ ב-$[0,1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$1/2$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>פתור: $y'' + \lambda y = 0, y(0)=0, y(1)-y'(1)=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lambda_n = k_n^2$ כאשר $\tan k_n = k_n$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>זהה משקל: $e^x y'' + e^x y' + \lambda y = 0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$(e^x y')' + \lambda e^x y = 0$... לא, כאן $w=1$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>הראה שפונקציות עצמיות של $y''+\lambda y=0$ ב-$[0,\pi]$ עם $y(0)=y(\pi)=0$ הן אורתוגונליות.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">חישוב אינטגרל סינוסים ב- $k \neq m$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מצא ע"ע הכי קטן ל-$y''+\lambda y=0, y(0)=0, y'(10)=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lambda_0 = (\pi/20)^2$.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section id="ch3" class="chapter">
+            <h2>פרק 3: טורי פורייה (ייצוג ממשי) - העמקה</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. הרעיון הפיזיקלי והמתמטי:</strong> טורי פורייה מאפשרים לנו לפרק כל פונקציה מחזורית $f(x)$
+                    בעלת מחזור $T=2L$ לסכום אינסופי של פונקציות בסיס אלמנטריות: הרמוניות של סינוס וקוסינוס. זהו כלי
+                    קריטי בעיבוד אותות ובפתרון מד"ר, שכן הוא הופך פעולות מורכבות (כמו גזירה) לפעולות אלגבריות פשוטות
+                    בשכיחות.</p>
+
+                <p><strong>2. נוסחאות המקדמים (מערכת אורתוגונלית):</strong> הפיתוח נשען על העובדה שהקבוצה $\{1,
+                    \cos(\frac{n\pi x}{L}), \sin(\frac{n\pi x}{L})\}$ היא קבוצה אורתוגונלית בקטע $[-L, L]$.
+                    $$ f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty \left[ a_n \cos\left(\frac{n\pi x}{L}\right) + b_n
+                    \sin\left(\frac{n\pi x}{L}\right) \right] $$
+                    המקדמים מחושבים כהיטלים של $f$ על פונקציות הבסיס:
+                    $$ a_0 = \frac{1}{L} \int_{-L}^L f(x) dx \quad \text{(זהו פעמיים הממוצע של הפונקציה)} $$
+                    $$ a_n = \frac{1}{L} \int_{-L}^L f(x) \cos\left(\frac{n\pi x}{L}\right) dx, \quad b_n = \frac{1}{L}
+                    \int_{-L}^L f(x) \sin\left(\frac{n\pi x}{L}\right) dx $$
+                </p>
+
+                <p><strong>3. זוגיות וחסכון בחישובים:</strong>
+                <ul>
+                    <li>אם $f(x)$ <strong>זוגית</strong> ($f(-x)=f(x)$): כל ה-$b_n$ מתאפסים. נותרים עם "טור קוסינוסים".
+                    </li>
+                    <li>אם $f(x)$ <strong>אי-זוגית</strong> ($f(-x)=-f(x)$): כל ה-$a_n$ מתאפסים. נותרים עם "טור
+                        סינוסים".</li>
+                </ul>
+                במקרים אלו, ניתן לחשב את האינטגרל רק על חצי קטע $[0, L]$ ולהכפיל ב-2.
+                </p>
+
+                <p><strong>4. המשמעות של $a_0/2$:</strong> הסיבה שמשתמשים ב-$a_0/2$ ולא ב-$a_0$ היא כדי שנוסחת $a_n$
+                    תהיה תקפה גם עבור $n=0$. גיאומטרית, זהו קו האמצע שסביבו הפונקציה מתנדנדת.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: פיתוח פונקציה לטור פורייה</span>
+                <ol>
+                    <li><strong>קביעת הקטע:</strong> זהה את גבולות האינטגרציה ומצא את $L$ ($T=2L$).</li>
+                    <li><strong>בדיקת סימטריה:</strong> בדוק האם הפונקציה זוגית או אי-זוגית. אם כן - בטל חצי מהמקדמים
+                        מראש.</li>
+                    <li><strong>חישוב $a_0$:</strong> חשב את האינטגרל הפשוט של הפונקציה. שימו לב: אם הפונקציה מוגדרת
+                        למקוטעין, פצל את האינטגרל.</li>
+                    <li><strong>חישוב $a_n$ ו-$b_n$:</strong> השתמש לעיתים קרובות באינטגרציה לפי חלקים (Integration by
+                        Parts). טיפ: $\int u v' = uv - \int u'v$. בדרך כלל $u$ יהיה הפולינום ($x, x^2$).</li>
+                    <li><strong>סידור התוצאה:</strong> הצב את המקדמים בנוסחת הטור ופשט ביטויים כמו $(-1)^n$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה (מורכבת)</span>
+                <p><strong>שאלה:</strong> פתח לטור פורייה את הפונקציה $f(x) = x^2$ בקטע $[-\pi, \pi]$.</p>
+                <p><strong>פתרון מלא:</strong>
+                    1. $L = \pi$. הפונקציה זוגית, לכן $b_n = 0$.
+                    2. חישוב $a_0$:
+                    $$ a_0 = \frac{1}{\pi} \int_{-\pi}^\pi x^2 dx = \frac{1}{\pi} \left[ \frac{x^3}{3}
+                    \right]_{-\pi}^\pi = \frac{1}{\pi} (\frac{\pi^3}{3} - (-\frac{\pi^3}{3})) = \frac{2\pi^2}{3} $$
+                    3. חישוב $a_n$ (לפי חלקים פעמיים):
+                    $$ a_n = \frac{1}{\pi} \int_{-\pi}^\pi x^2 \cos(nx) dx = \frac{2}{\pi} \int_0^\pi x^2 \cos(nx) dx $$
+                    $$ u = x^2, dv = \cos(nx)dx \Rightarrow du = 2xdx, v = \frac{\sin(nx)}{n} $$
+                    $$ = \frac{2}{\pi} \left( [x^2 \frac{\sin nx}{n}]_0^\pi - \int_0^\pi \frac{2x \sin nx}{n} dx \right)
+                    = \frac{2}{\pi} (0 - \frac{2}{n} \int_0^\pi x \sin nx dx) $$
+                    חלקים שוב: $u=x, dv=\sin nx dx \Rightarrow du=dx, v=-\frac{\cos nx}{n}$:
+                    $$ = -\frac{4}{n\pi} \left( [-x \frac{\cos nx}{n}]_0^\pi - \int_0^\pi -\frac{\cos nx}{n} dx \right)
+                    = -\frac{4}{n\pi} (-\frac{\pi \cos(n\pi)}{n} + 0) = \frac{4(-1)^n}{n^2} $$
+                    4. תשובה סופית:
+                    $$ x^2 = \frac{\pi^2}{3} + \sum_{n=1}^\infty \frac{4(-1)^n}{n^2} \cos(nx) $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את טור פורייה של $f(x) = |x|$ בקטע $[-\pi, \pi]$. פרט את שלבי האינטגרציה.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        הפונקציה זוגית $\Rightarrow b_n=0$. <br>
+                        $a_0 = \frac{2}{\pi} \int_0^\pi x dx = \pi$. <br>
+                        $a_n = \frac{2}{\pi} \int_0^\pi x \cos(nx) dx = \frac{2}{\pi} [\frac{x\sin nx}{n} + \frac{\cos
+                        nx}{n^2}]_0^\pi = \frac{2}{\pi n^2} ((-1)^n - 1)$. <br>
+                        עבור $n$ זוגי המקדם הוא 0, עבור $n$ אי-זוגי המקדם הוא $-4/(\pi n^2)$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את המקדמים עבור $f(x) = x$ ב-$[-1, 1]$. שים לב ש-$L=1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        אי-זוגית $\Rightarrow a_n=0$. $L=1$. <br>
+                        $b_n = 2 \int_0^1 x \sin(n\pi x) dx$. <br>
+                        לפי חלקים: $u=x, dv=\sin(n\pi x) \Rightarrow b_n = 2 [-\frac{x\cos n\pi x}{n\pi} + \frac{\sin
+                        n\pi x}{(n\pi)^2}]_0^1 = -\frac{2\cos n\pi}{n\pi} = \frac{2(-1)^{n+1}}{n\pi}$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>פתח את $f(x) = \sin(x)$ ב-$[0, \pi]$ לטור <strong>קוסינוסים</strong>.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        צריך הרחבה זוגית. $L=\pi$. <br>
+                        $a_0 = \frac{2}{\pi} \int_0^\pi \sin x dx = \frac{4}{\pi}$. <br>
+                        $a_n = \frac{2}{\pi} \int_0^\pi \sin x \cos(nx) dx = \frac{1}{\pi} \int_0^\pi [\sin(x+nx) +
+                        \sin(x-nx)] dx$. <br>
+                        לאחר אינטגרציה: $a_n = \frac{2(1+(-1)^n)}{\pi(1-n^2)}$. המקדמים שונים מאפס רק עבור $n$ זוגי.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מצא טור פורייה של פונקציית הלם (Pulse): $f(x)=1$ ב-$[-1, 1]$ בתוך קטע מחזורי $[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זוגית. $a_0 = \frac{1}{\pi} \int_{-1}^1 1 dx = \frac{2}{\pi}$. <br>
+                        $a_n = \frac{1}{\pi} \int_{-1}^1 \cos(nx) dx = \frac{2\sin n}{n\pi}$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>השתמש בטור של $x^2$ כדי לחשב את הסכום $\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n^2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נציב $x=0$ בטור של $x^2$: $0 = \frac{\pi^2}{3} + \sum \frac{4(-1)^n}{n^2}$. <br>
+                        $\sum \frac{4(-1)^{n+1}}{n^2} = \frac{\pi^2}{3} \Rightarrow \sum \frac{(-1)^{n+1}}{n^2} =
+                        \frac{\pi^2}{12}$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>פתח את $f(x) = e^x$ בקטע $[-\pi, \pi]$. רמז: אינטגרציה לפי חלקים פעמיים או שימוש במרוכבים.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        הפונקציה אינה זוגית ואינה אי-זוגית. $L=\pi$. <br>
+                        $a_n = \frac{1}{\pi} \int e^x \cos nx dx = \frac{\sinh \pi}{\pi} \frac{2(-1)^n}{1+n^2}$. <br>
+                        $b_n = \frac{1}{\pi} \int e^x \sin nx dx = \frac{\sinh \pi}{\pi} \frac{2n(-1)^{n+1}}{1+n^2}$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>נתונה $f(x) = x(\pi-x)$ ב-$[0, \pi]$. פתח לטור <strong>סינוסים</strong>.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $L=\pi$. $b_n = \frac{2}{\pi} \int_0^\pi (x\pi-x^2) \sin(nx) dx$. <br>
+                        לאחר אינטגרציה לפי חלקים: $b_n = \frac{4(1-(-1)^n)}{\pi n^3}$. <br>
+                        עבור $n$ אי-זוגי: $8/(\pi n^3)$, עבור $n$ זוגי: 0.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב את מקדמי פורייה של $f(x) = \sin(2x) + 3\cos(5x)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        אין צורך באינטגרציה! הפונקציה כבר בצורת טור פורייה. <br>
+                        $b_2 = 1, a_5 = 3$, כל שאר המקדמים הם 0.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מצא את $a_0$ עבור $f(x) = \cos^2 x$ ב-$[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זהות: $\cos^2 x = 0.5 + 0.5\cos 2x$. <br>
+                        הממוצע (שהוא $a_0/2$) הוא 0.5, לכן $a_0 = 1$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הוכח שלכל פונקציה $f(x)$ בטור פורייה, מתקיים $\int_{-L}^L f(x) dx = L a_0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        אינטגרציה על כל הטור: אינטגרל על כל $\sin$ ו-$\cos$ במחזור שלם הוא 0. נשאר רק האיבר הקבוע
+                        $a_0/2$: <br>
+                        $\int_{-L}^L (a_0/2) dx = (a_0/2) \cdot 2L = L a_0$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section id="ch4" class="chapter">
+            <h2>פרק 4: טורי פורייה מרוכבים - יתרון האלגברה</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. המעבר למרוכבים:</strong> המעבר מהצגה ממשית (קוסינוסים וסינוסים) להצגה מרוכבת מתבסס על זהות
+                    אוילר: $e^{ix} = \cos x + i \sin x$. זה מאפשר לנו לכתוב את הטור בצורה קומפקטית ואלגנטית הרבה יותר,
+                    המאחדת את שני המקדמים $a_n, b_n$ למקדם מרוכב יחיד $c_n$.</p>
+
+                <p><strong>2. הנוסחאות היסודיות:</strong> הטור המרוכב בקטע $[-L, L]$ מוגדר כ:
+                    $$ f(x) \sim \sum_{n=-\infty}^\infty c_n e^{i \frac{n\pi x}{L}} $$
+                    כאשר המקדמים מחושבים ע"י:
+                    $$ c_n = \frac{1}{2L} \int_{-L}^L f(x) e^{-i \frac{n\pi x}{L}} dx $$
+                </p>
+
+                <p><strong>3. הקשר בין הייצוגים:</strong> ניתן לעבור בקלות בין המקדמים:
+                <ul>
+                    <li>$c_0 = \frac{a_0}{2}$ (הממוצע).</li>
+                    <li>$c_n = \frac{a_n - i b_n}{2}$ עבור $n > 0$.</li>
+                    <li>$c_{-n} = \frac{a_n + i b_n}{2} = \overline{c_n}$ (בתנאי ש-$f$ ממשית).</li>
+                </ul>
+                </p>
+
+                <p><strong>4. המשמעות של תדרים שליליים:</strong> בטור המרוכב, הסכימה היא מ-$-\infty$ עד $\infty$.
+                    מתמטית, ה"תדרים השליליים" הם פשוט דרך לייצג את הוקטורים המסתובבים בכיוון הנגדי במישור המרוכב, כך
+                    שסכומם עם התדרים החיוביים יבטל את החלק המדומה (אם הפונקציה ממשית).</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: פיתוח לטור מרוכב</span>
+                <ol>
+                    <li><strong>הגדרת הפרמטרים:</strong> קבע את $L$ ורשום את האקספוננט המרוכב המתאים.</li>
+                    <li><strong>חישוב האינטגרל:</strong> חשב את $\int f(x) e^{-in\pi x/L} dx$.
+                        <br>טיפ: לעיתים קרובות משתמשים בזהות $\int e^{ax} dx = \frac{e^{ax}}{a}$ עבור $a$ מרוכב.
+                    </li>
+                    <li><strong>טיפול ב-$n=0$:</strong> אם הביטוי שקיבלת עבור $c_n$ כולל חילוק ב-$n$, בדוק את מקרה $n=0$
+                        בנפרד ע"י אינטגרציה ישירה.</li>
+                    <li><strong>פישוט:</strong> השתמש בזהות $e^{in\pi} = (-1)^n$ וב-$e^{i2n\pi} = 1$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> מצא את טור פורייה המרוכב של $f(x) = e^{ax}$ בקטע $[-\pi, \pi]$.</p>
+                <p><strong>פתרון:</strong>
+                    $L = \pi$. נוסחת המקדם:
+                    $$ c_n = \frac{1}{2\pi} \int_{-\pi}^\pi e^{ax} e^{-inx} dx = \frac{1}{2\pi} \int e^{(a-in)x} dx $$
+                    $$ = \frac{1}{2\pi} \left[ \frac{e^{(a-inx)}}{a-in} \right]_{-\pi}^\pi = \frac{1}{2\pi(a-in)}
+                    [e^{a\pi} e^{-in\pi} - e^{-a\pi} e^{in\pi}] $$
+                    נציב $e^{in\pi} = e^{-in\pi} = (-1)^n$:
+                    $$ = \frac{(-1)^n}{2\pi(a-in)} (e^{a\pi} - e^{-a\pi}) = \frac{(-1)^n \sinh(\pi a)}{\pi(a-in)} $$
+                    נכפיל בצמוד לפישוט:
+                    $$ c_n = \frac{(-1)^n \sinh(\pi a) (a+in)}{\pi(a^2+n^2)} $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא $c_n$ עבור פונקציית מדרגה $f(x) = 1$ בקטע $[0, L]$ ואפס ב-$[-L, 0]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $c_n = \frac{1}{2L} \int_0^L e^{-in\pi x/L} dx = \frac{1}{2L} [ \frac{e^{-in\pi x/L}}{-in\pi/L}
+                        ]_0^L = \frac{i}{2n\pi} ((-1)^n - 1)$. <br>
+                        עבור $n=0$: $c_0 = 1/2$.
+                    </div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>נתון טור ממשי עם $a_n = 1/n^2, b_n=0$. מהו $c_n$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$c_n = \frac{1}{2n^2}$ לכל $n \neq 0$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>השתמש בטור המרוכב של $e^{ax}$ למצוא את $a_n$ של $e^x$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$a_n = c_n + c_{-n} = \frac{(-1)^n \sinh \pi}{\pi} (\frac{1}{1-in} +
+                        \frac{1}{1+in}) = \frac{2(-1)^n \sinh \pi}{\pi(1+n^2)}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מצא $c_n$ עבור $f(x) = \sin(kx)$ ב-$[-\pi, \pi]$ כאשר $k$ לא שלם.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">משתמשים ב-$\sin kx = \frac{e^{ikx}-e^{-ikx}}{2i}$ ומבצעים אינטגרציה לכל
+                        אקספוננט בפני עצמו.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>הוכח: $\sum c_n e^{inx}$ גזיר אם ורק אם $\sum n c_n$ מתכנס.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">גזירה איבר-איבר מוציאה מקדם $in$, לכן הטור החדש חייב להתכנס.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מצא $c_n$ עבור $f(x) = x$ ב-$[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$c_n = \frac{i(-1)^n}{n}$ עבור $n \neq 0$. $c_0=0$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מהו הקשר בין $\|f\|^2$ ל-$c_n$ במערכת מרוכבת?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\|f\|^2 = 2L \sum |c_n|^2$. לבשים לב ל-2L.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מצא את המקדם $c_3$ עבור הפונקציה $f(x) = 10e^{3ix} + 5e^{-2ix}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$c_3 = 10$. כל מקדם הוא פשוט המקדם של האקספוננט המתאים.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב $c_n$ עבור $f(x) = |x|$ ב-$[-1, 1]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$c_n = \frac{(-1)^n - 1}{(n\pi)^2}$ עבור $n$ אי-זוגי. $c_0 = 1/2$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הסבר מדוע $c_n$ דועך מהר יותר ככל שהפונקציה חלקה יותר.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">גזירות נוספת מוסיפה $n$ במכנה (לפי אינטגרציה לפי חלקים), מה שגורם לדעיכה
+                        מהירה יותר.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 5 -->
+        <!-- Chapter 5 -->
+        <section id="ch5" class="chapter">
+            <h2>פרק 5: התכנסות טורי פורייה ותופעת גיבס</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. שאלת ההתכנסות:</strong> לאחר שחישבנו את מקדמי פורייה, עולה השאלה החשובה - האם הטור שבנינו
+                    באמת שווה לפונקציה המקורית $f(x)$? התשובה תלויה בתכונות של $f$ ובסוג ההתכנסות שאנו מחפשים (נקודתית,
+                    במידה שווה, או בנורמה).</p>
+
+                <p><strong>2. משפט דיריכלה (התכנסות נקודתית):</strong> אם פונקציה $f$ רציפה למקוטעין ובעלת נגזרת רציפה
+                    למקוטעין, הטור מתכנס לערך:
+                    $$ S(x) = \frac{f(x^+) + f(x^-)}{2} $$
+                    בנקודות רציפות, זהו פשוט $f(x)$. בנקודות קפיצה, זהו הממוצע של הגבולות משני הצדדים.</p>
+
+                <p><strong>3. התכנסות במידה שווה (Uniform Convergence):</strong> זהו סוג התכנסות "חזק" יותר, המבטיח
+                    שהטור מתקרב לפונקציה בצורה אחידה בכל הקטע. תנאים מספיקים:
+                <ul>
+                    <li>$f(x)$ רציפה בכל הקטע.</li>
+                    <li>$f(x)$ גזירה למקוטעין.</li>
+                    <li><strong>תנאי הקצוות:</strong> $f(-L) = f(L)$.</li>
+                </ul>
+                אם אחד מהתנאים לא מתקיים (למשל יש קפיצה), ההתכנסות לא תהיה במידה שווה והשארית לא תדעך בצורה אחידה.</p>
+
+                <p><strong>4. תופעת גיבס (Gibbs Phenomenon):</strong> ליד כל נקודת אי-רציפות מסוג קפיצה, סכומי פורייה
+                    החלקיים יוצרים "שפיצים" (Overshoot). באופן מפתיע, גובה השפיץ אינו קטן ככל שמוסיפים איברים, אלא נשאר
+                    קבוע על כ-9% מגובה הקפיצה. רק ב"אינסוף" השפיץ הופך לקו דק ונעלם.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: קביעת ערך התכנסות</span>
+                <ol>
+                    <li><strong>זיהוי הנקודה $x_0$:</strong> האם היא בתוך הקטע או בקצוות?</li>
+                    <li><strong>בדיקת רציפות:</strong> חשב את הגבול מהימין $f(x_0^+)$ ומהשמאל $f(x_0^-)$.</li>
+                    <li><strong>חישוב סכום הטור:</strong>
+                        <br>- אם רציפה: $S(x_0) = f(x_0)$.
+                        <br>- אם יש קפיצה: $S(x_0) = \frac{f(x_0^+) + f(x_0^-)}{2}$.
+                    </li>
+                    <li><strong>טיפול בקצוות:</strong> עבור $x=L$ או $x=-L$, השתמש במחזוריות: $S(L) = \frac{f(-L^+) +
+                        f(L^-)}{2}$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> תהי $f(x) = x$ ב-$[-\pi, \pi]$ ו-$f(x+2\pi)=f(x)$. לאן מתכנס טור פורייה
+                    בנקודות $x=\pi/2, x=\pi$? והאם יש התכנסות במידה שווה?</p>
+                <p><strong>פתרון:</strong>
+                    1. בנקודה $x = \pi/2$: הפונקציה רציפה שם, לכן הטור מתכנס ל-$f(\pi/2) = \pi/2$.
+                    2. בנקודה $x = \pi$: זוהי נקודת קצה. הגבול משמאל הוא $\pi$. בגלל המחזוריות, הגבול מימין (ב-$-\pi$)
+                    הוא $-\pi$.
+                    סכום הטור: $S(\pi) = \frac{\pi + (-\pi)}{2} = 0$.
+                    3. התכנסות במ"ש: למרות ש-$f$ רציפה בתוך הקטע, היא לא רציפה כפונקציה מחזורית (כי $f(-\pi) \neq
+                    f(\pi)$). לכן <strong>אין</strong> התכנסות במידה שווה ותופיע תופעת גיבס.
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>לאן מתכנס הטור של $f(x) = x^2$ ב-$x=\pi$ (בקטע $[-\pi, \pi]$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">רציפה בקצוות ($\pi^2 = (-\pi)^2$), לכן מתכנס ל-$\pi^2$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>פונקציה מוגדרת $f(x)=0$ ב-$[-1, 0]$ ו-$f(x)=1$ ב-$[0, 1]$. לאן מתכנס הטור ב-$x=0$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$(0+1)/2 = 0.5$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>האם הטור של $\sin(x)$ ב-$[0, \pi]$ שמרחיבים אותו לטור סינוסים מתכנס במ"ש?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">כן. הרחבה אי-זוגית יוצרת פונקציה רציפה ומחזורית.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מה ערך הטור $1 - 1/3 + 1/5 - \dots$ שמתקבל מפיתוח פונקציית מדרגה ב-$x=\pi/2$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\pi/4$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>האם פונקציית $1/x$ מקיימת את תנאי דיריכלה ב-$[-1, 1]$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לא, כי היא לא חסומה ולא אינטגרבילית ב-0.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>כמה היא הסטייה המקסימלית של תופעת גיבס עבור קפיצה בגובה 2?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$2 \times 0.09 = 0.18$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>האם לטור פורייה של $f(x) = |x|^ \frac{1}{2}$ יש תופעת גיבס?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לא, כי היא רציפה (גבס מופיע רק באי-רציפות).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>נתון $\sum a_n \cos nx$. אם $\sum |a_n| < \infty$, מה ניתן לומר על ההתכנסות?</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">הטור מתכנס במידה שווה (לפי מבחן ה-M של ויירשטראס).</div>
+                        </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>לאן מתכנס הטור של $f(x)=e^x$ ב-$x=\pi$ (בקטע $[-\pi, \pi]$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\frac{e^\pi + e^{-\pi}}{2} = \cosh \pi$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>האם טור נגזרות של פונקציה שאינה רציפה במחזור מתכנס לנגזרת?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לא, הוא יתבדר או יתכנס לערכים לא נכונים בגלל הקפיצה.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 6 -->
+        <!-- Chapter 6 -->
+        <section id="ch6" class="chapter">
+            <h2>פרק 6: נורמה ומשפטי אנרגיה (Parseval)</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. מרחב $L^2$:</strong> טורי פורייה חיים בצורה הטבעית ביותר במרחב הפונקציות שהריבוע שלהן
+                    אינטגרבילי. במרחב זה, המרחק בין פונקציות נמדד לפי הנורמה: $\|f\| = \sqrt{\int |f|^2 dx}$. למערכת
+                    פורייה יש תכונה של "שלמות" - הטור תמיד מתכנס לפונקציה בנורמה $L^2$.</p>
+
+                <p><strong>2. משפט פרסבל (חוק שימור האנרגיה):</strong> המשפט קובע שהאנרגיה הכוללת של האות (האינטגרל של
+                    ריבוע הפונקציה) שווה לסכום האנרגיות של כל ההרמוניות שלו (ריבועי המקדמים):
+                    $$ \frac{1}{2L} \int_{-L}^L |f(x)|^2 dx = \sum_{n=-\infty}^\infty |c_n|^2 $$
+                    בייצוג ממשי:
+                    $$ \frac{1}{L} \int_{-L}^L f(x)^2 dx = \frac{a_0^2}{2} + \sum_{n=1}^\infty (a_n^2 + b_n^2) $$
+                </p>
+
+                <p><strong>3. שימושים בחישוב טורים:</strong> זהו כלי חזק ביותר לחישוב סכומים של טורים מספריים שלא ניתנים
+                    לחישוב בדרכים אחרות. אם ידוע טור פורייה של פונקציה מסוימת, ניתן להשתמש בפרסבל כדי למצוא את סכום
+                    ריבועי המקדמים.</p>
+
+                <p><strong>4. אי-שוויון בסל (Bessel's Inequality):</strong> עבור כל קבוצה סופית של מקדמים, סכום ריבועיהם
+                    קטן או שווה לאנרגיה של הפונקציה. השוויון מתקיים רק כאשר לוקחים את כל אינסוף המקדמים.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: חישוב טורים בעזרת פרסבל</span>
+                <ol>
+                    <li><strong>בחירת פונקציה:</strong> מצא פונקציה שהטור שלה דומה לטור שאתה רוצה לחשב (למשל עבור $\sum
+                        1/n^2$ נבחר את $f(x)=x$).</li>
+                    <li><strong>חישוב המקדמים:</strong> וודא שבידך מקדמי פורייה ($a_n, b_n$ או $c_n$) של הפונקציה.</li>
+                    <li><strong>חישוב האנרגיה:</strong> חשב את האינטגרל $\int |f|^2 dx$.</li>
+                    <li><strong>הצבה והשוואה:</strong> הצב בנוסחת פרסבל ובודד את הסכום המבוקש.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> השתמש בטור של $f(x)=x$ ב-$[-\pi, \pi]$ כדי לחשב את $\sum_{n=1}^\infty
+                    \frac{1}{n^2}$.</p>
+                <p><strong>פתרון:</strong>
+                    1. טור פורייה של $x$ הוא $b_n = \frac{2(-1)^{n+1}}{n}$, $a_n=0$.
+                    2. חישוב האנרגיה:
+                    $$ \frac{1}{\pi} \int_{-\pi}^\pi x^2 dx = \frac{1}{\pi} [x^3/3]_{-\pi}^\pi = \frac{2\pi^2}{3} $$
+                    3. הצבה בפרסבל:
+                    $$ \frac{2\pi^2}{3} = \frac{a_0^2}{2} + \sum (a_n^2 + b_n^2) = 0 + \sum_{n=1}^\infty \left(
+                    \frac{2(-1)^{n+1}}{n} \right)^2 $$
+                    $$ \frac{2\pi^2}{3} = \sum_{n=1}^\infty \frac{4}{n^2} \Rightarrow \sum_{n=1}^\infty \frac{1}{n^2} =
+                    \frac{2\pi^2}{3 \cdot 4} = \frac{\pi^2}{6} $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>חשב את $\|x\|^2$ במרחב $L^2[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\int_{-\pi}^\pi x^2 dx = 2\pi^3/3$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא את סכום הטור $\sum \frac{1}{n^4}$ בעזרת הפיתוח של $x^2$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">הטור הוא $a_n = \frac{4(-1)^n}{n^2}$. האנרגיה של $x^2$ היא $2\pi^5/5$.
+                        בשימוש בפרסבל נקבל $\pi^4/90$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>ציין מהו נורמת $L^2$ של פונקציה קבועה $f(x)=C$ בקטע $[a, b]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$|C| \sqrt{b-a}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>אם $\|f-g\|^2 = 0$, האם $f=g$ תמיד?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">כמעט תמיד (פרט לקבוצת נקודות ממידה אפס).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>חשב את המכפלה הפנימית $\langle x, \sin x \rangle$ ב-$[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\int_{-\pi}^\pi x \sin x dx = 2\pi$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>השתמש בשוויון פרסבל כדי להוכיח שסדרת מקדמי פורייה היא ב-$l^2$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">מכיוון שהפונקציה ב-$L^2$, האינטגרל של ריבועה סופי, ולכן סכום ריבועי
+                        המקדמים סופי.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא את סכום הטור $\sum_{n=1}^\infty \frac{1}{(2n-1)^2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">ניתן להשתמש בפונקציית מדרגה. התשובה היא $\pi^2/8$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מהו הקשר בין פרסבל לזהות הקיטוב (Polarization identity)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">פרסבל הוא גרסה של משפט פיתגורס במרחב וקטורי עם מכפלה פנימית.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>חשב את $\| \cos(nx) \|^2$ בקטע $[-\pi, \pi]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\int \cos^2(nx) dx = \pi$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הסבר איך פרסבל עוזר למימוש דחיסת נתונים.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">רוב האנרגיה מרוכזת במקדמים הראשונים, לכן ניתן "לזרוק" את המקדמים הקטנים
+                        בלי לאבד הרבה מידע.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section id="ch7" class="chapter">
+            <h2>פרק 7: התמרת פורייה - יסודות והגדרות</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. מטור להתמרה:</strong> טורי פורייה מתאימים לפונקציות מחזוריות בקטע סופי. מה קורה כשהקטע
+                    הולך וגדל לאינסוף ($L \to \infty$)? המרחק בין התדרים הדיסקרטיים הולך וקטן עד שהוא הופך לרצף. תוצאה
+                    זו מובילה אותנו ל<strong>התמרת פורייה</strong>.</p>
+
+                <p><strong>2. הגדרה (ההתמרה הישרה):</strong> עבור פונקציה $f(x)$ שהיא אינטגרבילית בהחלט ב-$ \mathbb{R}$,
+                    ההתמרה מוגדרת כ:
+                    $$ \hat{f}(\omega) = \int_{-\infty}^{\infty} f(x) e^{-i\omega x} dx $$
+                    חשיבות ההתמרה היא במעבר מ"מרחב הזמן/מיקום" ל"מרחב התדר".</p>
+
+                <p><strong>3. ההתמרה ההפוכה:</strong> ניתן לשחזר את הפונקציה המקורית מתוך הפונקציה בספקטרום התדרים:
+                    $$ f(x) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \hat{f}(\omega) e^{i\omega x} d\omega $$
+                    (שימו לב למקדם $1/2\pi$ ולשינוי הסימן באקספוננט).</p>
+
+                <p><strong>4. תכונות יסוד:</strong>
+                <ul>
+                    <li><strong>ליניאריות:</strong> ההתמרה של סכום היא סכום ההתמרות.</li>
+                    <li><strong>הזזה בזמן:</strong> $f(x-x_0) \to e^{-i\omega x_0} \hat{f}(\omega)$.</li>
+                    <li><strong>מתיחה (Scaling):</strong> $f(ax) \to \frac{1}{|a|} \hat{f}(\frac{\omega}{a})$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: חישוב התמרת פורייה</span>
+                <ol>
+                    <li><strong>הצבה בהגדרה:</strong> רשום את האינטגרל $\int f(x) e^{-i\omega x} dx$.</li>
+                    <li><strong>קביעת גבולות:</strong> הגדר את הגבולות לפי התחום שבו $f(x) \neq 0$.</li>
+                    <li><strong>חישוב האינטגרל:</strong> השתמש בשיטות אינטגרציה רגילות או בזהויות אוילר.</li>
+                    <li><strong>פישוט:</strong> עבור פונקציות דופק, התוצאה תכלול לרוב פונקציית $\text{sinc}$
+                        ($\frac{\sin X}{X}$).</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> מצא את התמרת פורייה של $f(x) = 1$ עבור $|x| \leq a$ ו-0 אחרת.</p>
+                <p><strong>פתרון:</strong>
+                    $$ \hat{f}(\omega) = \int_{-a}^{a} e^{-i\omega x} dx = \left[ \frac{e^{-i\omega x}}{-i\omega}
+                    \right]_{-a}^a = \frac{e^{-i\omega a} - e^{i\omega a}}{-i\omega} = \frac{e^{i\omega a} - e^{-i\omega
+                    a}}{i\omega} $$
+                    לפי זהות אוילר $2i\sin\theta = e^{i\theta}-e^{-i\theta}$:
+                    $$ \hat{f}(\omega) = 2 \frac{\sin(\omega a)}{\omega} $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מהי התמרה של $\delta(x-a)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$e^{-i\omega a}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא התמרה של $f(x) = e^{-|x|}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\frac{2}{1+\omega^2}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>השתמש בליניאריות למצוא התמרה של $3\delta(x) + 2e^{-|x|}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$3 + \frac{4}{1+\omega^2}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מהי ההתמרה של הפונקציה הקבועה 1?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$2\pi \delta(\omega)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא התמרה של $f(x) = \cos(x)$ בעזרת אוילר ודלתא.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\pi(\delta(\omega-1) + \delta(\omega+1))$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מה קורה להתמרה אם מותחים את הפונקציה פי 2 ($f(2x)$)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\frac{1}{2}\hat{f}(\omega/2)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מהו משפט הדואליות?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">אם $\mathcal{F}\{f(x)\} = F(\omega)$, אז $\mathcal{F}\{F(x)\} = 2\pi
+                        f(-\omega)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>חשב התמרה של $e^{-x^2}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\sqrt{\pi} e^{-\omega^2/4}$. הגאוסיאן הוא פונקציה עצמית של ההתמרה.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>לאן שואפת ההתמרה בתדרים גבוהים מאוד?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לאפס (למת רימן-לבג).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>האם טור פורייה הוא מקרה פרטי של התמרת פורייה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">כן, במובן של התפלגויות (סדרה של פונקציות דלתא בתדרים של ההרמוניות).</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section id="ch8" class="chapter">
+            <h2>פרק 8: התמרת פורייה - קונבולוציה וזהויות</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. קונבולוציה (Convolution):</strong> זוהי פעולה מתמטית המשלבת שתי פונקציות ליצירת פונקציה
+                    שלישית. היא מוגדרת כ:
+                    $$ (f * g)(x) = \int_{-\infty}^{\infty} f(t)g(x-t) dt $$
+                    בפיזיקה והנדסה, זה מייצג תגובה של מערכת ליניארית לקלט מסוים.</p>
+
+                <p><strong>2. משפט הקונבולוציה (The Convolution Theorem):</strong> זהו אחד המשפטים החשובים ביותר: התמרה
+                    של קונבולוציה במרחב הזמן שווה למכפלה פשוטה במרחב התדר:
+                    $$ \mathcal{F}(f * g) = \hat{f}(\omega) \cdot \hat{g}(\omega) $$
+                    זה מאפשר "לפתור" קונבולוציות מורכבות בעזרת כפל פשוט והתמרה הפוכה.</p>
+
+                <p><strong>3. משפט פלנשרל / ריילי (Plancherel/Rayleigh):</strong> שימור אנרגיה במובן הרציף:
+                    $$ \int_{-\infty}^{\infty} |f(x)|^2 dx = \frac{1}{2\pi} \int_{-\infty}^{\infty} |\hat{f}(\omega)|^2
+                    d\omega $$
+                    סכום האנרגיה בזמן שווה לסכום האנרגיה בכל התדרים.</p>
+
+                <p><strong>4. נגזרת בתדר ובזמן:</strong>
+                <ul>
+                    <li>זמן: $\mathcal{F}\{f'(x)\} = i\omega \hat{f}(\omega)$.</li>
+                    <li>תדר: $\mathcal{F}\{x f(x)\} = i \frac{d\hat{f}(\omega)}{d\omega}$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: חישוב אינטגרלים בעזרת פלנשרל</span>
+                <ol>
+                    <li><strong>זיהוי הפונקציה:</strong> מצא $f(x)$ שדומה לביטוי שבתוך האינטגרל.</li>
+                    <li><strong>חשב התמרה:</strong> מצא את $\hat{f}(\omega)$.</li>
+                    <li><strong>הצבה בזהות:</strong> השווה בין האינטגרל המקורי לזהות פלנשרל.</li>
+                    <li><strong>בידוד:</strong> בודד את ערך האינטגרל המבוקש.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> חשב את האינטגרל $\int_{-\infty}^\infty \frac{\sin^2 x}{x^2} dx$ בעזרת משפט
+                    פלנשרל.</p>
+                <p><strong>פתרון:</strong>
+                    1. נזהה את $f(x) = \text{rect}(x/2)$ (פולס ב-$[-1, 1]$).
+                    2. התמרה של פולס זה היא $\hat{f}(\omega) = 2 \frac{\sin \omega}{\omega}$.
+                    3. לפי פלנשרל: $\int |f|^2 dx = \frac{1}{2\pi} \int |\hat{f}|^2 d\omega$:
+                    $$ \int_{-1}^1 1^2 dx = \frac{1}{2\pi} \int_{-\infty}^\infty \left( 2 \frac{\sin \omega}{\omega}
+                    \right)^2 d\omega $$
+                    $$ 2 = \frac{4}{2\pi} \int_{-\infty}^\infty \frac{\sin^2 \omega}{\omega^2} d\omega \Rightarrow 2 =
+                    \frac{2}{\pi} \int \Rightarrow \int = \pi $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מהי התמרה של $f(x) * \delta(x-a)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\hat{f}(\omega) e^{-i\omega a}$. (הזזה).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>מצא את האנרגיה של פולס $f(x)=A \cdot \text{rect}(x/T)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$A^2 T$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מהו הטרנספורם של $x^2 f(x)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$- \frac{d^2 \hat{f}}{d\omega^2}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>חשב קונבולוציה של שני פולסים זהים ב-$[-a, a]$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">פונקציית משולש ב-$[-2a, 2a]$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא התמרה של $f(x) \cos(\omega_0 x)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\frac{1}{2} [\hat{f}(\omega-\omega_0) + \hat{f}(\omega+\omega_0)]$.
+                        (אפנון/Modulation).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>איזו פונקציה היא איבר היחידה ביחס לקונבולוציה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">פונקציית דלתא $\delta(x)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>השתמש בפלנשרל לחישוב $\int \frac{1}{(1+\omega^2)^2} d\omega$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">נשתמש ב-$e^{-|x|}$ שהמרתו היא $2/(1+\omega^2)$. התוצאה היא $\pi/2$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מה הקשר בין קונבולוציה בזמן למכפלה בתדר בפיזיקה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">הקלט עובר דרך "פונקציית תמסורת" (התמרה של תגובת המערכת).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>מצא התמרה של $f(x) * f(x)$ עבור $f(x)=e^{-|x|}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\frac{4}{(1+\omega^2)^2}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>הסבר מדוע מכפלה של שתי פונקציות בזמן הופכת לקונבולוציה בתדר.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">זהו משפט הדואליות של משפט הקונבולוציה.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section id="ch9" class="chapter">
+            <h2>פרק 9: התמרת לפלס - יסודות והגדרות</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. למה לפלס?</strong> התמרת פורייה מוגדרת עבור פונקציות שדועכות באינסוף. פונקציות רבות (כמו
+                    $e^{2t}$) לא מקיימות זאת. התמרת לפלס פותרת זאת על ידי הכפלה באקספוננט דועך $e^{-st}$ המבטיח התכנסות.
+                    זהו כלי חיוני לפתרון בעיות ערך התחלה (IVP).</p>
+
+                <p><strong>2. הגדרה:</strong> עבור פונקציה $f(t)$ המוגדרת ל-$t \geq 0$, ההתמרה היא:
+                    $$ F(s) = \mathcal{L}\{f(t)\} = \int_{0}^{\infty} f(t) e^{-st} dt $$
+                    כאשר $s$ הוא מספר מרוכב $s = \sigma + i\omega$.</p>
+
+                <p><strong>3. תחום התכנסות (ROC):</strong> האינטגרל לא תמיד קיים. תחום ההתכנסות הוא קבוצת ערכי $s$ עבורם
+                    האינטגרל מתכנס בהחלט. לרוב זהו חצי מישור $Re(s) > \alpha$.</p>
+
+                <p><strong>4. תכונות יסוד:</strong>
+                <ul>
+                    <li><strong>ליניאריות:</strong> $\mathcal{L}\{af + bg\} = aF(s) + bG(s)$.</li>
+                    <li><strong>הזזה במישור s:</strong> $\mathcal{L}\{e^{at}f(t)\} = F(s-a)$.</li>
+                    <li><strong>קנה מידה:</strong> $\mathcal{L}\{f(at)\} = \frac{1}{a}F(\frac{s}{a})$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: חישוב התמרת לפלס לפי הגדרה</span>
+                <ol>
+                    <li><strong>כתיבת האינטגרל:</strong> רשום את הביטוי $\int_0^\infty f(t) e^{-st} dt$.</li>
+                    <li><strong>איחוד אקספוננטים:</strong> אם $f(t)$ מכיל אקספוננט, אחוד אותו עם $e^{-st}$
+                        ל-$e^{-(s-a)t}$.</li>
+                    <li><strong>חישוב הגבול:</strong> בצע אינטגרציה וחשב את הגבול ב-$t \to \infty$.</li>
+                    <li><strong>קביעת ROC:</strong> קבע מהו התנאי על $Re(s)$ כדי שהגבול באינסוף יהיה אפס.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> חשב את התמרת לפלס של $f(t) = e^{at}$ ואת תחום ההתכנסות שלה.</p>
+                <p><strong>פתרון:</strong>
+                    נציב בהגדרה:
+                    $$ F(s) = \int_0^\infty e^{at} e^{-st} dt = \int_0^\infty e^{-(s-a)t} dt $$
+                    $$ = \left[ \frac{e^{-(s-a)t}}{-(s-a)} \right]_0^\infty $$
+                    כדי שהערך באינסוף ישאף ל-0, אנו חייבים לדרוש שהחלק הממשי של המעריך יהיה שלילי:
+                    $$ Re(s-a) > 0 \Rightarrow Re(s) > Re(a) $$
+                    תחת תנאי זה (ה-ROC):
+                    $$ F(s) = 0 - \frac{e^0}{-(s-a)} = \frac{1}{s-a} $$
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא את ההתמרה של פונקציית היחידה $f(t)=1$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$1/s, Re(s)>0$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>חשב את $\mathcal{L}\{t^n\}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$n! / s^{n+1}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מצא התמרה של $\sin(at)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$a / (s^2 + a^2)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מצא התמרה של $\cos(at)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$s / (s^2 + a^2)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מהו ה-ROC של $f(t) = e^{3t} \cos(4t)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$Re(s) > 3$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מצא התמרה של הפונקציה הליניארית $f(t) = 3t + 5$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$3/s^2 + 5/s$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>חשב את $\mathcal{L}\{e^{-2t} t^3\}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">נשתמש בהזזה: $6 / (s+2)^4$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>מהי ההתמרה של $\sinh(at)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$a / (s^2 - a^2)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>האם לכל פונקציה יש התמרת לפלס?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">לא, רק לפונקציות מסדר אקספוננציאלי (שלא גדלות מהר יותר מ-$e^{ct}$).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מצא התמרה של $f(t) = (t+1)^2$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$2/s^3 + 2/s^2 + 1/s$.</div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Chapter 10 -->
+        <section id="ch10" class="chapter">
+            <h2>פרק 10: התמרת לפלס - שימושים ופתרון משוואות</h2>
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסיכום המורחב (Theory Deep Dive)</span>
+                <p><strong>1. פתרון מד"ר:</strong> הכוח העיקרי של ההתמרה הוא שהיא הופכת נגזרות לכפל ב-$s$. זה הופך
+                    משוואות דיפרנציאליות למשוואות אלגבריות פשוטות יחסית.</p>
+
+                <p><strong>2. משפטי הנגזרת:</strong>
+                <ul>
+                    <li>נגזרת ראשונה: $\mathcal{L}\{f'(t)\} = sF(s) - f(0)$.</li>
+                    <li>נגזרת שנייה: $\mathcal{L}\{f''(t)\} = s^2 F(s) - s f(0) - f'(0)$.</li>
+                </ul>
+                תשימו לב שהתנאים ההתחלתיים ($f(0), f'(0)$) נכנסים ישירות לתוך המשוואה!</p>
+
+                <p><strong>3. פונקציית מדרגה (Heaviside) והזזה בזמן:</strong> פונקציית המדרגה $u(t-a)$ מאפשרת לטפל
+                    בפונקציות ש"נדלקות" בזמן מסוים. המשפט המרכזי הוא:
+                    $$ \mathcal{L}\{f(t-a)u(t-a)\} = e^{-as}F(s) $$</p>
+
+                <p><strong>4. קונבולוציה בלפלס:</strong> בדומה לפורייה, $\mathcal{L}\{f * g\} = F(s)G(s)$. זה מאפשר
+                    לפתור משוואות אינטגרליות ומשוואות עם קלט כללי.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">אלגוריתם פתרון: פתרון מד"ר בעזרת לפלס</span>
+                <ol>
+                    <li><strong>התמרת שני הצדדים:</strong> הפעל את $\mathcal{L}$ על שני אגפי המשוואה.</li>
+                    <li><strong>הצבת תנאי התחלה:</strong> הצב את הערכים הנתונים ל-$f(0), f'(0)$ וכו'.</li>
+                    <li><strong>בידוד $F(s)$:</strong> פתור את המשוואה האלגברית כדי למצוא את $F(s)$.</li>
+                    <li><strong>פירוק לשברים חלקיים:</strong> הבא את $F(s)$ לצורה שמופיעה בטבלאות.</li>
+                    <li><strong>התמרה הפוכה:</strong> מצא את $f(t)$ בעזרת הטבלה.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה</span>
+                <p><strong>שאלה:</strong> פתור את בעיית ערך ההתחלה: $y'' + y = 0, y(0)=1, y'(0)=0$.</p>
+                <p><strong>פתרון:</strong>
+                    1. התמרה: $\mathcal{L}\{y''\} + \mathcal{L}\{y\} = 0$.
+                    2. $s^2 Y(s) - s y(0) - y'(0) + Y(s) = 0$.
+                    3. הצבת תנאים: $s^2 Y(s) - s \cdot 1 - 0 + Y(s) = 0$.
+                    4. בידוד: $Y(s)(s^2 + 1) = s \Rightarrow Y(s) = \frac{s}{s^2 + 1}$.
+                    5. התמרה הפוכה מהטבלה: $y(t) = \cos(t)$.
+                </p>
+            </div>
+
+            <h3>תרגול (10 תרגילים)</h3>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1</div>
+                <p>מצא התמרה הפוכה של $1/(s-5)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$e^{5t}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2</div>
+                <p>פתור: $y' - 2y = 0, y(0)=3$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$sY - 3 - 2Y = 0 \Rightarrow Y = 3/(s-2) \Rightarrow y = 3e^{2t}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3</div>
+                <p>מהי ההתמרה של פונקציית דלתא $\delta(t-a)$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$e^{-as}$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4</div>
+                <p>מצא התמרה הפוכה של $s / (s^2 + 9)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\cos(3t)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5</div>
+                <p>מצא התמרה הפוכה של $1 / (s^2 + 4)$ (זהירות עם המקדם!).</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$0.5 \sin(2t)$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6</div>
+                <p>מה אומר משפט הערך הסופי?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$\lim_{t \to \infty} f(t) = \lim_{s \to 0} sF(s)$. עוזר למצוא מצב מתמיד
+                        במערכות.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7</div>
+                <p>מצא התמרה של $H(t-1) \cdot (t-1)$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$e^{-s} / s^2$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8</div>
+                <p>פתור $y'' + 4y = \delta(t), y(0)=0, y'(0)=0$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$y = 0.5 \sin(2t)$. (תגובת הלם).</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9</div>
+                <p>השתמש בקונבולוציה לפתרון $Y(s) = \frac{1}{s^2(s-1)}$.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">$t * e^t = e^t - t - 1$.</div>
+                </details>
+            </div>
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10</div>
+                <p>מה היתרון של לפלס על פני שיטות ניחוש (כמו מקדמים לא ידועים)?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">היא מטפלת בפונקציות לא רציפות (כמו דופק או דלתא) בצורה טבעית ואחידה.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const formulas = {
+            'ch1': '<h3>מרחבי מכפלה פנימית</h3><p><b>מכפלה פנימית:</b> $\\langle f, g \\rangle = \\int_{a}^{b} f(x) \\overline{g(x)} w(x) dx$</p><p><b>נורמה:</b> $\\|f\\| = \\sqrt{\\langle f, f \\rangle}$</p><p><b>הטלה:</b> $\\text{proj}_g(f) = \\frac{\\langle f, g \\rangle}{\\|g\\|^2} g$</p>',
+            'ch2': '<h3>שטורם-ליוביל</h3><p><b>משוואה:</b> $(p(x)y\')\' + (q(x) + \\lambda w(x))y = 0$</p><p><b>צמוד עצמי:</b> $L = \\frac{1}{w} [-(py\')\' - qy]$</p><p><b>אורתוגונליות:</b> $\\int_a^b y_n y_m w dx = 0$ עבור $n \\neq m$</p>',
+            'ch3': '<h3>טורי פורייה ממשיים</h3><p><b>המקדמים:</b></p><p>$a_0 = \\frac{1}{L} \\int_{-L}^L f(x) dx$</p><p>$a_n = \\frac{1}{L} \\int_{-L}^L f(x) \\cos(\\frac{n\\pi x}{L}) dx$</p><p>$b_n = \\frac{1}{L} \\int_{-L}^L f(x) \\sin(\\frac{n\\pi x}{L}) dx$</p><p><b>הטור:</b> $f(x) \\sim \\frac{a_0}{2} + \\sum_{n=1}^\\infty (a_n \\cos \\frac{n\\pi x}{L} + b_n \\sin \\frac{n\\pi x}{L})$</p>',
+            'ch4': '<h3>טורי פורייה מרוכבים</h3><p><b>המקדם:</b> $c_n = \\frac{1}{2L} \\int_{-L}^L f(x) e^{-i\\frac{n\\pi x}{L}} dx$</p><p><b>הטור:</b> $f(x) \\sim \\sum_{n=-\\infty}^\\infty c_n e^{i\\frac{n\\pi x}{L}}$</p><p><b>קשר לממשי:</b> $c_n = \\frac{a_n - i b_n}{2}, c_{-n} = \\frac{a_n + i b_n}{2}$</p>',
+            'ch5': '<h3>התכנסות ותופעת גיבס</h3><p><b>משפט דיריכלה:</b> $S(x) = \\frac{f(x^+) + f(x^-)}{2}$</p><p><b>סטיית גיבס:</b> כ-9% מגובה הקפיצה ליד אי-רציפות.</p>',
+            'ch6': '<h3>נורמות ופרסבל</h3><p><b>זהות פרסבל (ממשי):</b> $\\frac{1}{L} \\int_{-L}^L f(x)^2 dx = \\frac{a_0^2}{2} + \\sum_{n=1}^\\infty (a_n^2 + b_n^2)$</p><p><b>זהות פרסבל (מרוכב):</b> $\\frac{1}{2L} \\int_{-L}^L |f(x)|^2 dx = \\sum_{n=-\\infty}^\\infty |c_n|^2$</p>',
+            'ch7': '<h3>התמרת פורייה</h3><p><b>התמרה:</b> $\\hat{f}(\\omega) = \\int_{-\\infty}^{\\infty} f(x) e^{-i\\omega x} dx$</p><p><b>התמרה הפוכה:</b> $f(x) = \\frac{1}{2\\pi} \\int_{-\\infty}^{\\infty} \\hat{f}(\\omega) e^{i\\omega x} d\\omega$</p><p><b>תכונות:</b> $\\mathcal{F}(f\') = i\\omega \\hat{f}(\\omega)$</p>',
+            'ch8': '<h3>קונבולוציה ושימושים</h3><p><b>קונבולוציה:</b> $(f * g)(x) = \\int_{-\\infty}^{\\infty} f(x-t)g(t) dt$</p><p><b>משפט הקונבולוציה:</b> $\\mathcal{F}(f * g) = \\hat{f}(\\omega)\\hat{g}(\\omega)$</p>',
+            'ch9': '<h3>התמרת לפלס - יסודות</h3><p><b>הגדרה:</b> $F(s) = \\int_0^\\infty f(t) e^{-st} dt$</p><p><b>ליניאריות:</b> $\\mathcal{L}(af+bg) = aF(s)+bG(s)$</p><p><b>הזזה ב-s:</b> $\\mathcal{L}(e^{at}f(t)) = F(s-a)$</p>',
+            'ch10': '<h3>לפלס - נגזרות ומערכות</h3><p><b>נגזרת ראשונה:</b> $\\mathcal{L}(f\') = sF(s) - f(0)$</p><p><b>נגזרת שנייה:</b> $\\mathcal{L}(f\'\') = s^2F(s) - sf(0) - f\'(0)$</p><p><b>פונקציית מדרגה:</b> $\\mathcal{L}(H(t-a)) = \\frac{e^{-as}}{s}$</p>'
+        };
+
+        let activeChapter = 'ch1';
+
+        function openFormulaSheet() {
+            const container = document.getElementById('formulaContainer');
+            container.innerHTML = formulas[activeChapter] || formulas['ch1'];
+            document.getElementById('formulaModal').style.display = 'block';
+            MathJax.typesetPromise([container]);
+        }
+
+        function closeFormulaSheet() { document.getElementById('formulaModal').style.display = 'none'; }
+        window.onclick = function (event) { if (event.target == document.getElementById('formulaModal')) closeFormulaSheet(); }
+
+        // Sidebar active link and chapter tracking update
+        window.addEventListener('scroll', () => {
+            let current = "ch1";
+            document.querySelectorAll('section').forEach(section => {
+                if (pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            activeChapter = current;
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

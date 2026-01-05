@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבוא להסתברות - המדריך המלא</title>
+
+    <!-- גופנים -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            /* Indigo 900 */
+            --secondary-color: #0d47a1;
+            /* Blue 900 */
+            --accent-color: #c2185b;
+            /* Pink 700 */
+            --bg-color: #f5f5f5;
+            --sidebar-width: 300px;
+            --text-color: #212121;
+            --theory-bg: #e8eaf6;
+            --algo-bg: #fff3e0;
+            --example-bg: #e0f2f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* סרגל צד */
+        #sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Heebo', sans-serif;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #424242;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links li a:hover {
+            background-color: #e3f2fd;
+            color: var(--secondary-color);
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        /* תוכן ראשי */
+        #main-content {
+            margin-right: var(--sidebar-width);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .chapter {
+            background: white;
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 6px solid var(--primary-color);
+        }
+
+        h2 {
+            font-family: 'Heebo', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.8rem;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 2.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        /* תיבות תוכן */
+        .content-box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+
+        .theory {
+            background-color: var(--theory-bg);
+            border-right: 5px solid #3949ab;
+        }
+
+        .algorithm {
+            background-color: var(--algo-bg);
+            border-right: 5px solid #ff9800;
+        }
+
+        .example {
+            background-color: var(--example-bg);
+            border-right: 5px solid #009688;
+        }
+
+        .box-title {
+            display: block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #000;
+            font-family: 'Heebo', sans-serif;
+            text-decoration: underline;
+        }
+
+        /* תרגילים */
+        .exercise {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .ex-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* פתרונות */
+        details {
+            margin-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        summary {
+            padding: 0.8rem 0;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: bold;
+            outline: none;
+            list-style: none;
+        }
+
+        summary:hover {
+            text-decoration: underline;
+        }
+
+        summary::after {
+            content: " ▼ הצג פתרון מלא";
+            font-size: 0.9rem;
+        }
+
+        details[open] summary::after {
+            content: " ▲ הסתר פתרון";
+        }
+
+        .solution-body {
+            background-color: #fafafa;
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: #333;
+            border-right: 3px solid #ccc;
+        }
+
+        /* רספונסיביות */
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(100%);
+                width: 85%;
+                transition: transform 0.3s ease;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #main-content {
+                margin-right: 0;
+                padding: 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 2000;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.6rem 1rem;
+                border-radius: 4px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* הדגשות בתוך טקסט */
+        strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        ul,
+        ol {
+            padding-right: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* מצב כהה */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --theory-bg: #1a237e;
+            --algo-bg: #4a3a2a;
+            --example-bg: #1a3a3a;
+        }
+
+        body.dark-mode #sidebar {
+            background-color: #1e1e1e;
+            border-left: 1px solid #333;
+        }
+
+        body.dark-mode .chapter,
+        body.dark-mode .exercise {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border-color: #333;
+        }
+
+        body.dark-mode .nav-links li a {
+            color: #bbb;
+            border-bottom: 1px solid #333;
+        }
+
+        body.dark-mode .nav-links li a:hover {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        body.dark-mode .solution-body {
+            background-color: #252525;
+            color: #ccc;
+        }
+
+        body.dark-mode strong,
+        body.dark-mode .box-title {
+            color: #fff;
+        }
+
+        /* כפתור החלפת ערכת נושא */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 5rem;
+            z-index: 2000;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* כפתור נוסחאון צף */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 2000;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* מודאל נוסחאון */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        .close-modal {
+            position: absolute;
+            left: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .formula-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        body.dark-mode .formula-item {
+            border-bottom-color: #333;
+        }
+
+        .formula-item:last-child {
+            border-bottom: none;
+        }
+
+        .math-display {
+            background: #f9f9f9;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        body.dark-mode .math-display {
+            background: #252525;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('active')">תפריט</button>
+    <button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')"
+        title="החלף מצב תצוגה">🌓</button>
+    <button class="fab" onclick="openFormulaSheet()" title="נוסחאון מהיר">Σ</button>
+
+    <!-- מודאל נוסחאון -->
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeFormulaSheet()">&times;</span>
+            <h2 id="modalTitle">נוסחאון מהיר</h2>
+            <div id="formulaContainer">
+                <!-- נוסחאות יוטענו כאן דינמית -->
+            </div>
+        </div>
+    </div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>מבוא להסתברות</h1>
+            <p>המרכז ללמידה עצמית</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html"
+                    style="background-color: var(--accent-color); color: white; text-align: center; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.1);">🏠
+                    חזרה למאגר הקורסים</a></li>
+            <li><a href="#ch1">1. יסודות וקומבינטוריקה</a></li>
+            <li><a href="#ch2">2. הסתברות מותנית ואי-תלות</a></li>
+            <li><a href="#ch3">3. משתנים מקריים בדידים</a></li>
+            <li><a href="#ch4">4. משתנים מקריים רציפים</a></li>
+            <li><a href="#ch5">5. משתנים מקריים דו-ממדיים</a></li>
+            <li><a href="#ch6">6. משפטי גבול וקירובים</a></li>
+            <li><a href="#ch7">7. רווחי סמך ואמידה</a></li>
+            <li><a href="#ch8">8. בדיקת השערות</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+        <!-- פרק 1 -->
+        <section id="ch1" class="chapter">
+            <h2>פרק 1: יסודות וקומבינטוריקה</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: מושגי יסוד ואקסיומות</span>
+                <p><strong>מרחב המדגם ($\Omega$):</strong> אוסף כל התוצאות האפשריות של ניסוי מקרי.</p>
+                <p><strong>מאורע ($A$):</strong> תת-קבוצה של מרחב המדגם. מאורע פשוט הוא נקודה אחת ב-$\Omega$.</p>
+                <ul>
+                    <li><strong>איחוד ($A \cup B$):</strong> לפחות אחד מהמאורעות קרה.</li>
+                    <li><strong>חיתוך ($A \cap B$):</strong> שני המאורעות קרו בו-זמנית.</li>
+                    <li><strong>השלמה ($A^c$):</strong> המאורע $A$ לא קרה.</li>
+                </ul>
+                <p><strong>אקסיומות הסתברות:</strong></p>
+                <ol>
+                    <li>$0 \le P(A) \le 1$ לכל מאורע $A$.</li>
+                    <li>$P(\Omega) = 1$.</li>
+                    <li>עבור מאורעות זרים ($A \cap B = \emptyset$): $P(A \cup B) = P(A) + P(B)$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: נוסחאות ספירה (קומבינטוריקה)</span>
+                <p>הכלל המנחה הוא האם יש חשיבות לסדר והאם יש החזרה.</p>
+                <ul>
+                    <li><strong>פרמוטציה:</strong> סידור $n$ איברים: $n!$.</li>
+                    <li><strong>חליפה (סדר חשוב):</strong>
+                        <ul>
+                            <li>עם החזרה: $n^k$</li>
+                            <li>בלי החזרה: $\frac{n!}{(n-k)!}$</li>
+                        </ul>
+                    </li>
+                    <li><strong>צירוף (סדר לא חשוב, בלי החזרה):</strong> $\binom{n}{k} = \frac{n!}{k!(n-k)!}$</li>
+                    <li><strong>מחיצות (סידור איברים עם חזרות):</strong> $\frac{n!}{n_1! n_2! \dots n_k!}$</li>
+                </ul>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: סידור בשורה</span>
+                <p><strong>שאלה:</strong> כמה דרכים יש לסדר 3 ספרי היסטוריה ו-2 ספרי מדע על מדף כך שספרי המדע יהיו
+                    צמודים?</p>
+                <p><strong>פתרון:</strong>
+                <ol>
+                    <li>נתייחס ל-2 ספרי המדע כאל "גוש" אחד.</li>
+                    <li>כעת יש לנו 4 איברים לסדר (3 היסטוריה + גוש אחד): $4! = 24$.</li>
+                    <li>בתוך הגוש, ניתן לסדר את 2 ספרי המדע ב-$2! = 2$ דרכים.</li>
+                    <li>לפי עקרון הכפל: $24 \times 2 = 48$ דרכים.</li>
+                </ol>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>הטלת קוביות:</strong> מטילים שתי קוביות הוגנות (אחת ירוקה ואחת אדומה).
+                    <br>א. מה ההסתברות שסכום התוצאות יהיה בדיוק 7?
+                    <br>ב. מה ההסתברות שהסכום יהיה לפחות 11?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        מרחב המדגם: $\Omega = 6 \times 6 = 36$.<br>
+                        <strong>א. סכום 7:</strong> הזוגות הם: (1,6), (6,1), (2,5), (5,2), (3,4), (4,3). סה"כ 6
+                        אפשרויות.
+                        <br>$P(\text{Sum}=7) = \frac{6}{36} = \mathbf{\frac{1}{6}}$.<br>
+                        <strong>ב. סכום $\ge 11$:</strong> הזוגות הם: (5,6), (6,5), (6,6). סה"כ 3 אפשרויות.
+                        <br>$P(\text{Sum} \ge 11) = \frac{3}{36} = \mathbf{\frac{1}{12}}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>יצירת סיסמאות:</strong> מערכת אבטחה דורשת סיסמה בת 4 תווים המורכבת מהאותיות {A, B, C, D, E}.
+                    <br>א. כמה סיסמאות אפשריות יש אם מותרת חזרה על אותיות?
+                    <br>ב. כמה סיסמאות אפשריות יש אם כל אות חייבת להיות שונה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. עם חזרות:</strong> עבור כל אחד מ-4 המקומות יש 5 בחירות.
+                        <br>$5 \times 5 \times 5 \times 5 = 5^4 = \mathbf{625}$ אפשרויות.<br>
+                        <strong>ב. ללא חזרות:</strong> מדובר בבחירת 4 מתוך 5 עם חשיבות לסדר (חליפה).
+                        <br>$P(5,4) = 5 \times 4 \times 3 \times 2 = \mathbf{120}$ אפשרויות.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>ועדת ספורט:</strong> באגודה יש 10 ספורטאים (6 גברים ו-4 נשים). רוצים לבחור ועד של 3 אנשים שבו
+                    אין חשיבות לתפקידים.
+                    <br>א. כמה ועדים שונים ניתן להרכיב בסך הכל?
+                    <br>ב. כמה ועדים ניתן להרכיב כך שבוועד יהיו בדיוק 2 נשים וגבר אחד?
+                    <br>ג. מה ההסתברות שבוועד שנבחר באקראי יהיו רק גברים?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. סך הכל ועדים:</strong> סדר לא חשוב (צירופים).
+                        <br>$\binom{10}{3} = \frac{10 \times 9 \times 8}{3 \times 2 \times 1} = \mathbf{120}$.<br>
+                        <strong>ב. 2 נשים וגבר:</strong> בוחרים 2 נשים מתוך 4 וגבר מתוך 6.
+                        <br>$\binom{4}{2} \times \binom{6}{1} = 6 \times 6 = \mathbf{36}$ אפשרויות.<br>
+                        <strong>ג. הסתברות לרק גברים:</strong> בחירת 3 גברים מתוך ה-6.
+                        <br>$\binom{6}{3} = \frac{6 \times 5 \times 4}{3 \times 2 \times 1} = 20$.
+                        <br>$P = \frac{20}{120} = \mathbf{\frac{1}{6}}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>סידור ספרים:</strong> סטודנט מסדר על המדף 3 ספרי פיזיקה, 4 ספרי מתמטיקה ו-2 ספרי כימיה.
+                    <br>א. בכמה דרכים ניתן לסדר את כל 9 הספרים אם אין הגבלות?
+                    <br>ב. בכמה דרכים ניתן לסדר את הספרים כך שכל הספרים מאותו מקצוע יהיו צמודים זה לזה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. ללא הגבלות:</strong> סידור פשוט של 9 איברים שונים.
+                        <br>$9! = \mathbf{362,880}$ דרכים.<br>
+                        <strong>ב. צמודים לפי מקצוע:</strong>
+                        <ol>
+                            <li>נסדר את 3 ה"גושים" (פיזיקה, מתמטיקה, כימיה): $3! = 6$ דרכים.</li>
+                            <li>נסדר בתוך גוש הפיזיקה: $3! = 6$ דרכים.</li>
+                            <li>נסדר בתוך גוש המתמטיקה: $4! = 24$ דרכים.</li>
+                            <li>נסדר בתוך גוש הכימיה: $2! = 2$ דרכים.</li>
+                        </ol>
+                        סה"כ: $6 \times 6 \times 24 \times 2 = \mathbf{1,728}$ דרכים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>מאורעות סותרים ומשלימים:</strong> במעבדה מבצעים ניסוי. נגדיר $A$: "הניסוי הצליח", $B$:
+                    "הטמפרטורה הייתה תקינה". נתון: $P(A)=0.6, P(B)=0.7, P(A \cup B)=0.9$.
+                    <br>א. חשב את ההסתברות שגם הניסוי הצליח וגם הטמפרטורה הייתה תקינה.
+                    <br>ב. חשב את $P(A^c \cup B^c)$ והסבר את משמעות המאורע במילים.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חיתוך:</strong> לפי חוק החיבור: $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+                        <br>$0.9 = 0.6 + 0.7 - P(A \cap B) \Rightarrow P(A \cap B) = 1.3 - 0.9 = \mathbf{0.4}$.<br>
+                        <strong>ב. דה-מורגן:</strong> $A^c \cup B^c = (A \cap B)^c$.
+                        <br>$P((A \cap B)^c) = 1 - P(A \cap B) = 1 - 0.4 = \mathbf{0.6}$.
+                        <br><strong>משמעות:</strong> ההסתברות שלפחות אחד מהשניים **לא** קרה (או שהניסוי נכשל, או
+                        שהטמפרטורה לא הייתה תקינה, או שניהם).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>סידור מעגלי:</strong> 5 זוגות נשואים (10 אנשים) מוזמנים לארוחת ערב סביב שולחן עגול.
+                    <br>א. בכמה דרכים ניתן להושיב את כולם?
+                    <br>ב. בכמה דרכים ניתן להושיבם כך שכל זוג יישב זה ליד זה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. סידור מעגלי כללי:</strong> הנוסחה היא $(n-1)!$.
+                        <br>$(10-1)! = 9! = \mathbf{362,880}$ דרכים.<br>
+                        <strong>ב. זוגות צמודים:</strong>
+                        <ol>
+                            <li>נתייחס לכל זוג כאל "גוש" אחד. יש לנו 5 גושים לסדר במעגל: $(5-1)! = 4! = 24$.</li>
+                            <li>בתוך כל אחד מ-5 הגושים, בני הזוג יכולים להחליף מקומות: $2^5 = 32$.</li>
+                        </ol>
+                        סה"כ: $24 \times 32 = \mathbf{768}$ דרכים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>בניית מספרים:</strong> כמה מספרים בעלי 5 ספרות ניתן להרכיב מהספרות {0, 1, 2, 3, 4, 5, 6} כך
+                    ש:
+                    <br>א. המספר אי-זוגי ואין חזרה על ספרות? (זכור: מספר לא יכול להתחיל ב-0).
+                    <br>ב. המספר גדול מ-40,000 וכל ספרותיו שונות?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. אי-זוגי וללא חזרות:</strong>
+                        <ul>
+                            <li>ספרת היחידות: חייבת להיות {1, 3, 5} $\Rightarrow$ 3 אפשרויות.</li>
+                            <li>ספרת העשרות אלפים: לא 0 ולא מה שנבחר ליחידות $\Rightarrow$ $7-2=5$ אפשרויות.</li>
+                            <li>שאר 3 המקומות: נותרו 5 ספרות לסידור ב-3 מקומות $\Rightarrow 5 \times 4 \times 3 = 60$
+                                אפשרויות.</li>
+                        </ul>
+                        סה"כ: $3 \times 5 \times 60 = \mathbf{900}$ מספרים.<br>
+                        <strong>ב. גדול מ-40,000 וללא חזרות:</strong>
+                        <ul>
+                            <li>ספרה ראשונה: חייבת להיות {4, 5, 6} $\Rightarrow$ 3 אפשרויות.</li>
+                            <li>שאר 4 המקומות: מתוך 6 ספרות שנותרו, בוחרים 4 עם חשיבות לסדר.</li>
+                            <li>$P(6,4) = 6 \times 5 \times 4 \times 3 = 360$.</li>
+                        </ul>
+                        סה"כ: $3 \times 360 = \mathbf{1,080}$ מספרים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>כדורים ותאים:</strong> יש לנו 12 כדורים זהים לחלוטין ו-4 תאים שונים (צבועים בצבעים שונים).
+                    <br>א. בכמה דרכים ניתן לחלק את הכדורים לתאים אם מותר שתאים יישארו ריקים?
+                    <br>ב. בכמה דרכים ניתן לחלקם כך שבתא הראשון יהיו לפחות 2 כדורים ובכל שאר התאים לפחות כדור אחד?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. מחיצות (Stars and Bars):</strong> $n=12, k=4$.
+                        <br>$\binom{n+k-1}{k-1} = \binom{12+4-1}{4-1} = \binom{15}{3} = \frac{15 \times 14 \times 13}{3
+                        \times 2 \times 1} = \mathbf{455}$.<br>
+                        <strong>ב. עם אילוצים:</strong> נחלק מראש את המינימום הנדרש.
+                        <ul>
+                            <li>נשים 2 כדורים בתא 1: נשארו 10.</li>
+                            <li>נשים כדור 1 בכל אחד מהתאים 2, 3, 4: נשארו 7.</li>
+                            <li>כעת נחלק את 7 הכדורים הנותרים ל-4 תאים ללא הגבלה: $n=7, k=4$.</li>
+                        </ul>
+                        $\binom{7+4-1}{4-1} = \binom{10}{3} = \frac{10 \times 9 \times 8}{3 \times 2 \times 1} =
+                        \mathbf{120}$ דרכים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>בעיית הזוגות (Matched Pairs):</strong> בחדר נמצאים 6 זוגות נשואים. בוחרים באקראי 4 אנשים מתוך
+                    ה-12.
+                    <br>א. מה ההסתברות שנבחרו בדיוק 2 זוגות נשואים?
+                    <br>ב. מה ההסתברות שלא נבחר אף זוג נשוי (ארבעת האנשים שנבחרו הם מ-4 זוגות שונים)?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        מרחב המדגם: $\binom{12}{4} = \frac{12 \times 11 \times 10 \times 9}{4 \times 3 \times 2 \times
+                        1} = 495$.<br>
+                        <strong>א. בדיוק 2 זוגות:</strong> עלינו לבחור 2 זוגות מתוך ה-6.
+                        <br>$\binom{6}{2} = 15$.
+                        <br>$P = \frac{15}{495} = \mathbf{\frac{1}{33} \approx 0.03}$.<br>
+                        <strong>ב. ללא אף זוג:</strong>
+                        <ol>
+                            <li>בוחרים 4 זוגות מתוך ה-6 שמהם יילקחו האנשים: $\binom{6}{4} = 15$.</li>
+                            <li>מכל אחד מ-4 הזוגות שנבחרו, בוחרים אדם אחד (בעל או אישה): $2^4 = 16$.</li>
+                        </ol>
+                        מספר אפשרויות: $15 \times 16 = 240$.
+                        <br>$P = \frac{240}{495} = \mathbf{\frac{16}{33} \approx 0.485}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>הוצאה מכד עם החזרה:</strong> בכד יש 4 כדורים לבנים, 3 שחורים ו-3 אדומים. מוציאים 3 כדורים בזה
+                    אחר זה **עם החזרה**.
+                    <br>א. מה ההסתברות שכל שלושת הכדורים יהיו באותו צבע?
+                    <br>ב. מה ההסתברות שייצא כדור אחד מכל צבע?
+                    <br>ג. מה ההסתברות שייצא לפחות כדור לבן אחד?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        סה"כ כדורים: 10. עם החזרה $\Rightarrow$ ההסתברויות קבועות: $P(W)=0.4, P(B)=0.3, P(R)=0.3$.<br>
+                        <strong>א. אותו צבע:</strong> (WWW) או (BBB) או (RRR).
+                        <br>$(0.4)^3 + (0.3)^3 + (0.3)^3 = 0.064 + 0.027 + 0.027 = \mathbf{0.118}$.<br>
+                        <strong>ב. אחד מכל צבע:</strong> מדובר בסידור של {W, B, R}. יש $3! = 6$ סידורים אפשריים.
+                        <br>$6 \times (0.4 \times 0.3 \times 0.3) = 6 \times 0.036 = \mathbf{0.216}$.<br>
+                        <strong>ג. לפחות לבן אחד:</strong> נשתמש במשלים (אפס לבנים).
+                        <br>$P(\text{לא לבן}) = P(B \cup R) = 0.6$.
+                        <br>$P(\text{אפס לבנים ב-3 הוצאות}) = (0.6)^3 = 0.216$.
+                        <br>$P(\text{לפחות לבן אחד}) = 1 - 0.216 = \mathbf{0.784}$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 2 -->
+        <section id="ch2" class="chapter">
+            <h2>פרק 2: הסתברות מותנית ואי-תלות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הסתברות מותנית</span>
+                <p><strong>הגדרה:</strong> ההסתברות של מאורע $A$ בהינתן שקרה מאורע $B$ היא: $P(A|B) = \frac{P(A \cap
+                    B)}{P(B)}$ (כאשר $P(B) > 0$).</p>
+                <p><strong>אי-תלות:</strong> המאורעות $A$ ו-$B$ הם בלתי תלויים (ב"ת) אם ורק אם $P(A \cap B) = P(A) \cdot
+                    P(B)$.</p>
+                <ul>
+                    <li>אם $A, B$ ב"ת, אז $P(A|B) = P(A)$.</li>
+                    <li>אם $A, B$ ב"ת, אז גם $A^c, B$ ב"ת, וכן הלאה.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: הסתברות שלמה וחוק בייס</span>
+                <p><strong>נוסחת ההסתברות השלמה:</strong> אם $\{B_1, \dots, B_n\}$ היא חלוקה של $\Omega$, אז:<br>
+                    $P(A) = P(A|B_1)P(B_1) + P(A|B_2)P(B_2) + \dots + P(A|B_n)P(B_n)$</p>
+                <p><strong>חוק בייס:</strong> מאפשר "להפוך" את המותנות:<br>
+                    $P(B_k|A) = \frac{P(A|B_k)P(B_k)}{P(A)}$</p>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: בדיקת מעבדה</span>
+                <p><strong>שאלה:</strong> מחלה נדירה תוקפת 1% מהאוכלוסייה. בדיקה למחלה מדייקת ב-95% (חיובי לחולה, שלילי
+                    לבריא). אדם נבדק ויצא חיובי. מה ההסתברות שהוא אכן חולה?</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>$P(\text{חולה}) = 0.01$, $P(\text{בריא}) = 0.99$.</li>
+                    <li>$P(\text{חיובי}|\text{חולה}) = 0.95$, $P(\text{חיובי}|\text{בריא}) = 0.05$.</li>
+                    <li>לפי הסתברות שלמה: $P(\text{חיובי}) = 0.95 \cdot 0.01 + 0.05 \cdot 0.99 = 0.0095 + 0.0495 =
+                        0.059$.</li>
+                    <li>לפי בייס: $P(\text{חולה}|\text{חיובי}) = \frac{0.95 \cdot 0.01}{0.059} = \mathbf{0.161}$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>משפחה עם שני ילדים:</strong> ידוע שבמשפחה עם שני ילדים, לפחות אחד מהם הוא בן.
+                    <br>מה ההסתברות ששני הילדים הם בנים? (הנח שהסתברות לבן/בת היא 0.5 והלידות בלתי תלויות).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        מרחב המדגם המקורי: $\Omega = \{BB, BG, GB, GG\}$ (כל שילוב בסיכוי 1/4).
+                        <br>נתון המאורע $A$: "לפחות בן אחד" $\Rightarrow A = \{BB, BG, GB\}$.
+                        <br>המאורע המבוקש $B$: "שני בנים" $\Rightarrow B = \{BB\}$.
+                        <br>לפי הגדרת הסתברות מותנית: $P(B|A) = \frac{P(B \cap A)}{P(A)}$.
+                        <br>$B \cap A = \{BB\}$, לכן $P(B \cap A) = 1/4$.
+                        <br>$P(A) = 3/4$.
+                        <br>$P(B|A) = \frac{1/4}{3/4} = \mathbf{\frac{1}{3}}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>בדיקת תקינות:</strong> מכונה מייצרת חלקים. 5% מהחלקים פגומים.
+                    <br>א. אם בוחרים 2 חלקים באופן בלתי תלוי, מה ההסתברות ששניהם תקינים?
+                    <br>ב. מה ההסתברות שלפחות אחד מהם פגום?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $P(\text{פגום}) = 0.05, P(\text{תקין}) = 0.95$.<br>
+                        <strong>א. שניהם תקינים:</strong> עקב אי-תלות:
+                        <br>$0.95 \times 0.95 = \mathbf{0.9025}$.<br>
+                        <strong>ב. לפחות אחד פגום:</strong> נשתמש במשלים (אף אחד לא פגום = שניהם תקינים).
+                        <br>$1 - 0.9025 = \mathbf{0.0975}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>מבחני קבלה:</strong> תלמיד ניגש למבחן קבלה. אם הוא למד, הוא עובר בסיכוי 0.9. אם לא למד, הוא
+                    עובר בסיכוי 0.2. ידוע ש-70% מהתלמידים לומדים למבחן.
+                    <br>א. מה ההסתברות שתלמיד שנבחר באקראי יעבור את המבחן?
+                    <br>ב. אם ידוע שתלמיד עבר את המבחן, מה ההסתברות שהוא אכן למד?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נגדיר $L$: למד, $V$: עבר.
+                        <br>נתונים: $P(L) = 0.7, P(L^c) = 0.3, P(V|L) = 0.9, P(V|L^c) = 0.2$.
+                        <br><strong>א. הסתברות שלמה:</strong>
+                        <br>$P(V) = P(V|L)P(L) + P(V|L^c)P(L^c) = 0.9 \cdot 0.7 + 0.2 \cdot 0.3 = 0.63 + 0.06 =
+                        \mathbf{0.69}$.<br>
+                        <strong>ב. חוק בייס:</strong>
+                        <br>$P(L|V) = \frac{P(V|L)P(L)}{P(V)} = \frac{0.63}{0.69} = \mathbf{\frac{21}{23} \approx
+                        0.913}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>שלושה כדים:</strong> בכד א' 3 כדורים אדומים ו-2 שחורים. בכד ב' 2 אדומים ו-4 שחורים. בכד ג' 5
+                    אדומים בלבד.
+                    <br>בוחרים כד באקראי ומוציאים ממנו כדור.
+                    <br>א. מה ההסתברות שהכדור שהוצא הוא אדום?
+                    <br>ב. אם הכדור שהוצא הוא אדום, מה ההסתברות שהגיע מכד ג'?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        $P(\text{כד}) = 1/3$ לכל כד.
+                        <br>$P(R|\text{א}) = 3/5, P(R|\text{ב}) = 2/6 = 1/3, P(R|\text{ג}) = 1$.
+                        <br><strong>א. הסתברות שלמה:</strong>
+                        <br>$P(R) = \frac{1}{3} \cdot \frac{3}{5} + \frac{1}{3} \cdot \frac{1}{3} + \frac{1}{3} \cdot 1
+                        = \frac{1}{5} + \frac{1}{9} + \frac{1}{3} = \frac{9+5+15}{45} = \mathbf{\frac{29}{45} \approx
+                        0.644}$.<br>
+                        <strong>ב. חוק בייס:</strong>
+                        <br>$P(\text{ג}|R) = \frac{P(R|\text{ג})P(\text{ג})}{P(R)} = \frac{1 \cdot 1/3}{29/45} =
+                        \frac{1}{3} \cdot \frac{45}{29} = \mathbf{\frac{15}{29} \approx 0.517}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>תקשורת נתונים:</strong> ערוץ תקשורת מעביר סיביות (0 או 1).
+                    <br>הסיכוי לשלוח "0" הוא 0.6. הסיכוי לטעות במעבר (שישלח 0 ויתקבל 1 או להיפך) הוא 0.1.
+                    <br>א. מה ההסתברות שהתקבל "1"?
+                    <br>ב. אם התקבל "1", מה ההסתברות שאכן נשלח "1"?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נגדיר $S_0, S_1$: נשלח 0 או 1. $R_0, R_1$: התקבל 0 או 1.
+                        <br>נתונים: $P(S_0)=0.6, P(S_1)=0.4$.
+                        <br>סיכוי לטעות: $P(R_1|S_0)=0.1, P(R_0|S_1)=0.1$.
+                        <br>סיכוי לדיוק: $P(R_0|S_0)=0.9, P(R_1|S_1)=0.9$.
+                        <br><strong>א. הסתברות לקבל 1:</strong>
+                        <br>$P(R_1) = P(R_1|S_0)P(S_0) + P(R_1|S_1)P(S_1) = 0.1 \cdot 0.6 + 0.9 \cdot 0.4 = 0.06 + 0.36
+                        = \mathbf{0.42}$.<br>
+                        <strong>ב. בייס:</strong>
+                        <br>$P(S_1|R_1) = \frac{P(R_1|S_1)P(S_1)}{P(R_1)} = \frac{0.36}{0.42} = \mathbf{\frac{6}{7}
+                        \approx 0.857}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>אי-תלות:</strong> נתונים שני מאורעות $A$ ו-$B$ במרחב מדגם $\Omega$.
+                    <br>ידוע כי $P(A)=0.5, P(B)=0.6$.
+                    <br>א. אם $A, B$ בלתי תלויים, מצא את $P(A \cup B)$.
+                    <br>ב. אם $A, B$ זרים (סותרים), האם הם יכולים להיות בלתי תלויים? הסבר.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חוק החיבור עם אי-תלות:</strong>
+                        <br>$P(A \cap B) = P(A)P(B) = 0.5 \cdot 0.6 = 0.3$.
+                        <br>$P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.5 + 0.6 - 0.3 = \mathbf{0.8}$.<br>
+                        <strong>ב. זרים מול ב"ת:</strong>
+                        <br>נניח שהם ב"ת: $P(A \cap B) = P(A)P(B) = 0.5 \cdot 0.6 = 0.3$.
+                        <br>אבל אם הם זרים: $P(A \cap B) = 0$.
+                        <br>מכיוון ש-$0.3 \ne 0$, **הם לא יכולים להיות בלתי תלויים**.
+                        <br>באופן כללי: שני מאורעות עם הסתברות חיובית שהם זרים תמיד **תלויים** (אם $A$ קרה, אני יודע
+                        בוודאות ש-$B$ לא קרה).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>משחק טניס:</strong> דני ויוסי משחקים טניס עד שאחד מהם מנצח בשתי מערכות (הטוב מ-3).
+                    <br>הסיכוי של דני לנצח מערכת בודדת הוא 0.6 (והמערכות בלתי תלויות).
+                    <br>א. מה ההסתברות שדני ינצח במשחק כולו?
+                    <br>ב. אם ידוע שדני ניצח, מה ההסתברות שהמשחק הסתיים כבר אחרי 2 מערכות?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נסמן $D$ לניצחון של דני ו-$Y$ ליוסי.
+                        <br><strong>א. דני מנצח (W):</strong> האפשרויות הן:
+                        <ul>
+                            <li>$DD$: $0.6 \cdot 0.6 = 0.36$.</li>
+                            <li>$DYD$: $0.6 \cdot 0.4 \cdot 0.6 = 0.144$.</li>
+                            <li>$YDD$: $0.4 \cdot 0.6 \cdot 0.6 = 0.144$.</li>
+                        </ul>
+                        סה"כ: $0.36 + 0.144 + 0.144 = \mathbf{0.648}$.<br>
+                        <strong>ב. מותנה:</strong>
+                        <br>$P(\text{2 מערכות}|W) = \frac{P(DD)}{P(W)} = \frac{0.36}{0.648} = \frac{360}{648} =
+                        \mathbf{\frac{5}{9} \approx 0.555}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>בעיית מונטי הול (וריאציה):</strong> ישנן 3 קופסאות. באחת יש פרס יקר ובשתיים האחרות אין כלום.
+                    <br>שחקן בוחר קופסה. לאחר מכן, המנחה (שיודע איפה הפרס) פותח קופסה ריקה אחרת.
+                    <br>הוכח בעזרת הסתברות מותנית שכדאי לשחקן להחליף את בחירתו המקורית.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נסמן $C_i$: הפרס בקופסה $i$. נניח השחקן בחר ב-1. $M_j$: המנחה פתח את $j$.
+                        <br>$P(C_1) = P(C_2) = P(C_3) = 1/3$.
+                        <br>אם הפרס ב-1, המנחה פותח את 2 או 3 בחצי סיכוי: $P(M_3|C_1) = 1/2$.
+                        <br>אם הפרס ב-2, המנחה חייב לפתוח את 3: $P(M_3|C_2) = 1$.
+                        <br>אם הפרס ב-3, המנחה לא יכול לפתוח את 3: $P(M_3|C_3) = 0$.
+                        <br>הסתברות שלמה שהמנחה פתח את 3: $P(M_3) = \frac{1}{2} \cdot \frac{1}{3} + 1 \cdot \frac{1}{3}
+                        + 0 \cdot \frac{1}{3} = \frac{1}{6} + \frac{1}{3} = 1/2$.
+                        <br>בייס לסיכוי שהפרס ב-2 אם המנחה פתח את 3: $P(C_2|M_3) = \frac{P(M_3|C_2)P(C_2)}{P(M_3)} =
+                        \frac{1 \cdot 1/3}{1/2} = \mathbf{2/3}$.
+                        <br>מכיוון ש-$2/3 > 1/3$, כדאי להחליף לקופסה שנותרה.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>אמינות בדיקה רפואית:</strong> מחלה נדירה תוקפת 1 ל-1,000 אנשים.
+                    <br>בדיקה לגילוי המחלה נותנת תוצאה חיובית ב-99% מהמקרים עבור אדם חולה (רגישות).
+                    <br>עם זאת, היא נותנת תוצאה חיובית ב-5% מהמקרים עבור אדם בריא (False Positive).
+                    <br>א. מה הסתברות שאדם שנבחר באקראי ייצא חיובי בבדיקה?
+                    <br>ב. מה ההסתברות שאדם שיצא חיובי הוא באמת חולה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נגדיר $D$: חולה, $D^c$: בריא. $Pos$: תוצאה חיובית.
+                        <br>$P(D)=0.001, P(D^c)=0.999$.
+                        <br>$P(Pos|D)=0.99, P(Pos|D^c)=0.05$.
+                        <br><strong>א. הסתברות שלמה:</strong>
+                        <br>$P(Pos) = (0.99 \cdot 0.001) + (0.05 \cdot 0.999) = 0.00099 + 0.04995 =
+                        \mathbf{0.05094}$.<br>
+                        <strong>ב. בייס:</strong>
+                        <br>$P(D|Pos) = \frac{0.00099}{0.05094} \approx \mathbf{0.0194}$ (פחות מ-2%!).
+                        <br><strong>מסקנה:</strong> למרות שהבדיקה לכאורה מדויקת מאוד, עקב נדירות המחלה, רוב החיוביים הם
+                        למעשה בריאים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>הימורים של בעלי הון:</strong> לשחקן יש $k$ שקלים. בכל שלב הוא מנצח שקל בסיכוי $p$ או מפסיד
+                    שקל בסיכוי $q=1-p$. המשחק נגמר כשהוא מגיע ל-$N$ שקלים או ל-0.
+                    <br>הוכח (או הראה את הנוסחה) להסתברות לנצח את המשחק כאשר $p=0.5$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נסמן $P_k$ כהסתברות להגיע ל-$N$ כשמתחילים ב-$k$.
+                        <br>ממשואת נסיגה: $P_k = 0.5 \cdot P_{k+1} + 0.5 \cdot P_{k-1}$ עם תנאי שפה $P_0=0, P_N=1$.
+                        <br>זוהי סדרה חשבונית שכן $P_{k+1} - P_k = P_k - P_{k-1}$.
+                        <br>לכן הזינוק בין כל איבר הוא קבוע $d$.
+                        <br>$P_k = k \cdot d$. מכיוון ש-$P_N = N \cdot d = 1$, נקבל $d = 1/N$.
+                        <br>תשובה: $P_k = \mathbf{\frac{k}{N}}$.
+                        <br>(הערה: אם $p \ne q$ הנוסחה היא $\frac{1-(q/p)^k}{1-(q/p)^N}$).
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 3 -->
+        <section id="ch3" class="chapter">
+            <h2>פרק 3: משתנים מקריים בדידים</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הגדרות ומדדים</span>
+                <p>מ"מ בדיד מקבל ערכים מקבוצה בת-מנייה. לכל ערך $k$ יש הסתברות $P(X=k)$.</p>
+                <p><strong>תוחלת ($E[X]$):</strong> הממוצע המשוקלל: $E[X] = \sum_k k \cdot P(X=k)$.</p>
+                <p><strong>שונות ($Var(X)$):</strong> מדד לפיזור: $Var(X) = E[X^2] - (E[X])^2$.</p>
+                <p><strong>ליניאריות:</strong> $E[aX+b] = aE[X]+b$ , $Var(aX+b) = a^2Var(X)$.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: התפלגויות בדידות נפוצות</span>
+                <ul>
+                    <li><strong>בינומית ($Bin(n,p)$):</strong> מספר הצלחות ב-$n$ ניסויים ב"ת. $P(X=k) = \binom{n}{k} p^k
+                        (1-p)^{n-k}$. $E[X]=np, Var(X)=npq$.</li>
+                    <li><strong>גיאומטרית ($Geo(p)$):</strong> מספר ניסיונות עד ההצלחה הראשונה. $P(X=k) = q^{k-1}p$.
+                        $E[X]=1/p, Var(X)=q/p^2$.</li>
+                    <li><strong>פואסונית ($Pois(\lambda)$):</strong> מספר מאורעות בפרק זמן. $P(X=k) =
+                        \frac{e^{-\lambda}\lambda^k}{k!}$. $E[X]=\lambda, Var(X)=\lambda$.</li>
+                    <li><strong>היפרגיאומטרית:</strong> בחירה ללא החזרה מכד עם שני סוגי כדורים.</li>
+                </ul>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: זריקת קובייה</span>
+                <p><strong>שאלה:</strong> מטילים קובייה הוגנת. אם יוצא 6 מרוויחים 10 ש"ח, אחרת מפסידים 2 ש"ח. מהו הרווח
+                    הצפוי?</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>ערכי $X$: {10, -2}.</li>
+                    <li>הסתברויות: $P(X=10) = 1/6$, $P(X=-2) = 5/6$.</li>
+                    <li>תוחלת: $E[X] = 10 \cdot (1/6) + (-2) \cdot (5/6) = \frac{10-10}{6} = \mathbf{0}$.</li>
+                    <li>זהו "משחק הוגן" - בטווח הארוך לא מרוויחים ולא מפסידים.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>משחק בקובייה:</strong> מטילים קובייה הוגנת פעם אחת. נגדיר מ"מ $X$ כתוצאת ההטלה.
+                    <br>א. רשום את פונקציית ההסתברות (הטבלה) של $X$.
+                    <br>ב. חשב את התוחלת $E[X]$.
+                    <br>ג. חשב את $E[2X+5]$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. טבלה:</strong> לכל $k \in \{1,2,3,4,5,6\}$, $P(X=k) = 1/6$.<br>
+                        <strong>ב. תוחלת:</strong>
+                        <br>$E[X] = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = \mathbf{3.5}$.<br>
+                        <strong>ג. ליניאריות:</strong>
+                        <br>$E[2X+5] = 2E[X] + 5 = 2 \cdot 3.5 + 5 = 7 + 5 = \mathbf{12}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>זריקות חופשיות:</strong> כדורסלן קולע לסל בסיכוי 0.7. הוא זורק 5 זריקות בלתי תלויות.
+                    <br>א. מה ההסתברות שיקלע בדיוק 3 סלים?
+                    <br>ב. מה ההסתברות שיקלע לפחות סל אחד?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זהו מ"מ בינומי $X \sim Bin(5, 0.7)$.<br>
+                        <strong>א. בדיוק 3:</strong>
+                        <br>$P(X=3) = \binom{5}{3} (0.7)^3 (0.3)^2 = 10 \cdot 0.343 \cdot 0.09 = \mathbf{0.3087}$.<br>
+                        <strong>ב. לפחות אחד:</strong> נשתמש במשלים (0 סלים).
+                        <br>$P(X \ge 1) = 1 - P(X=0) = 1 - (0.3)^5 = 1 - 0.00243 = \mathbf{0.99757}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>מוקד שירות:</strong> מספר התלונות המגיעות למוקד בשעה מתפלג פואסונית עם ממוצע של 2 תלונות
+                    לשעה.
+                    <br>א. מה ההסתברות שבשעה מסוימת יגיעו בדיוק 4 תלונות?
+                    <br>ב. מה ההסתברות שבמשך שעתיים רצופות יגיעו בדיוק 2 תלונות בסך הכל?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. שעה אחת:</strong> $X \sim Pois(\lambda=2)$.
+                        <br>$P(X=4) = \frac{e^{-2} \cdot 2^4}{4!} = \frac{e^{-2} \cdot 16}{24} = \frac{2}{3} e^{-2}
+                        \approx \mathbf{0.09}$.<br>
+                        <strong>ב. שעתיים:</strong> הממוצע לשעתיים הוא $\lambda = 2 \cdot 2 = 4$.
+                        <br>$P(Y=2) = \frac{e^{-4} \cdot 4^2}{2!} = \frac{e^{-4} \cdot 16}{2} = 8e^{-4} \approx
+                        \mathbf{0.146}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>שונות וליניאריות:</strong> נתון מ"מ $X$ עם $E[X]=10$ ו-$Var(X)=9$.
+                    <br>א. חשב את $E[X^2]$.
+                    <br>ב. חשב את השונות של המשתנה $Y = -2X + 7$.
+                    <br>ג. חשב את סטיית התקן של $Y$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. מציאת $E[X^2]$:</strong> לפי הנוסחה $Var(X) = E[X^2] - (E[X])^2$.
+                        <br>$9 = E[X^2] - 10^2 \Rightarrow E[X^2] = 100 + 9 = \mathbf{109}$.<br>
+                        <strong>ב. שונות של טרנספורמציה:</strong> $Var(aX+b) = a^2 Var(X)$.
+                        <br>$Var(-2X+7) = (-2)^2 \cdot Var(X) = 4 \cdot 9 = \mathbf{36}$.<br>
+                        <strong>ג. סטיית תקן:</strong> היא השורש של השונות.
+                        <br>$\sigma_Y = \sqrt{36} = \mathbf{6}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>התפלגות גיאומטרית:</strong> סטודנטית ניגשת למבחן תיאוריה בנהיגה שוב ושוב עד שהיא עוברת.
+                    הסיכוי לעבור בכל פעם הוא 0.4 (המבחנים בלתי תלויים).
+                    <br>א. מה ההסתברות שהיא תעבור בדיוק במבחן השלישי?
+                    <br>ב. מה ההסתברות שהיא תצטרך לגשת ל*יותר* מ-3 מבחנים?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זהו מ"מ גיאומטרי $X \sim Geo(p=0.4)$.
+                        <br><strong>א. הצלחה בניסיון ה-3:</strong>
+                        <br>$P(X=3) = (1-0.4)^2 \cdot 0.4 = 0.6^2 \cdot 0.4 = 0.36 \cdot 0.4 = \mathbf{0.144}$.<br>
+                        <strong>ב. יותר מ-3 זריקות:</strong> המשמעות היא שנכשלה ב-3 המבחנים הראשונים.
+                        <br>$P(X > 3) = (1-0.4)^3 = 0.6^3 = \mathbf{0.216}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>היפרגיאומטרית (בחירה ללא החזרה):</strong> בכד יש 10 כדורים: 6 אדומים ו-4 כחולים. מוציאים 3
+                    כדורים ללא החזרה.
+                    <br>א. מה ההסתברות שיצאו בדיוק 2 כדורים אדומים?
+                    <br>ב. מהי התוחלת של מספר הכדורים האדומים שייצאו?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. בדיוק 2 אדומים:</strong> עלינו לבחור 2 אדומים מתוך 6, וכדור 1 "אחר" מתוך 4.
+                        <br>$P(X=2) = \frac{\binom{6}{2} \cdot \binom{4}{1}}{\binom{10}{3}} = \frac{15 \cdot 4}{120} =
+                        \frac{60}{120} = \mathbf{0.5}$.<br>
+                        <strong>ב. תוחלת:</strong> בנוסחה להיפרגיאומטרית $E[X] = n \cdot \frac{M}{N}$ (כאשר $n$ המדגם,
+                        $M$ רצויים, $N$ סה"כ).
+                        <br>$E[X] = 3 \cdot \frac{6}{10} = \mathbf{1.8}$ כדורים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>משחק הוגן?</strong> אתה משלם 5 ש"ח כדי להשתתף במשחק הבא: אתה מטיל 3 מטבעות. אם יצאו 3 "עץ",
+                    אתה מקבל 20 ש"ח. אם יצאו 2 "עץ", אתה מקבל 2 ש"ח. אחרת - לא מקבל כלום.
+                    <br>א. חשב את תוחלת הרווח של המשתתף (כולל מחיר ההשתתפות).
+                    <br>ב. האם המשחק כדאי לשחקן?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        מספר ה"עצים" $Y$ מתפלג $Bin(3, 0.5)$.
+                        <br>$P(Y=3) = 1/8$, $P(Y=2) = 3/8$, $P(Y \le 1) = 4/8$.
+                        <br>נגדיר $X$ כסכום שהשחקן מקבל: $1/8 \cdot 20 + 3/8 \cdot 2 + 4/8 \cdot 0 = \frac{20+6}{8} =
+                        3.25$ ש"ח.
+                        <br><strong>א. תוחלת רווח נקי:</strong> $E[X-5] = E[X] - 5 = 3.25 - 5 = \mathbf{-1.75}$ ש"ח.
+                        <br><strong>ב. מסקנה:</strong> המשחק לא כדאי, השחקן מפסיד בממוצע 1.75 ש"ח בכל משחק.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>סופת ברקים:</strong> נתון כי מספר הברקים בשעה מתפלג פואסונית. הסיכוי שלא יהיה אף ברק בשעה הוא
+                    $e^{-3}$.
+                    <br>א. מהי התוחלת של מספר הברקים בשעה?
+                    <br>ב. מהי ההסתברות שיהיה לפחות ברק אחד בחצי שעה?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. מציאת $\lambda$:</strong> $P(X=0) = e^{-\lambda}$.
+                        <br>נתון $P(X=0) = e^{-3} \Rightarrow \mathbf{\lambda=3}$ ברקים לשעה.<br>
+                        <strong>ב. חצי שעה:</strong> הקצב לחצי שעה הוא $\lambda' = 1.5$.
+                        <br>$P(Y \ge 1) = 1 - P(Y=0) = 1 - e^{-1.5} \approx \mathbf{0.776}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>פונקציה של משתנה מקרי:</strong> המשתנה $X$ מקבל את הערכים $\{-2, -1, 0, 1, 2\}$ בסיכוי שווה
+                    של $1/5$ לכל ערך.
+                    <br>נגדיר משתנה חדש $Y = X^2$.
+                    <br>א. מצא את פונקציית ההסתברות של $Y$.
+                    <br>ב. חשב את השונות של $Y$.
+                    <br>ג. האם $E[X^2] = (E[X])^2$? הסבר.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. ערכי $Y$:</strong> $Y$ יכול להיות $\{0, 1, 4\}$.
+                        <br>$P(Y=0) = P(X=0) = 1/5$.
+                        <br>$P(Y=1) = P(X=1) + P(X=-1) = 2/5$.
+                        <br>$P(Y=4) = P(X=2) + P(X=-2) = 2/5$.<br>
+                        <strong>ב. שונות של $Y$:</strong>
+                        <br>$E[Y] = 0(1/5) + 1(2/5) + 4(2/5) = 10/5 = 2$.
+                        <br>$E[Y^2] = 0^2(1/5) + 1^2(2/5) + 4^2(2/5) = 2/5 + 32/5 = 34/5 = 6.8$.
+                        <br>$Var(Y) = 6.8 - 2^2 = \mathbf{2.8}$.<br>
+                        <strong>ג. בדיקה:</strong> $E[X] = 0$ (בגלל הסימטריה).
+                        <br>$E[X^2] = E[Y] = 2$. לעומת זאת $(E[X])^2 = 0^2 = 0$.
+                        <br><strong>הסבר:</strong> הם שווים רק אם השונות אפס (המשתנה קבוע). באופן כללי השוויון לא
+                        מתקיים.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>אינדיקטורים:</strong> מטילים $n$ קוביות. נגדיר $X$ כמספר ה"זוגות" של קוביות המראות אותה
+                    תוצאה.
+                    <br>(לדוגמה במטילים 3 קוביות ויוצא {5,5,2} יש זוג אחד. ב-{5,5,5} יש 3 זוגות אפשריים: (1,2), (1,3),
+                    (2,3)).
+                    <br>מצא את התוחלת של $X$ בעזרת אינדיקטורים.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נגדיר $I_{i,j}$ כמשתנה אינדיקטור השווה 1 אם קובייה $i$ וקובייה $j$ מראות אותה תוצאה (עבור $i <
+                            j$). <br>מספר הזוגות האפשריים הוא $\binom{n}{2}$.
+                            <br>ההסתברות ששתי קוביות ספציפיות יראו אותה תוצאה היא $6/36 = 1/6$.
+                            <br>לכן $E[I_{i,j}] = 1/6$.
+                            <br>לפי ליניאריות התוחלת (שהיא תמיד נכונה, גם אם המשתנים תלויים):
+                            <br>$E[X] = E[ \sum I_{i,j} ] = \sum E[I_{i,j}] = \binom{n}{2} \cdot \frac{1}{6} =
+                            \mathbf{\frac{n(n-1)}{12}}$.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 4 -->
+        <section id="ch4" class="chapter">
+            <h2>פרק 4: משתנים מקריים רציפים</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: הגדרות ומדדים</span>
+                <p>מ"מ רציף מקבל ערכים בטווח (אינטרוול). ההסתברות לקבל ערך נקודתי היא אפס: $P(X=x) = 0$.</p>
+                <p><strong>פונקציית צפיפות ($f(x)$):</strong> $f(x) \ge 0$ ומתקיים $\int_{-\infty}^{\infty} f(x) dx =
+                    1$.</p>
+                <p><strong>פונקציית התפלגות מצטברת ($F(x)$):</strong> $F(x) = P(X \le x) = \int_{-\infty}^{x} f(t) dt$.
+                </p>
+                <p><strong>תוחלת ושונות:</strong> $E[X] = \int_{-\infty}^{\infty} x \cdot f(x) dx$ , $Var(X) = E[X^2] -
+                    (E[X])^2$.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: התפלגויות רציפות נפוצות</span>
+                <ul>
+                    <li><strong>אחידה ($U(a,b)$):</strong> צפיפות קבועה $1/(b-a)$ בתחום. $E[X]=(a+b)/2,
+                        Var(X)=(b-a)^2/12$.</li>
+                    <li><strong>מעריכית ($Exp(\lambda)$):</strong> זמן המתנה למאורע. $f(x) = \lambda e^{-\lambda x}$
+                        (עבור $x \ge 0$). תכונת חוסר זיכרון: $P(X > s+t | X > s) = P(X > t)$. $E[X]=1/\lambda,
+                        Var(X)=1/\lambda^2$.</li>
+                    <li><strong>נורמלית ($N(\mu, \sigma^2)$):</strong> התפלגות הפעמון. <strong>תקנון:</strong> $Z =
+                        \frac{X-\mu}{\sigma} \sim N(0,1)$. שימוש בטבלת Z לחישוב הסתברויות.</li>
+                </ul>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: התפלגות מעריכית</span>
+                <p><strong>שאלה:</strong> זמן שימוש בנורה מתפלג מעריכית עם תוחלת 1000 שעות. מה ההסתברות שהנורה תישרף
+                    לפני 500 שעות?</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>תוחלת $E[X]=1000 \Rightarrow \lambda = 1/1000 = 0.001$.</li>
+                    <li>פונקציית התפלגות: $F(x) = 1 - e^{-\lambda x}$.</li>
+                    <li>נחשב: $P(X < 500)=F(500)=1 - e^{-0.001 \cdot 500}=1 - e^{-0.5} \approx \mathbf{0.393}$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>התפלגות אחידה:</strong> המשתנה $X$ מתפלג אחידה בקטע $[2, 10]$.
+                    <br>א. רשום את פונקציית הצפיפות $f(x)$ ואת פונקציית ההתפלגות $F(x)$.
+                    <br>ב. חשב את ההסתברות $P(3 < X < 6)$. <br>ג. חשב את התוחלת $E[X]$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. פונקציות:</strong>
+                        <br>$f(x) = \frac{1}{10-2} = \frac{1}{8}$ עבור $2 \le x \le 10$.
+                        <br>$F(x) = \frac{x-2}{8}$ עבור $2 \le x \le 10$.<br>
+                        <strong>ב. הסתברות:</strong>
+                        <br>$P(3 < X < 6)=F(6) - F(3)=\frac{6-2}{8} -
+                            \frac{3-2}{8}=\frac{4-1}{8}=\mathbf{\frac{3}{8}}$.<br>
+                            <strong>ג. תוחלת:</strong>
+                            <br>$E[X] = \frac{2+10}{2} = \mathbf{6}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>התפלגות מעריכית:</strong> זמן ההמתנה בתור לרופא מתפלג מעריכית עם תוחלת של 20 דקות.
+                    <br>א. מהו הפרמטר $\lambda$ של ההתפלגות?
+                    <br>ב. מה ההסתברות שתמתין פחות מ-10 דקות?
+                    <br>ג. מה ההסתברות שתמתין יותר מ-30 דקות?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. פרמטר:</strong> $E[X] = 1/\lambda \Rightarrow 20 = 1/\lambda \Rightarrow
+                        \mathbf{\lambda = 0.05}$ דקות$^{-1}$.<br>
+                        <strong>ב. $P(X < 10)$:</strong> נשתמש ב-$F(x) = 1 - e^{-\lambda x}$.
+                                <br>$P(X < 10)=1 - e^{-0.05 \cdot 10}=1 - e^{-0.5} \approx \mathbf{0.393}$.<br>
+                                    <strong>ג. $P(X > 30)$:</strong>
+                                    <br>$P(X > 30) = e^{-0.05 \cdot 30} = e^{-1.5} \approx \mathbf{0.223}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>מרחק בלימה:</strong> מרחק הבלימה של מכונית במהירות מסוימת מתפלג נורמלית עם ממוצע $\mu=40$
+                    מטרים וסטיית תקן $\sigma=5$ מטרים.
+                    <br>א. מה ההסתברות שמרחק הבלימה יהיה גדול מ-45 מטרים? (היעזר ב-$\Phi(1) \approx 0.8413$).
+                    <br>ב. מה ההסתברות שמרחק הבלימה יהיה בין 35 ל-45 מטרים?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. $P(X > 45)$:</strong>
+                        <br>תקנון: $Z = \frac{45 - 40}{5} = 1$.
+                        <br>$P(X > 45) = P(Z > 1) = 1 - \Phi(1) = 1 - 0.8413 = \mathbf{0.1587}$.<br>
+                        <strong>ב. $P(35 < X < 45)$:</strong>
+                                <br>תקנון ל-35: $Z = \frac{35 - 40}{5} = -1$.
+                                <br>$P(-1 < Z < 1)=\Phi(1) - \Phi(-1)=\Phi(1) - (1 - \Phi(1))=2\Phi(1) - 1$. <br>$2
+                                    \cdot 0.8413 - 1 = 1.6826 - 1 = \mathbf{0.6826}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>מציאת קבוע נרמול:</strong> נתונה פונקציית צפיפות: $f(x) = \begin{cases} C \cdot (4-x^2) & -2
+                    \le x \le 2 \\ 0 & \text{else} \end{cases}$
+                    <br>א. מצא את ערך הקבוע $C$.
+                    <br>ב. חשב את $E[X]$ ללא שימוש באינטגרל (נמק בעזרת סימטריה).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. מציאת $C$:</strong> עלינו לדרוש $\int_{-2}^2 f(x) dx = 1$.
+                        <br>$\int_{-2}^2 C(4-x^2) dx = C [4x - \frac{x^3}{3}]_{-2}^2 = C [(8 - 8/3) - (-8 + 8/3)]$
+                        <br>$= C [16/3 - (-16/3)] = C \cdot \frac{32}{3}$.
+                        <br>$C \cdot \frac{32}{3} = 1 \Rightarrow \mathbf{C = 3/32}$.<br>
+                        <strong>ב. תוחלת:</strong>
+                        <br>הצפיפות היא פונקציה זוגית סביב המרכז $x=0$.
+                        <br>מאחר שהתחום סימטרי סביב 0, התוחלת היא בהכרח $\mathbf{0}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>חוסר זיכרון:</strong> רכיב אלקטרוני מתפלג מעריכית. הסיכוי שהוא יחזיק מעמד יותר מ-100 שעות הוא
+                    0.8.
+                    <br>ידוע שהרכיב כבר עבד 50 שעות. מה ההסתברות שהוא יעבוד בסה"כ יותר מ-150 שעות?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        נשתמש בתכונת "חוסר הזיכרון": $P(X > s+t | X > s) = P(X > t)$.
+                        <br>אנחנו מחפשים את $P(X > 50+100 | X > 50)$.
+                        <br>לפי התכונה, זה שווה בדיוק ל-$P(X > 100)$.
+                        <br>נתון $P(X > 100) = \mathbf{0.8}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>ציון תקן הפוך:</strong> בבית ספר למחוננים, סף הקבלה נקבע כך שרק 5% מהתלמידים מתקבלים. הציונים
+                    מתפלגים נורמלית עם $\mu=100, \sigma=15$.
+                    <br>א. מה הציון המינימלי הנדרש לקבלה? (היעזר ב-$\Phi(1.645) \approx 0.95$).
+                    <br>ב. מה אחוז הילדים שקיבלו מעל 130?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. מציאת הציון:</strong> אנו מחפשים $x$ כך ש-$P(X > x) = 0.05$, כלומר $\Phi(z) = 0.95$.
+                        <br>לפי הנתון $z = 1.645$.
+                        <br>$1.645 = \frac{x-100}{15} \Rightarrow x-100 = 24.675 \Rightarrow \mathbf{x \approx
+                        124.7}$.<br>
+                        <strong>ב. מעל 130:</strong>
+                        <br>תקנון: $Z = \frac{130-100}{15} = 2$.
+                        <br>$P(Z > 2) = 1 - \Phi(2) = 1 - 0.9772 = \mathbf{0.0228}$ (בערך 2.3%).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>זמן המתנה:</strong> זמן ההמתנה לאוטובוס מתפלג אחידה בין 0 ל-15 דקות. הגעת לתחנה וכבר מחכים שם
+                    5 דקות.
+                    <br>מה ההסתברות שתחכה עוד חמש דקות לפחות (כלומר סה"כ זמן ההמתנה שלך ושל אלו שכבר שם יהיה מעל 10
+                    דקות)?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        זהו מ"מ אחיד $X \sim U(0,15)$, אין לו "חוסר זיכרון".
+                        <br>נתון $X > 5$. אנו מחפשים $P(X > 10 | X > 5)$.
+                        <br>לפי ההגדרה: $\frac{P(X > 10)}{P(X > 5)} = \frac{5/15}{10/15} = \mathbf{0.5}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>תערובת התפלגויות:</strong> זמן התיקון של תקלה במכונה $A$ מתפלג $Exp(1)$. ב-$B$ הוא מתפלג
+                    $Exp(0.5)$.
+                    <br>בוחרים מכונה שבורה, כאשר יש הסתבורת 0.4 שהיא מנוע $A$ ו-0.6 שהיא מנוע $B$.
+                    <br>א. מה ההסתברות שהתיקון ייקח יותר מ-2 שעות?
+                    <br>ב. אם התיקון לקח יותר מ-2 שעות, מה ההסתברות שמדובר במכונה $B$?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. הסתברות שלמה:</strong>
+                        <br>$P(T > 2) = P(T > 2|A)P(A) + P(T > 2|B)P(B)$.
+                        <br>$P(T > 2) = e^{-1 \cdot 2} \cdot 0.4 + e^{-0.5 \cdot 2} \cdot 0.6$.
+                        <br>$0.4 e^{-2} + 0.6 e^{-1} \approx 0.4 \cdot 0.135 + 0.6 \cdot 0.368 = 0.054 + 0.221 =
+                        \mathbf{0.275}$.<br>
+                        <strong>ב. חוק בייס:</strong>
+                        <br>$P(B|T > 2) = \frac{P(T > 2|B)P(B)}{P(T > 2)} = \frac{0.221}{0.275} \approx \mathbf{0.804}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>שונות של משתנה רציף:</strong> נתונה הצפיפות $f(x) = \frac{3}{2} x^2$ בתחום $-1 \le x \le 1$.
+                    <br>א. חשב את השונות $Var(X)$.
+                    <br>ב. הוכח כי $P(|X - E[X]| > 0.5)$ גדול יותר במשתנה זה מאשר במשתנה אחידי בקטע $[-1, 1]$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב שונות:</strong> ה-$E[X]=0$ מסימטריה.
+                        <br>$Var(X) = E[X^2] = \int_{-1}^1 x^2 \cdot \frac{3}{2} x^2 dx = \int_{-1}^1 \frac{3}{2} x^4
+                        dx$
+                        <br>$= \left[ \frac{3}{10} x^5 \right]_{-1}^1 = \frac{3}{10} - (-\frac{3}{10}) =
+                        \mathbf{0.6}$.<br>
+                        <strong>ב. השוואה:</strong>
+                        <br>במשתנה שלנו $P(|X| > 0.5) = 2 \int_{0.5}^1 \frac{3}{2} x^2 dx = 3 [\frac{x^3}{3}]_{0.5}^1 =
+                        1 - 0.5^3 = \mathbf{0.875}$.
+                        <br>במשתנה אחיד $U(-1, 1)$, הצפיפות היא $1/2$.
+                        <br>$P(|X| > 0.5) = \frac{1 - 0.5 + (-0.5 - (-1))}{2} = \frac{0.5 + 0.5}{2} = \mathbf{0.5}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>חסמים של פונקציית הטעות:</strong> עבור $X \sim N(0, 1)$, מקובל להשתמש בקירוב המפורסם לזנב
+                    ההתפלגות: $P(X > x) \approx \frac{1}{x} \phi(x)$ עבור $x$ גדול.
+                    <br>א. חשב את $P(X > 4)$ בעזרת הקירוב (כאשר $\phi(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$).
+                    <br>ב. הסבר מדוע קירוב זה שימושי בחישובים הנדסיים של אמינות מערכות.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב:</strong> עבור $x=4$:
+                        <br>$\phi(4) = \frac{1}{\sqrt{2\pi}} e^{-8} \approx 0.3989 \cdot 0.000335 \approx 0.0001338$.
+                        <br>$P(X > 4) \approx \frac{0.0001338}{4} = \mathbf{0.00003345}$.
+                        <br>(לשם השוואה, הערך המדויק מהטבלאות הוא 0.0000316 - קירוב מצוין!)<br>
+                        <strong>ב. חשיבות הנדסית:</strong>
+                        <br>במערכות קריטיות (תעופה, גשרים), אנו מתעניינים במקרי קצה נדירים ("זנבות"). טבלאות רגילות לא
+                        תמיד מפורטות מספיק לערכי $Z$ גבוהים, והנוסחה מאפשרת הערכה מהירה של סיכוי לכשל קטסטרופלי.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 5 -->
+        <section id="ch5" class="chapter">
+            <h2>פרק 5: משתנים מקריים דו-ממדיים</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: התפלגות משותפת ומדדי קשר</span>
+                <p>כאשר עוסקים בשני משתנים $(X,Y)$, נתעניין בהתפלגות המשותפת שלהם.</p>
+                <p><strong>שונות משותפת (Covariance):</strong> $Cov(X,Y) = E[XY] - E[X]E[Y]$.</p>
+                <ul>
+                    <li>אם $X, Y$ ב"ת, אז $Cov(X,Y) = 0$. (אך ההפך לא תמיד נכון!)</li>
+                    <li>$Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y)$.</li>
+                </ul>
+                <p><strong>מקדם מתאם (Correlation):</strong> $\rho_{X,Y} = \frac{Cov(X,Y)}{\sigma_X \sigma_Y}$. תמיד
+                    בתחום $[-1, 1]$.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: שוליים ומותנות</span>
+                <p><strong>התפלגות שולית:</strong> סכימה/אינטגרציה על המשתנה השני:<br>
+                    $P(X=x) = \sum_y P(X=x, Y=y)$</p>
+                <p><strong>התפלגות מותנית:</strong> $f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}$.</p>
+                <p><strong>תוחלת מותנית:</strong> $E[X|Y=y] = \sum x \cdot P(X=x|Y=y)$.</p>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: חילוץ מדדים</span>
+                <p><strong>שאלה:</strong> ידוע כי $E[X]=1, E[Y]=2, E[XY]=3$. מצא את $Cov(X,Y)$.</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>נשתמש בנוסחה הישירה: $Cov(X,Y) = E[XY] - E[X]E[Y]$.</li>
+                    <li>נציב: $Cov(X,Y) = 3 - (1 \cdot 2) = 3 - 2 = \mathbf{1}$.</li>
+                    <li>מכיוון שהתוצאה חיובית, ישנו קשר ליניארי חיובי בין המשתנים.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>חישוב שונות של סכום:</strong> נתונים משתנים $X$ ו-$Y$ עם המדדים הבאים:
+                    <br>$Var(X)=4, Var(Y)=9, Cov(X,Y)=2$.
+                    <br>א. חשב את $Var(X+Y)$.
+                    <br>ב. חשב את $Var(X-Y)$.
+                    <br>ג. חשב את מקדם המתאם $\rho_{X,Y}$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. שונות סכום:</strong>
+                        <br>$Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y) = 4 + 9 + 2(2) = \mathbf{17}$.<br>
+                        <strong>ב. שונות הפרש:</strong>
+                        <br>$Var(X-Y) = Var(X) + Var(Y) - 2Cov(X,Y) = 4 + 9 - 2(2) = \mathbf{9}$.<br>
+                        <strong>ג. מקדם מתאם:</strong>
+                        <br>$\rho = \frac{Cov(X,Y)}{\sigma_X \sigma_Y} = \frac{2}{\sqrt{4} \cdot \sqrt{9}} = \frac{2}{2
+                        \cdot 3} = \mathbf{\frac{1}{3} \approx 0.333}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>התפלגות משותפת בדידה:</strong> נתונה הטבלה הבאה עבור $P(X=x, Y=y)$:
+                <table style="width:100%; text-align:center; border: 1px solid var(--border-color);">
+                    <tr>
+                        <th>X \ Y</th>
+                        <th>0</th>
+                        <th>1</th>
+                    </tr>
+                    <tr>
+                        <th>1</th>
+                        <td>0.2</td>
+                        <td>0.3</td>
+                    </tr>
+                    <tr>
+                        <th>2</th>
+                        <td>0.1</td>
+                        <td>0.4</td>
+                    </tr>
+                </table>
+                א. מצא את ההתפלגויות השוליות $P(X)$ ו-$P(Y)$.
+                <br>ב. האם $X$ ו-$Y$ בלתי תלויים? נמק.</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. שוליות:</strong>
+                        <br>$P(X=1) = 0.2+0.3 = 0.5$, $P(X=2) = 0.1+0.4 = 0.5$.
+                        <br>$P(Y=0) = 0.2+0.1 = 0.3$, $P(Y=1) = 0.3+0.4 = 0.7$.<br>
+                        <strong>ב. בדיקת אי-תלות:</strong>
+                        <br>נבדוק אם $P(X=1, Y=0) = P(X=1) \cdot P(Y=0)$.
+                        <br>מצד אחד: $0.2$. מצד שני: $0.5 \cdot 0.3 = 0.15$.
+                        <br>מאחר ש-$0.2 \ne 0.15$, המשתנים **תלויים**.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>התפלגות מותנית:</strong> בהמשך לטבלה מתרגיל 2:
+                    <br>א. חשב את ההסתברות המותנית $P(Y=1 | X=1)$.
+                    <br>ב. חשב את התוחלת המותנית $E[Y | X=2]$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. הסתברות מותנית:</strong>
+                        <br>$P(Y=1 | X=1) = \frac{P(X=1, Y=1)}{P(X=1)} = \frac{0.3}{0.5} = \mathbf{0.6}$.<br>
+                        <strong>ב. תוחלת מותנית:</strong>
+                        <br>עבור $X=2$, ההתפלגות של $Y$ היא:
+                        <br>$P(Y=0|X=2) = 0.1/0.5 = 0.2$, $P(Y=1|X=2) = 0.4/0.5 = 0.8$.
+                        <br>$E[Y|X=2] = 0 \cdot 0.2 + 1 \cdot 0.8 = \mathbf{0.8}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>קוואריאנס של צירופים ליניאריים:</strong> נתון $Cov(X,Y) = 5$.
+                    <br>א. חשב את $Cov(2X, 3Y)$.
+                    <br>ב. חשב את $Cov(X+2, Y-10)$.
+                    <br>ג. חשב את $Cov(X+Y, X-Y)$ אם ידוע ש-$Var(X)=Var(Y)=10$.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. כפולות:</strong> $Cov(aX, bY) = ab \cdot Cov(X,Y) = 2 \cdot 3 \cdot 5 =
+                        \mathbf{30}$.<br>
+                        <strong>ב. הזזות:</strong> הזזות קבועות לא משפיעות על הקשר בין המשתנים. $Cov(X+a, Y+b) =
+                        Cov(X,Y) = \mathbf{5}$.<br>
+                        <strong>ג. פתיחת סוגריים:</strong> $Cov(X+Y, X-Y) = Cov(X,X) - Cov(X,Y) + Cov(Y,X) - Cov(Y,Y) =
+                        Var(X) - Var(Y)$.
+                        <br>מכיוון שהשנויות שוות, התוצאה היא $\mathbf{0}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>מקדם מתאם של קו ישר:</strong> נתון $Y = -3X + 4$.
+                    <br>א. מהו מקדם המתאם $\rho_{X,Y}$ במקרה זה? (אין צורך בחישוב ארוך).
+                    <br>ב. הסבר את המשמעות של התוצאה שקיבלת.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. תשובה:</strong> $\rho_{X,Y} = \mathbf{-1}$.<br>
+                        <strong>ב. הסבר:</strong>
+                        <br>כאשר ישנו קשר ליניארי מושלם ($Y = aX+b$), מקדם המתאם הוא 1 או -1.
+                        <br>מכיוון שהשיפוע הוא שלילי (-3), הקשר הוא הפוך מושלם, ולכן הערך הוא -1.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>התפלגות משותפת רציפה:</strong> נתונה הצפיפות $f(x,y) = C \cdot x y$ בתחום $0 \le x \le 1, 0
+                    \le y \le 1$.
+                    <br>א. מצא את הקבוע $C$.
+                    <br>ב. חשב את הצפיפות השולית $f_X(x)$.
+                    <br>ג. האם המשתנים בלתי תלויים?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. אינטגרל כפול:</strong>
+                        <br>$\int_0^1 \int_0^1 C xy dx dy = C \int_0^1 x dx \int_0^1 y dy = C \cdot \frac{1}{2} \cdot
+                        \frac{1}{2} = C/4$.
+                        <br>$C/4 = 1 \Rightarrow \mathbf{C = 4}$.<br>
+                        <strong>ב. שולית:</strong>
+                        <br>$f_X(x) = \int_0^1 4xy dy = 4x [\frac{y^2}{2}]_0^1 = \mathbf{2x}$ (עבור $0 \le x \le
+                        1$).<br>
+                        <strong>ג. אי-תלות:</strong>
+                        <br>בדומה, $f_Y(y) = 2y$.
+                        <br>מתקיים $f_X(x)f_Y(y) = 2x \cdot 2y = 4xy = f(x,y)$.
+                        <br>לכן המשתנים **בלתי תלויים**.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>משולש הצפיפות:</strong> נתונה צפיפות משותפת אחידה מעל המשולש שקודקודיו $(0,0), (2,0), (0,2)$.
+                    <br>א. מצא את פונקציית הצפיפות $f(x,y)$.
+                    <br>ב. חשב את $P(X+Y < 1)$.</p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. צפיפות:</strong> שטח המשולש הוא $\frac{2 \cdot 2}{2} = 2$.
+                                <br>בהתפלגות אחידה, הצפיפות היא 1 חלקי השטח: $f(x,y) = \mathbf{1/2}$ בתוך המשולש.<br>
+                                <strong>ב. הסתברות:</strong> התחום $X+Y < 1$ בתוך המשולש המקורי הוא משולש קטן יותר עם
+                                    קודקודים $(0,0), (1,0), (0,1)$. <br>שטח המשולש הקטן הוא $\frac{1 \cdot 1}{2} = 0.5$.
+                                    <br>ההסתברות היא שטח התחום המבוקש כפול הצפיפות: $0.5 \cdot \frac{1}{2} =
+                                    \mathbf{0.25}$.
+                            </div>
+                        </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>שינוי סדר כרונולוגי:</strong> נתון $X \sim N(0,1)$ ונגדיר $Y = X^2$.
+                    <br>א. חשב את $Cov(X,Y)$.
+                    <br>ב. האם $X$ ו-$Y$ בלתי תלויים? הסבר.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. קוואריאנס:</strong> $Cov(X, X^2) = E[X \cdot X^2] - E[X]E[X^2] = E[X^3] -
+                        E[X]E[X^2]$.
+                        <br>עבור התפלגות נורמלית סטנדרטית, המומנטים האי-זוגיים הם 0, לכן $E[X]=0$ ו-$E[X^3]=0$.
+                        <br>מכאן ש-$Cov(X,Y) = \mathbf{0}$.<br>
+                        <strong>ב. אי-תלות:</strong>
+                        <br>למרות שהקוואריאנס אפס, המשתנים **תלויים לחלוטין** ($Y$ נקבע בלעדית ע"י $X$).
+                        <br>זהו מקרה קלאסי המראה שחוסר מתאם ליניארי ($Cov=0$) לא גורר אי-תלות.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>דו-נורמלי:</strong> נתון וקטור אקראי $(X,Y)$ המתפלג דו-נורמלית עם ממוצעים $\mu_X=0, \mu_Y=0$,
+                    שונויות $\sigma_X^2=1, \sigma_Y^2=1$ ומקדם מתאם $\rho=0.6$.
+                    <br>ידוע כי התפלגות המותנית $Y|X=x$ היא נורמלית עם תוחלת $\mu_{Y|X} = \mu_Y + \rho
+                    \frac{\sigma_Y}{\sigma_X}(x-\mu_X)$ ושונות $\sigma_{Y|X}^2 = \sigma_Y^2(1-\rho^2)$.
+                    <br>א. מצא את התוחלת והשונות של $Y|X=1$.
+                    <br>ב. מה ההסתברות ש-$Y > 1.5$ בהינתן $X=1$? (היעזר ב-$\Phi(1.125) \approx 0.87$).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. תוחלת ושונות מותנית:</strong>
+                        <br>נציב את הנתונים: $\mu_X=0, \mu_Y=0, \sigma_X=1, \sigma_Y=1, \rho=0.6$.
+                        <br>$\mu_{Y|X=1} = 0 + 0.6 \cdot \frac{1}{1}(1-0) = \mathbf{0.6}$.
+                        <br>$\sigma_{Y|X=1}^2 = 1^2(1-0.6^2) = 1 - 0.36 = \mathbf{0.64}$.
+                        <br>לכן, $Y|X=1 \sim N(0.6, 0.64)$.<br>
+                        <strong>ב. הסתברות מותנית:</strong>
+                        <br>אנו מחפשים $P(Y > 1.5 | X=1)$.
+                        <br>נשתמש בתוצאות מסעיף א': $Y|X=1 \sim N(0.6, 0.64)$. סטיות התקן היא $\sqrt{0.64} = 0.8$.
+                        <br>תקנון: $Z = \frac{1.5 - 0.6}{0.8} = \frac{0.9}{0.8} = 1.125$.
+                        <br>$P(Y > 1.5 | X=1) = P(Z > 1.125)$.
+                        <br>לפי הנתון $\Phi(1.125) \approx 0.87$, לכן $P(Z > 1.125) = 1 - 0.87 = \mathbf{0.13}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>חוק התוחלת הכוללת:</strong> נניח שמספר הביצים $N$ שמטילה ציפור מתפלג פואסונית
+                    $Pois(\lambda)$. לכל ביצה יש סיכוי $p$ לבקוע (באופן בלתי תלוי).
+                    <br>יהי $K$ מספר הגוזלים שבקעו.
+                    <br>א. חשב את $E[K]$ בעזרת תוחלת מותנית.
+                    <br>ב. מצא את ההתפלגות של $K$ (רמז: זוהי התפלגות פואסונית עם פרמטר חדש).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. תוחלת:</strong> $E[K] = E[ E[K|N] ]$.
+                        <br>בהינתן מספר הביצים $N$, מספר הבקיעות $K$ הוא בינומי $Bin(N, p)$, לכן $E[K|N] = N \cdot p$.
+                        <br>$E[K] = E[Np] = p \cdot E[N] = \mathbf{\lambda p}$.<br>
+                        <strong>ב. התפלגות:</strong> חישוב מלא (שלא נפרט כאן את כולו) מראה כי $K \sim
+                        \mathbf{Pois(\lambda p)}$.
+                        <br>זהו מקרה של "פיצול פואסוני": כאשר דוגמים אירועים מתהליך פואסוני בהסתברות $p$, התהליך החדש
+                        נשאר פואסוני.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 6 -->
+        <section id="ch6" class="chapter">
+            <h2>פרק 6: משפטי גבול וקירובים</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: אי-שוויונות הסתברותיים</span>
+                <p>כאשר לא יודעים את ההתפלגות המדויקת, ניתן לחסום את ההסתברות לאירוע חריג.</p>
+                <p><strong>אי-שוויון מרקוב:</strong> עבור מ"מ אי-שלילי $X$: $P(X \ge a) \le \frac{E[X]}{a}$.</p>
+                <p><strong>אי-שוויון צ'בישב:</strong> חסם המבוסס על השונות: $P(|X-\mu| \ge k) \le \frac{Var(X)}{k^2}$
+                    (עבור מרחק $k$ מהתוחלת).</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: משפט הגבול המרכזי (CLT)</span>
+                <p>סכום של מספר רב של מ"מ בלתי תלויים ובעלי אותה התפלגות (i.i.d) מתקרב להתפלגות נורמלית.</p>
+                <p><strong>הנוסחה:</strong> $S_n = \sum_{i=1}^n X_i \approx N(n\mu, n\sigma^2)$.</p>
+                <p><strong>לממוצע:</strong> $\bar{X} \approx N(\mu, \sigma^2/n)$.</p>
+                <p><strong>שימוש:</strong> מאפשר לחשב הסתברויות על סכומים/ממוצעים גם כשלא יודעים את התפלגות המקור
+                    ($X_i$).</p>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: אי-שוויון מרקוב</span>
+                <p><strong>שאלה:</strong> משכורת ממוצעת בחברה היא 10,000 ש"ח. מה ניתן לומר על אחוז האנשים שמרוויחים יותר
+                    מ-50,000 ש"ח?</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>נשתמש במרקוב מכיוון שמשכורת היא משתנה אי-שלילי. $E[X]=10,000$.</li>
+                    <li>$P(X \ge 50,000) \le \frac{10,000}{50,000} = 0.2$.</li>
+                    <li>תשובה: לכל היותר **20%** מהעובדים מרוויחים מעל סכום זה.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p>מדגם של 100 אנשים. בכל יום אדם צורך בממוצע 2 ליטר מים עם שונות 0.25. מהי תוחלת צריכת המים הכוללת של
+                    הקבוצה?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <p><strong>אי-שוויון מרקוב:</strong> במבחן, הציון הממוצע הוא 70.
+                            <br>א. מה ניתן לומר על אחוז התלמידים שקיבלו מעל 90 בעזרת אי-שוויון מרקוב?
+                            <br>ב. מהם התנאים ההכרחיים לשימוש באי-שוויון מרקוב?
+                            <br>ג. אם ידוע שהציון המקסימלי הוא 100, האם זה משנה את החסם של מרקוב?
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. חישוב חסם:</strong>
+                                <br>$P(X \ge 90) \le \frac{E[X]}{90} = \frac{70}{90} = \mathbf{7/9} \approx
+                                \mathbf{0.777}$.
+                                <br>כלומר, לכל היותר 77.7% מהתלמידים קיבלו מעל 90.<br>
+                                <strong>ב. תנאים:</strong> המשתנה חייב להיות **אי-שלילי** ($X \ge 0$).<br>
+                                <strong>ג. תשובה:</strong> לא, אי-שוויון מרקוב משתמש רק בתוחלת ולא מתחשב במידע נוסף על
+                                חסמים עליונים (למרות שחסם כזה עשוי לאפשר שימוש בחסמים הדוקים יותר כמו חסם הופדינג).
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 2 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 2 - קל</div>
+                        <p><strong>אי-שוויון צ'בישב:</strong> נתון משתנה $X$ עם תוחלת 100 ושונות 100.
+                            <br>א. מהו החסם להסתברות שהמרחק של $X$ מהתוחלת גדול מ-20?
+                            <br>ב. מה ניתן לומר על ההסתברות ש-$X$ נמצא בין 80 ל-120?
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. חסם לצדדים קיצוניים:</strong>
+                                <br>לפי צ'בישב: $P(|X - 100| \ge 20) \le \frac{Var(X)}{20^2} = \frac{100}{400} =
+                                \mathbf{0.25}$.<br>
+                                <strong>ב. חסם לתחום המרכזי:</strong>
+                                <br>$P(80 < X < 120)=1 - P(|X - 100| \ge 20) \ge 1 - 0.25=\mathbf{0.75}$. <br>לפחות 75%
+                                    מהערכים נמצאים בתוך 2 סטיות תקן מהממוצע.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 3 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 3 - בינוני</div>
+                        <p><strong>משפט הגבול המרכזי (CLT) - יסודות:</strong> מטילים קובייה הוגנת 100 פעמים. יהי
+                            $S_{100}$ סכום התוצאות.
+                            <br>א. מצא את התוחלת והשונות של הטלת קובייה בודדת.
+                            <br>ב. מהי ההתפלגות המקורבת של $S_{100}$?
+                            <br>ג. מה ההסתברות שהסכום יהיה גדול מ-380? (היעזר ב-$\Phi(1.7) \approx 0.9554$).
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. בודד:</strong> $E[X] = 3.5$. $Var(X) = \frac{6^2 - 1}{12} = \frac{35}{12}
+                                \approx 2.917$.<br>
+                                <strong>ב. סכום:</strong> הממוצע הוא $100 \cdot 3.5 = 350$. השונות היא $100 \cdot 2.917
+                                \approx 291.7$.
+                                <br>לפי CLT: $S_{100} \approx N(350, 291.7)$. סטית התקן היא $\sqrt{291.7} \approx
+                                17.08$.<br>
+                                <strong>ג. הסתברות:</strong>
+                                <br>תקנון: $Z = \frac{380 - 350}{17.08} = \frac{30}{17.08} \approx 1.75$.
+                                <br>$P(S > 380) = 1 - \Phi(1.75) \approx \mathbf{0.04}$.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 4 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 4 - בינוני</div>
+                        <p><strong>מטיילים ומעליות:</strong> מעלית יכולה לשאת עד 1,000 ק"ג. משקל של אדם מתפלג עם תוחלת
+                            75 ק"ג וסטיית תקן 15 ק"ג.
+                            <br>א. אם נכנסים 12 אנשים למעלית, מה הממוצע והשונות של משקלם הכולל?
+                            <br>ב. מה ההסתברות שהמשקל הכולל יעבור את המותר (1,000 ק"ג)? (היעזר ב-$\Phi(1.92) \approx
+                            0.97$).
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. מדדי הסכום:</strong>
+                                <br>$E[S] = 12 \cdot 75 = 900$.
+                                <br>$Var(S) = 12 \cdot 15^2 = 12 \cdot 225 = 2700$.<br>
+                                <strong>ב. הסתברות:</strong>
+                                <br>סטיית תקן של הסכום: $\sigma_S = \sqrt{2700} \approx 51.96$.
+                                <br>תקנון: $Z = \frac{1000 - 900}{51.96} \approx 1.92$.
+                                <br>$P(S > 1000) = 1 - \Phi(1.92) = 1 - 0.9726 = \mathbf{0.0274}$.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 5 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 5 - בינוני</div>
+                        <p><strong>קירוב נורמלי לבינומית:</strong> סוקר שואל 400 אנשים האם הם תומכים במועמד מסוים. נניח
+                            שבאוכלוסייה 50% תומכים.
+                            <br>א. חשב את ההסתברות שמספר התומכים במדגם יהיה בין 190 ל-210.
+                            <br>ב. האם נדרש תיקון רציפות כאן? (נמק).
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. חישוב:</strong>
+                                <br>$X \sim Bin(400, 0.5) \Rightarrow \mu = 200, \sigma^2 = 400 \cdot 0.5 \cdot 0.5 =
+                                100$.
+                                <br>לפי CLT (ללא תיקון רציפות לשם הפשטות במדגם גדול):
+                                <br>$Z_1 = \frac{190-200}{10} = -1$, $Z_2 = \frac{210-200}{10} = 1$.
+                                <br>$P(-1 < Z < 1)=\Phi(1) - (1-\Phi(1))=2 \cdot 0.8413 - 1=\mathbf{0.6826}$.<br>
+                                    <strong>ב. תיקון רציפות:</strong>
+                                    <br>במדגם של 400, התיקון ($0.5/10 = 0.05$ בערך ה-$Z$) הוא קטן מאוד ולא משנה את
+                                    התוצאה משמעותית. עם זאת, לדיוק מירבי רצוי להשתמש ב-$P(189.5 < X < 210.5)$. </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 6 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                        <p><strong>משחקי מזל:</strong> בקזינו, למשחק מסוים יש תוחלת רווח של $-0.1$ ש"ח למשחק וסטיית תקן
+                            של 5 ש"ח.
+                            <br>א. אם שחקן משחק 2,500 פעמים, מהו הרווח הכולל הצפוי לו?
+                            <br>ב. מה הסיכוי שהשחקן יצא ברווח (סכום גדול מ-0)? (היעזר ב-$\Phi(1) \approx 0.84$).
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. תוחלת הסכום:</strong> $E[S] = 2500 \cdot (-0.1) = \mathbf{-250}$ ש"ח.<br>
+                                <strong>ב. סיכוי לרווח:</strong>
+                                <br>שונות הסכום: $Var(S) = 2500 \cdot 5^2 = 2500 \cdot 25 = 62,500$.
+                                <br>סטיית תקן: $\sigma_S = \sqrt{62,500} = 250$.
+                                <br>תקנון: $Z = \frac{0 - (-250)}{250} = \frac{250}{250} = 1$.
+                                <br>$P(S > 0) = P(Z > 1) = 1 - \Phi(1) = 1 - 0.8413 = \mathbf{0.1587}$.
+                                <br>כלומר, רק בערך 16% מהשחקנים הכבדים יצאו ברווח.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 7 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                        <p><strong>חוק המספרים הגדולים:</strong> נניח שתוחלת ההכנסה השנתית היא 120,000 ש"ח עם שונות
+                            גבוהה מאוד.
+                            <br>א. מדוע ממוצע המדגם יהיה קרוב מאוד ל-120,000 אם נדגום מיליון איש?
+                            <br>ב. מה ההבדל המושגי בין החוק החלש לחוק החזק של המספרים הגדולים?
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. הסבר:</strong> לפי חוק המספרים הגדולים, הממוצע המדגמי $\bar{X}_n$ מתכנס
+                                בהסתברות לתוחלת האוכלוסייה $\mu$. ככל ש-$n$ גדל, השונות של הממוצע ($Var(X)/n$) שואפת
+                                ל-0, ולכן הממוצע נעשה יציב ומדויק יותר.<br>
+                                <strong>ב. החוק החלש לעומת החזק:</strong>
+                                <br>החוק **החלש** מדבר על התכנסות בהסתברות (הסיכוי למרחק קטן מ-$\epsilon$ שואף ל-1).
+                                <br>החוק **החזק** מדבר על התכנסות "כמעט תמיד" (הסדרה עצמה מתכנסת לערך התוחלת בהסתברות
+                                1).
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 8 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                        <p><strong>השוואת חסמים:</strong> נתון $X \sim U(0, 10)$. נניח שאיננו יודעים את ההתפלגות, רק
+                            ש-$E[X]=5, Var(X)=100/12 \approx 8.33$.
+                            <br>א. חשב את $P(X \ge 9)$ המדויק.
+                            <br>ב. חשב את החסם לפי מרקוב.
+                            <br>ג. חשב את החסם לפי צ'בישב. מה מסקנתך?
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. מדויק:</strong> $P(X \ge 9) = \frac{10-9}{10} = \mathbf{0.1}$.<br>
+                                <strong>ב. מרקוב:</strong> $P(X \ge 9) \le 5/9 = \mathbf{0.55}$.<br>
+                                <strong>ג. צ'בישב:</strong> נשים לב ש-$X \ge 9$ גורר $|X-5| \ge 4$.
+                                <br>$P(|X-5| \ge 4) \le \frac{8.33}{16} \approx \mathbf{0.52}$.
+                                <br><strong>מסקנה:</strong> החסמים הם שמרניים מאוד ("פסימיים"). ככל שיש לנו יותר מידע
+                                (שונות במקום רק תוחלת), החסם בדרך כלל משתפר אך עדיין רחוק מהערך האמיתי.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 9 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 9 - קשה</div>
+                        <p><strong>קירוב פואסון לעומת נורמלי:</strong> נתונה התפלגות בינומית $Bin(1000, 0.01)$.
+                            <br>א. האם עדיף להשתמש בקירוב פואסון או בקירוב נורמלי?
+                            <br>ב. חשב את $P(X=0)$ לפי ההתפלגות המדויקת ולפי שני הקירובים.
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. עדיפות:</strong> מכיוון ש-$p$ קטן מאוד ($0.01$) ו-$n$ גדול, התפלגות פואסון עם
+                                $\lambda = np = 10$ היא הקירוב הטבעי והמדויק יותר כאן.<br>
+                                <strong>ב. חישובים:</strong>
+                                <br>1. **מדויק:** $(0.99)^{1000} \approx \mathbf{0.000043}$.
+                                <br>2. **פואסון:** $e^{-10} \frac{10^0}{0!} = e^{-10} \approx \mathbf{0.000045}$.
+                                <br>3. **נורמלי:** $\mu=10, \sigma^2 = 9.9 \Rightarrow \sigma \approx 3.14$.
+                                <br>בעזרת תיקון רציפות: $P(X < 0.5)=P(Z < \frac{0.5-10}{3.14})=P(Z <
+                                    -3.02)=1-0.9987=\mathbf{0.0013}$. <br>רואים שפואסון הרבה יותר קרוב לאמת במקרים של
+                                    נדירות.
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- תרגיל 10 -->
+                    <div class="exercise">
+                        <div class="ex-badge">תרגיל 10 - קשה</div>
+                        <p><strong>תכנון גודל מדגם (צ'בישב):</strong> אנו רוצים לאמוד את אחוז המעשנים בארץ.
+                            <br>מהו מספר האנשים $n$ שעלינו לדגום כדי להבטיח בביטחון של 95% שהטעות שלנו לא תעלה על 2%?
+                            <br>א. פתור בעזרת אי-שוויון צ'בישב (ללא הנחה נורמלית, מקרה גרוע $p=0.5$).
+                            <br>ב. מדוע התוצאה של צ'בישב נחשבת ל"בזבזנית" לעומת שימוש ב-CLT?
+                        </p>
+                        <details>
+                            <summary></summary>
+                            <div class="solution-body">
+                                <strong>א. פתרון:</strong> אנו דורשים $P(|\hat{p} - p| \ge 0.02) \le 0.05$.
+                                <br>לפי צ'בישב: $P \le \frac{Var(\hat{p})}{\epsilon^2} = \frac{p(1-p)/n}{0.0004}$.
+                                <br>במקרה הגרוע $p(1-p)=0.25$. לכן: $\frac{0.25}{0.0004 n} \le 0.05$.
+                                <br>$\frac{625}{n} \le 0.05 \Rightarrow n \ge \frac{625}{0.05} = \mathbf{12,500}$.<br>
+                                <strong>ב. צ'בישב לעומת CLT:</strong>
+                                <br>צ'בישב עובד לכל התפלגות, ולכן הוא "זהיר" מדי. אילו השתמשנו ב-CLT (קירוב נורמלי),
+                                היינו מקבלים ש-$n \approx 2,400$ מספיק לאותה רמת דיוק. צ'בישב דורש פי 5 יותר נבדקים כי
+                                הוא לא מניח שלפעמון יש זנבות דועכים מהר.
+                            </div>
+                        </details>
+                    </div>
+        </section>
+
+        <!-- פרק 7 -->
+        <section id="ch7" class="chapter">
+            <h2>פרק 7: רווחי סמך ואמידה</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: אמידה נקודתית ורווח סמך</span>
+                <p><strong>אמידה נקודתית:</strong> שימוש בנתוני מדגם כדי להעריך פרמטר באוכלוסייה (למשל ממוצע המדגם
+                    $\bar{X}$ אומד את $\mu$).</p>
+                <p><strong>רווח סמך (CI):</strong> טווח ערכים שבו אנו מאמינים שהפרמטר נמצא ברמת ביטחון מסוימת
+                    ($1-\alpha$).</p>
+                <p><strong>העיקרון:</strong> האומד $\pm$ טעות דגימה.</p>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: נוסחאות לרווחי סמך</span>
+                <ul>
+                    <li><strong>לתוחלת ($\mu$) כש-$\sigma$ ידוע:</strong> $\bar{X} \pm Z_{1-\alpha/2}
+                        \frac{\sigma}{\sqrt{n}}$.</li>
+                    <li><strong>לתוחלת ($\mu$) כש-$\sigma$ לא ידוע:</strong> $\bar{X} \pm t_{n-1, 1-\alpha/2}
+                        \frac{S}{\sqrt{n}}$.</li>
+                    <li><strong>לפרופורציה ($p$):</strong> $\hat{p} \pm Z_{1-\alpha/2}
+                        \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$.</li>
+                </ul>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: רווח סמך לתוחלת</span>
+                <p><strong>שאלה:</strong> במדגם של 100 אנשים נמצא גובה ממוצע 175 ס"מ. ידוע שסטיות התקן באוכלוסייה היא
+                    $\sigma=10$. מצא רווח סמך בביטחון 95% לתוחלת הגובה. ($Z_{0.975} = 1.96$).</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>נתונים: $n=100, \bar{X}=175, \sigma=10, Z=1.96$.</li>
+                    <li>נוסחה: $175 \pm 1.96 \frac{10}{\sqrt{100}} = 175 \pm 1.96 \cdot 1$.</li>
+                    <li>רווח סמך: $[173.04, 176.96]$.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>רמת ביטחון ורוחב רווח:</strong> חוקר בנה רווח סמך לתוחלת עם רמת ביטחון של 90%.
+                    <br>א. מה יקרה לרוחב הרווח אם החוקר יחליט להעלות את רמת הביטחון ל-99%?
+                    <br>ב. הסבר מדוע רמת ביטחון גבוהה יותר גוררת רווח רחב יותר (אינטואיציה).
+                    <br>ג. איזה ערך קריטי ($Z$) מתאים ל-95% ביטחון?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. תשובה:</strong> רווח הסמך **יתרחב**.<br>
+                        <strong>ב. הסבר:</strong> כדי להיות "בטוחים יותר" שהערך האמיתי נמצא בפנים, עלינו לקחת טווח
+                        ביטחון גדול יותר. ככל שהדרישה לדיוק (רמת ביטחון) עולה, אנו מקריבים את ה"חדות" (רוחב הרווח).<br>
+                        <strong>ג. ערך קריטי:</strong> עבור 95%, אנו משאירים 2.5% בכל זנב, לכן $Z_{0.975} =
+                        \mathbf{1.96}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>גודל מדגם ודיוק:</strong> נניח שרווח הסמך שחושב הוא $150 \pm 10$ עבור מדגם של $n=100$.
+                    <br>א. מה תהיה טעות הדגימה אם נגדיל את המדגם ל-$n=400$ (באותה רמת ביטחון)?
+                    <br>ב. פי כמה יש להגדיל את המדגם כדי לחתוך את טעות הדגימה פי 3?
+                    <br>ג. מה היחס בין רוחב רווח הסמך לבין שורש גודל המדגם?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב:</strong> טעות הדגימה $d$ פרופורציונלית ל-$1/\sqrt{n}$.
+                        <br>אם המדגם גדל פי 4, טעות הדגימה קטנה פי $\sqrt{4}=2$. לכן הטעות החדשה תהיה $\mathbf{5}$
+                        ($10/2$).<br>
+                        <strong>ב. הכפלה:</strong> כדי להקטין את הטעות פי 3, יש להגדיל את $n$ פי $3^2 = \mathbf{9}$.<br>
+                        <strong>ג. יחס:</strong> יחס הפוך. רוחב הרווח $\propto \frac{1}{\sqrt{n}}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>רווח סמך לפרופורציה:</strong> בסקר בחירות שכלל 400 נשאלים, 220 הצהירו שיתמכו במועמד א'.
+                    <br>א. מצא את האומד הנקודתי $\hat{p}$ לפרופורציית התמיכה.
+                    <br>ב. בנה רווח סמך ברמת ביטחון 95% ($Z=1.96$).
+                    <br>ג. האם ניתן לומר בביטחון של 95% שהמועמד יקבל מעל 50% מהקולות?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. אומד:</strong> $\hat{p} = 220/400 = \mathbf{0.55}$.<br>
+                        <strong>ב. רווח סמך:</strong>
+                        <br>$\sigma_{\hat{p}} = \sqrt{\frac{0.55 \cdot 0.45}{400}} = \sqrt{\frac{0.2475}{400}} \approx
+                        0.02487$.
+                        <br>$CI = 0.55 \pm 1.96 \cdot 0.02487 = 0.55 \pm 0.0487 = \mathbf{[0.5013, 0.5987]}$.<br>
+                        <strong>ג. החלטה:</strong> מכיוון שהקצה התחתון של הרווח (50.13%) גדול מ-50%, התשובה היא **כן**
+                        (בסבירות של 95%).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>תכנון ניסוי (גודל מדגם):</strong> חברת תרופות רוצה לאמוד את זמן ההשפעה של תרופה חדשה.
+                    <br>ידוע כי סטיית התקן של זמן ההשפעה היא $\sigma = 10$ דקות.
+                    <br>א. מהו גודל המדגם המינימלי הדרוש כדי שטעות הדגימה לא תעלה על דקה אחת (בביטחון של 95%)?
+                    <br>ב. אם רמת הביטחון הנדרשת הייתה 99% ($Z=2.576$), כיצד היה משתנה גודל המדגם?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב עבור 95%:</strong>
+                        <br>$n = (\frac{Z \sigma}{d})^2 = (\frac{1.96 \cdot 10}{1})^2 = 19.6^2 = 384.16$.
+                        <br>יש לדגום לפחות **385** אנשים.<br>
+                        <strong>ב. חישוב עבור 99%:</strong>
+                        <br>$n = (\frac{2.576 \cdot 10}{1})^2 = 25.76^2 = 663.57$.
+                        <br>יש לדגום לפחות **664** אנשים (גידול משמעותי במחיר המחקר).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>מדגם קטן ($\sigma$ לא ידוע):</strong> נמדדה רמת סוכר אצל 9 מטופלים: ממוצע $\bar{x} = 100$,
+                    שונות מדגמית $s^2 = 36$. נניח שהאוכלוסייה מתפלגת נורמלית.
+                    <br>א. באיזו התפלגות נשתמש לצורך בניית רווח סמך?
+                    <br>ב. בנה רווח סמך לתוחלת ברמת ביטחון 95% (נתון $t_{8, 0.975} = 2.306$).
+                    <br>ג. מה היה קורה לרווח אילו היינו יודעים ש-$\sigma=6$ מראש?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. התפלגות:</strong> נשתמש בהתפלגות **t-student** עם $n-1=8$ דרגות חופש, כי סטיית התקן
+                        של האוכלוסייה לא ידועה והמדגם קטן.<br>
+                        <strong>ב. בנייה:</strong>
+                        <br>$CI = 100 \pm 2.306 \cdot \frac{6}{\sqrt{9}} = 100 \pm 2.306 \cdot 2 = 100 \pm 4.612 =
+                        \mathbf{[95.388, 104.612]}$.<br>
+                        <strong>ג. $\sigma$ ידוע:</strong> היינו משתמשים ב-$Z=1.96$ במקום ב-$t=2.306$.
+                        <br>$CI = 100 \pm 1.96 \cdot 2 = \mathbf{[96.08, 103.92]}$. הרווח היה צר יותר (מדויק יותר).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>פרמטר מול סטטיסטי:</strong> נניח שבאוניברסיטה יש 10,000 סטודנטים. דגמנו 100 מהם ומצאנו ממוצע
+                    גילים 23.
+                    <br>א. זהה את הפרמטר ואת הסטטיסטי במקרה זה.
+                    <br>ב. האם הסטטיסטי הוא קבוע או משתנה מקרי? הסבר.
+                    <br>ג. מהי "התפלגות הדגימה"?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. זיהוי:</strong>
+                        <br>הפרמטר הוא ממוצע הגילים של **כל** 10,000 הסטודנטים ($\mu$).
+                        <br>הסטטיסטי הוא ממוצע הגילים של **100** הסטודנטים שנדגמו ($\bar{X} = 23$).<br>
+                        <strong>ב. מהות הסטטיסטי:</strong> הסטטיסטי הוא **משתנה מקרי**. אם היינו לוקחים 100 סטודנטים
+                        אחרים, הממוצע היה יוצא אחרת (נניח 22.8).<br>
+                        <strong>ג. התפלגות דגימה:</strong> זוהי ההתפלגות של כל הערכים האפשריים שהסטטיסטי יכול לקבל מכל
+                        המדגמים האפשריים בגודל $n$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>אמידה חסרת הטיה:</strong> יהי $X$ משתנה עם תוחלת $\mu$. נדגמו $X_1, X_2$.
+                    <br>מציעים שני אומדים ל-$\mu$:
+                    <br>$\hat{\mu}_1 = 0.5 X_1 + 0.5 X_2$
+                    <br>$\hat{\mu}_2 = 0.8 X_1 + 0.2 X_2$
+                    <br>א. האם שני האומדים חסרי הטיה? הוכח.
+                    <br>ב. אילו מהם עדיף מבחינת שונות? (הנח ש-$X_i$ בלתי תלויים בעלי אותה שונות $\sigma^2$).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חוסר הטיה:</strong>
+                        <br>$E[\hat{\mu}_1] = 0.5 \mu + 0.5 \mu = \mu$. (חסר הטיה)
+                        <br>$E[\hat{\mu}_2] = 0.8 \mu + 0.2 \mu = \mu$. (חסר הטיה)<br>
+                        <strong>ב. שונות:</strong>
+                        <br>$Var(\hat{\mu}_1) = 0.5^2 \sigma^2 + 0.5^2 \sigma^2 = 0.25 \sigma^2 + 0.25 \sigma^2 =
+                        \mathbf{0.5 \sigma^2}$.
+                        <br>$Var(\hat{\mu}_2) = 0.8^2 \sigma^2 + 0.2^2 \sigma^2 = 0.64 \sigma^2 + 0.04 \sigma^2 =
+                        \mathbf{0.68 \sigma^2}$.
+                        <br><strong>מסקנה:</strong> אומד 1 עדיף כי השונות שלו נמוכה יותר (הוא "יעיל" יותר).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - מאתגר</div>
+                <p><strong>פענוח רווח סמך:</strong> נתון רווח סמך לתוחלת שחושב על ידי תוכנה: $[72.4, 87.6]$.
+                    <br>א. מהו ממוצע המדגם $\bar{x}$ ששימש לחישוב?
+                    <br>ב. מהי טעות הדגימה $d$?
+                    <br>ג. אם ידוע שהרווח חושב עם עשירית סטיית תקן מדגמית ו-$n=100$, באיזה ערך קריטי השתמשו?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. ממוצע:</strong> הממוצע הוא אמצע הקטע. $(72.4 + 87.6) / 2 = \mathbf{80}$.<br>
+                        <strong>ב. טעות:</strong> מרחק הממוצע מהקצוות. $87.6 - 80 = \mathbf{7.6}$.<br>
+                        <strong>ג. ערך קריטי:</strong> $d = Z \cdot \frac{\sigma}{\sqrt{n}} \Rightarrow 7.6 = Z \cdot
+                        \frac{\sigma}{10}$.
+                        <br>ללא מידע על $\sigma$ לא ניתן למצוא את $Z$ המדויק, אך ניתן לחלץ את היחס.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>רווח סמך להפרש תוחלות:</strong> רוצים להשוות ציונים בין שני בתי ספר.
+                    <br>בי"ס א': $n_1=50, \bar{x}_1=80, \sigma_1=10$.
+                    <br>בי"ס ב': $n_2=50, \bar{x}_2=75, \sigma_2=12$.
+                    <br>א. בנה רווח סמך 95% להפרש התוחלות $\mu_1 - \mu_2$.
+                    <br>ב. האם ניתן לקבוע שיש הבדל משמעותי בין בתי הספר?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב:</strong>
+                        <br>הפרש ממוצעים: $80 - 75 = 5$.
+                        <br>סטיית תקן של ההפרש: $\sqrt{\frac{10^2}{50} + \frac{12^2}{50}} = \sqrt{\frac{100+144}{50}} =
+                        \sqrt{4.88} \approx 2.21$.
+                        <br>$CI = 5 \pm 1.96 \cdot 2.21 = 5 \pm 4.33 = \mathbf{[0.67, 9.33]}$.<br>
+                        <strong>ב. מסקנה:</strong> כיוון שהערך 0 **אינו** נמצא בתוך הרווח (הרווח כולו חיובי), ניתן לומר
+                        בביטחון של 95% שבי"ס א' אכן טוב יותר מבי"ס ב'.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>משמעות רמת הביטחון:</strong> חוקר בנה 100 רווחי סמך שונים (מרמת ביטחון 95%) עבור פרמטרים
+                    שונים.
+                    <br>א. לכמה מהם אנו מצפים ש"יפספסו" את הערך האמיתי?
+                    <br>ב. האם ניתן לומר על רווח ספציפי (למשל $[5, 12]$) שההסתברות שהפרמטר בתוכו היא 0.95? נמק.
+                    <br>ג. מה הקשר בין רוחב הרווח לבין עוצמת המבחן?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. ציפייה:</strong> אנו מצפים ש-5% יפספסו, כלומר בערך **5** רווחים.<br>
+                        <strong>ב. הסבר קריטי:</strong> **לא.** הפרמטר $\mu$ הוא מספר קבוע. הוא או בתוך הקטע או מחוצה
+                        לו. ברגע שהמספרים ברווח ידועים, אין יותר הסתברות. ה-0.95 מתייחס **לתהליך** (לפני דגימת
+                        הנתונים).<br>
+                        <strong>ג. עוצמה:</strong> ככל שהרווח צר יותר (עבור אותה רמת ביטחון), כך המבחן נחשב למדויק ובעל
+                        עוצמה גבוהה יותר לזיהוי הבדלים.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- פרק 8 -->
+        <section id="ch8" class="chapter">
+            <h2>פרק 8: בדיקת השערות</h2>
+
+            <div class="content-box theory">
+                <span class="box-title">חלק 1: מושגי יסוד בבדיקת השערות</span>
+                <p>תהליך קבלת החלטות לגבי תכונות האוכלוסייה על סמך מדגם.</p>
+                <ul>
+                    <li><strong>השערת האפס ($H_0$):</strong> המצב הקיים/ברירת המחדל (למשל $\mu = \mu_0$).</li>
+                    <li><strong>השערה אלטרנטיבית ($H_1$):</strong> מה שאנחנו מנסים להוכיח (למשל $\mu > \mu_0$ או $\mu
+                        \ne \mu_0$).</li>
+                    <li><strong>רמת מובהקות ($\alpha$):</strong> ההסתברות המקסימלית המותרת לטעות מסוג ראשון.</li>
+                    <li><strong>P-value:</strong> ההסתברות לקבל את תוצאת המדגם (או קיצונית ממנה) תחת הנחת $H_0$.</li>
+                </ul>
+            </div>
+
+            <div class="content-box algorithm">
+                <span class="box-title">חלק 2: אלגוריתם לביצוע בדיקה</span>
+                <ol>
+                    <li>הגדרת השערות $H_0, H_1$.</li>
+                    <li>בחירת רמת מובהקות $\alpha$.</li>
+                    <li>חישוב סטטיסטי המבחן ($Z$ או $t$):
+                        <ul>
+                            <li>$Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}$ (כאשר $\sigma$ ידוע).</li>
+                            <li>$t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}$ (כאשר $\sigma$ לא ידוע).</li>
+                        </ul>
+                    </li>
+                    <li>קביעת אזור דחייה או השוואת P-value ל-$\alpha$.</li>
+                </ol>
+            </div>
+
+            <div class="content-box example">
+                <span class="box-title">דוגמה פתורה: מבחן Z לתוחלת</span>
+                <p><strong>שאלה:</strong> משקל ממוצע של שקית סוכר צריך להיות 1 ק"ג. צרכן חושד שהמשקל נמוך יותר. במדגם של
+                    25 שקיות נמצא ממוצע 0.98 ק"ג. ידוע $\sigma=0.05$. בדוק ברמת מובהקות 5% ($Z_{0.05} = -1.645$).</p>
+                <p><strong>פתרון:</strong>
+                <ul>
+                    <li>$H_0: \mu = 1$, $H_1: \mu < 1$.</li>
+                    <li>סטטיסטי: $Z = \frac{0.98 - 1}{0.05 / \sqrt{25}} = \frac{-0.02}{0.01} = -2$.</li>
+                    <li>אזור דחייה: $Z < -1.645$.</li>
+                    <li>החלטה: מאחר ו-$-2 < -1.645$, **דוחים את $H_0$**. יש ראיות שהמשקל נמוך מ-1 ק"ג.</li>
+                </ul>
+                </p>
+            </div>
+
+            <h3>חלק 3: תרגול (10 תרגילים מדורגים)</h3>
+
+            <!-- תרגיל 1 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 1 - קל</div>
+                <p><strong>טעויות במבחן:</strong> הגדר בצורה מדויקת:
+                    <br>א. מהי "טעות מסוג ראשון" ($\alpha$) מהו מחירה המוסרי במחקר רפואי?
+                    <br>ב. מהי "טעות מסוג שני" ($\beta$)?
+                    <br>ג. מה הקשר בין המושגים לבין רמת המובהקות הנקבעת מראש?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. טעות מסוג ראשון:</strong> דחיית השערת האפס ($H_0$) כשהיא נכונה. דוגמה: אישור תרופה
+                        שאינה מועילה. המחיר: כסף מבוזבז ותופעות לוואי מיותרות.<br>
+                        <strong>ב. טעות מסוג שני:</strong> אי-דחיית השערת האפס ($H_0$) כשהיא לא נכונה ($H_1$ נכונה).
+                        דוגמה: פסילת תרופה שדווקא יכולה להציל חיים.<br>
+                        <strong>ג. קשר:</strong> רמת המובהקות $\alpha$ היא בדיוק החסם העליון שאנו מציבים להסתברות לטעות
+                        מסוג ראשון.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 2 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 2 - קל</div>
+                <p><strong>השערות חד ודו-צדדיות:</strong> חברה טוענת שמיונז חדש שהיא מייצרת מכיל 15 גרם שומן.
+                    <br>א. נסח את השערות המחקר אם נרצה לבדוק האם הכמות באמת שונה מ-15.
+                    <br>ב. נסח את השערות המחקר אם צרכן חושש שיש במיונז יותר מ-15 גרם שומן.
+                    <br>ג. באיזה מקרה אזור הדחייה יהיה גדול יותר (עבור אותה $\alpha$)?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. דו-צדדי:</strong> $H_0: \mu = 15$ מול $H_1: \mu \ne 15$.<br>
+                        <strong>ב. חד-צדדי:</strong> $H_0: \mu = 15$ מול $H_1: \mu > 15$.<br>
+                        <strong>ג. השוואה:</strong> במבחן דו-צדדי ה-$\alpha$ מתחלקת לשני זנבות (למשל 2.5% בכל צד), בעוד
+                        שבחד-צדדי כל ה-5% נמצאים בצד אחד. מבחינת "מרחק מהמרכז", אזור הדחייה הדו-צדדי מתחיל רחוק יותר.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 3 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 3 - בינוני</div>
+                <p><strong>מבחן Z לתוחלת:</strong> ידוע כי גובה הגברים באוכלוסייה מתפלג עם $\mu=175$ ו-$\sigma=10$.
+                    <br>חוקר בדק מדגם של $n=100$ כדורסלנים ומצא ממוצע $\bar{X}=178$.
+                    <br>א. בדוק את ההשערה שהכדורסלנים גבוהים מהממוצע באוכלוסייה ברמת מובהקות 5%.
+                    <br>ב. מהו ה-P-value של התוצאה? ($Z_{178} = 3$).
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. בדיקה:</strong>
+                        <br>$H_0: \mu=175, H_1: \mu>175$.
+                        <br>סטטיסטי: $Z = \frac{178-175}{10/\sqrt{100}} = \frac{3}{1} = 3$.
+                        <br>ערך קריטי ל-$\alpha=0.05$ הוא $1.645$.
+                        <br>כיוון ש-$3 > 1.645$, **דוחים את $H_0$**.<br>
+                        <strong>ב. P-value:</strong>
+                        <br>$P(Z > 3) = 1 - \Phi(3) = 1 - 0.9987 = \mathbf{0.0013}$.
+                        <br>זוהי תוצאה מובהקת מאוד.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 4 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 4 - בינוני</div>
+                <p><strong>מבחן t למדגמים קטנים:</strong> יצרן צמיגים טוען שהצמיגים מחזיקים 40,000 ק"מ.
+                    <br>במדגם של 16 צמיגים נמצא ממוצע 38,000 עם סטיית תקן מדגמית $s=4,000$.
+                    <br>א. בצע בדיקה דו-צדדית ב-$\alpha=0.05$ (נתון $t_{15, 0.975} = 2.131$).
+                    <br>ב. מה הייתה המסקנה אילו היית משתמש ב-$\alpha=0.01$ (נתון $t_{15, 0.995} = 2.947$)?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. בדיקה ב-5%:</strong>
+                        <br>$H_0: \mu=40000, H_1: \mu \ne 40000$.
+                        <br>סטטיסטי: $t = \frac{38000-40000}{4000/\sqrt{16}} = \frac{-2000}{1000} = -2$.
+                        <br>אזור הדחייה הוא $|t| > 2.131$.
+                        <br>כיוון ש-$|-2| < 2.131$, **לא דוחים את $H_0$** ברמת מובהקות זו.<br>
+                            <strong>ב. בדיקה ב-1%:</strong>
+                            <br>הערך הקריטי מחמיר ועולה ל-2.947. המסקנה נשארת **לא דוחים**.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 5 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 5 - בינוני</div>
+                <p><strong>בדיקת פרופורציה:</strong> פוליטיקאי טוען ש-60% מהציבור איתו.
+                    <br>סקר של 100 אנשים מצא רק 50 תומכים.
+                    <br>א. בצע מבחן ב-$\alpha=0.05$ עבור ההשערה שהפרופורציה נמוכה מהטענה.
+                    <br>ב. מהו ה-P-value המקורב?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. בדיקה:</strong>
+                        <br>$H_0: p=0.6, H_1: p < 0.6$. <br>סטטיסטי: $Z = \frac{0.5 - 0.6}{\sqrt{\frac{0.6 \cdot
+                            0.4}{100}}} = \frac{-0.1}{0.0489} \approx -2.04$.
+                            <br>ערך קריטי חד-צדדי: $-1.645$.
+                            <br>מכיוון ש-$-2.04 < -1.645$, **דוחים את $H_0$**.<br>
+                                <strong>ב. P-value:</strong> $P(Z < -2.04) \approx 1 - 0.979=\mathbf{0.021}$. </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 6 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 6 - מאתגר</div>
+                <p><strong>פער בין ממוצעים:</strong> בודקים שתי שיטות לימוד.
+                    <br>שיטה א': $n_1=40, \bar{x}_1=85, \sigma_1=8$.
+                    <br>שיטה ב': $n_2=40, \bar{x}_2=81, \sigma_2=10$.
+                    <br>א. בצע מבחן דו-צדדי ב-$\alpha=0.05$ לבדיקה האם יש הבדל בין השיטות.
+                    <br>ב. חשב את ה-P-value.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. בדיקה:</strong>
+                        <br>הפרש ממוצעים: $4$. שונות ההפרש: $\frac{64}{40} + \frac{100}{40} = 1.6 + 2.5 = 4.1$.
+                        <br>סטיית תקן של ההפרש: $\sqrt{4.1} = 2.025$.
+                        <br>ערך קריטי דו-צדדי: $1.96$.
+                        <br>כיוון ש-$1.975 > 1.96$, **דוחים את $H_0$** (על הקשקש).<br>
+                        <strong>ב. P-value:</strong>
+                        <br>$P(Z > 1.975) \approx 0.024$. בבדיקה דו-צדדית נכפיל ב-2: $\mathbf{0.048}$.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 7 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 7 - מאתגר</div>
+                <p><strong>מבחן למובהקות מתאם:</strong> חוקר מצא מתאם $r=0.4$ בין שעות שינה לציונים במדגם של $n=27$.
+                    <br>סטטיסטי המבחן הוא $t = r \sqrt{\frac{n-2}{1-r^2}}$.
+                    <br>א. חשב את ערך ה-$t$.
+                    <br>ב. האם המתאם מובהק ב-$\alpha=0.05$ (דו-צדדי, $t_{25, 0.975} = 2.06$)?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. חישוב:</strong>
+                        <br>$t = 0.4 \sqrt{\frac{25}{1-0.16}} = 0.4 \sqrt{\frac{25}{0.84}} = 0.4 \cdot \sqrt{29.76} =
+                        0.4 \cdot 5.45 = \mathbf{2.18}$.<br>
+                        <strong>ב. החלטה:</strong>
+                        <br>כיוון ש-$2.18 > 2.06$, המתאם **מובהק סטטיסטית** ושונה מ-0.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 8 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 8 - קשה (מורחב)</div>
+                <p><strong>עוצמת המבחן וחישוב $\beta$:</strong> במפעל אורז, משקל שקית הוא $\mu=1000$ גרם עם $\sigma=20$.
+                    אנו בודקים מדגם של $n=25$ שקיות כדי לגלות אם המכונה תקולה ומשקל השקיות ירד ($H_1: \mu < 1000$). <br>
+                        א. מצא את אזור הדחייה עבור $\alpha=0.05$ במונחים של ממוצע המדגם $\bar{X}$.
+                        <br>ב. נניח שבפועל המכונה מקולקלת והתוחלת האמיתית היא $\mu_1 = 985$. מה ההסתברות של טעות מסוג
+                        שני ($\beta$)?
+                        <br>ג. מהי "עוצמת המבחן" במצב זה?
+                        <br>ד. מה יקרה לעוצמת המבחן אם נגדיל את המדגם ל-$n=100$?</p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. אזור דחייה:</strong>
+                        <br>סטיית תקן של הממוצע: $20 / \sqrt{25} = 4$.
+                        <br>ערך קריטי $Z = -1.645$.
+                        <br>$\bar{X}_{crit} = 1000 - 1.645 \cdot 4 = 1000 - 6.58 = \mathbf{993.42}$.
+                        <br>נדחה אם $\bar{X} \le 993.42$.<br>
+                        <strong>ב. טעות מסוג שני ($\beta$):</strong>
+                        <br>זוהי ההסתברות **לא** לדחות כש $\mu=985$.
+                        <br>$P(\bar{X} > 993.42 | \mu=985) = P(Z > \frac{993.42 - 985}{4}) = P(Z > 2.105)$.
+                        <br>$P(Z > 2.105) = 1 - \Phi(2.105) \approx 1 - 0.982 = \mathbf{0.018}$.<br>
+                        <strong>ג. עוצמת המבחן:</strong>
+                        <br>$1 - \beta = 1 - 0.018 = \mathbf{0.982}$ (98.2%). המבחן חזק מאוד בזיהוי ירידה של 15 גרם.<br>
+                        <strong>ד. הגדלת המדגם:</strong>
+                        <br>כאשר $n$ גדל, סטיית התקן של הממוצע קטנה, אזור הדחייה מתהדק והתוחלת תחת $H_1$ מתרחקת מהגבול.
+                        העוצמה **תעלה** (תתקרב ל-100%).
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 9 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 9 - קשה</div>
+                <p><strong>P-value וקשר לדגימה:</strong> חוקר שינה את יחידות המדידה מס"מ למ"מ (הכפיל הכל ב-10).
+                    <br>א. האם הממוצע ישתנה?
+                    <br>ב. האם ערך ה-$Z$ שלו ישתנה?
+                    <br>ג. האם ה-P-value ישתנה? נמק.
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. ממוצע:</strong> כן, הממוצע ייגדל פי 10.<br>
+                        <strong>ב. ערך ה-Z:</strong> **לא.** $\bar{X}, \mu_0$ ו-$\sigma$ כולם גדלים פי 10. בחישוב ה-Z
+                        המונה והמכנה גדלים באותו יחס, ולכן ה-10 מצטמצם.
+                        <br>$Z = \frac{10(\bar{X}-\mu_0)}{10\sigma / \sqrt{n}} = Z_{old}$.<br>
+                        <strong>ג. P-value:</strong> לא. כיוון שערך ה-Z לא השתנה, גם השטח בזנב נשאר זהה. המסקנה
+                        הסטטיסטית אינה תלויה ביחידות המדידה.
+                    </div>
+                </details>
+            </div>
+
+            <!-- תרגיל 10 -->
+            <div class="exercise">
+                <div class="ex-badge">תרגיל 10 - קשה</div>
+                <p><strong>מבחן חי-בריבוע לטיב התאמה (בונוס):</strong> מטילים קובייה 60 פעמים ומקבלים:
+                    <br>1: 15 פעם, 2: 15 פעם, השאר 30 פעם (10 לכל פאה).
+                    <br>א. מהם הערכים הצפויים ($E_i$) תחת השערת האפס שהקובייה הוגנת?
+                    <br>ב. חשב את סטטיסטי המחקר $\chi^2 = \sum \frac{(O_i-E_i)^2}{E_i}$.
+                    <br>ג. האם הקובייה נראית מזויפת?
+                </p>
+                <details>
+                    <summary></summary>
+                    <div class="solution-body">
+                        <strong>א. צפויים:</strong> בקובייה הוגנת, לכל פאה סיכוי $1/6$. ב-60 הטלות אנו מצפים ל-**10**
+                        פעמים לכל פאה.<br>
+                        <strong>ב. חישוב:</strong>
+                        <br>$\chi^2 = \frac{(15-10)^2}{10} + \frac{(15-10)^2}{10} + \frac{(10-10)^2}{10} \dots =
+                        \frac{25}{10} + \frac{25}{10} + 0 + 0 + 0 + 0 = 2.5 + 2.5 = \mathbf{5}$.<br>
+                        <strong>ג. מובהקות:</strong> עם 5 דרגות חופש, ערך קריטי ב-5% הוא 11.07.
+                        <br>כיוון ש-$5 < 11.07$, למרות שיש חריגות, הן עדיין **בטווח הרעש המקרי** הסביר ולא ניתן להוכיח
+                            שהקובייה מזויפת בביטחון גבוה. </div>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const formulas = {
+            'ch1': [
+                { title: 'חוק החיבור', tex: 'P(A \\cup B) = P(A) + P(B) - P(A \\cap B)' },
+                { title: 'צירופים (Combination)', tex: '\\binom{n}{k} = \\frac{n!}{k!(n-k)!}' },
+                { title: 'דה מורגן', tex: '(A \\cup B)^c = A^c \\cap B^c' }
+            ],
+            'ch2': [
+                { title: 'הסתברות מותנית', tex: 'P(A|B) = \\frac{P(A \\cap B)}{P(B)}' },
+                { title: 'הסתברות שלמה', tex: 'P(A) = \\sum P(A|B_i)P(B_i)' },
+                { title: 'חוק בייס', tex: 'P(B_k|A) = \\frac{P(A|B_k)P(B_k)}{P(A)}' }
+            ],
+            'ch3': [
+                { title: 'תוחלת', tex: 'E[X] = \\sum x_i P(X=x_i)' },
+                { title: 'שונות', tex: 'Var(X) = E[X^2] - (E[X])^2' },
+                { title: 'בינומית', tex: 'P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}' }
+            ],
+            'ch4': [
+                { title: 'מעריכית - הסתברות לזנב', tex: 'P(X > x) = e^{-\\lambda x}' },
+                { title: 'תוחלת מעריכית', tex: 'E[X] = \\frac{1}{\\lambda}' },
+                { title: 'תקנון נורמלי', tex: 'Z = \\frac{X - \\mu}{\\sigma}' }
+            ],
+            'ch5': [
+                { title: 'שונות משותפת', tex: 'Cov(X,Y) = E[XY] - E[X]E[Y]' },
+                { title: 'מקדם מתאם', tex: '\\rho = \\frac{Cov(X,Y)}{\\sigma_X \\sigma_Y}' },
+                { title: 'שונות של סכום', tex: 'Var(aX+bY) = a^2Var(X) + b^2Var(Y) + 2abCov(X,Y)' }
+            ],
+            'ch6': [
+                { title: 'אי שוויון מרקוב', tex: 'P(X \\ge a) \\le \\frac{E[X]}{a}' },
+                { title: 'אי שוויון צ\'בישב', tex: 'P(|X-\\mu| \\ge k) \\le \\frac{Var(X)}{k^2}' },
+                { title: 'משפט הגבול המרכזי', tex: '\\bar{X} \\approx N(\\mu, \\frac{\\sigma^2}{n})' }
+            ],
+            'ch7': [
+                { title: 'רווח סמך לתוחלת', tex: '\\bar{X} \\pm Z_{1-\\alpha/2} \\frac{\\sigma}{\\sqrt{n}}' },
+                { title: 'רווח סמך לפרופורציה', tex: '\\hat{p} \\pm Z_{1-\\alpha/2} \\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n}}' }
+            ],
+            'ch8': [
+                { title: 'סטטיסטי Z לתוחלת', tex: 'Z = \\frac{\\bar{X} - \\mu_0}{\\sigma/\\sqrt{n}}' },
+                { title: 'סטטיסטי t לתוחלת', tex: 't = \\frac{\\bar{X} - \\mu_0}{S/\\sqrt{n}}' }
+            ]
+        };
+
+        let activeChapterId = 'ch1';
+
+        // מעקב אחרי הפרק הנראה בעין
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    activeChapterId = entry.target.id;
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chapter').forEach(section => {
+            observer.observe(section);
+        });
+
+        function openFormulaSheet() {
+            const modal = document.getElementById('formulaModal');
+            const container = document.getElementById('formulaContainer');
+            container.innerHTML = '';
+
+            // הצגת הפרק הנוכחי קודם
+            const showChapter = (id) => {
+                if (!formulas[id]) return;
+                const chapterTitle = document.querySelector(`a[href="#${id}"]`).innerText;
+                const header = document.createElement('h3');
+                header.style.color = 'var(--accent-color)';
+                header.innerText = chapterTitle;
+                container.appendChild(header);
+
+                formulas[id].forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = 'formula-item';
+                    div.innerHTML = `<strong>${f.title}:</strong>
+                        <div class="math-display">\\[ ${f.tex} \\]</div>`;
+                    container.appendChild(div);
+                });
+            };
+
+            // הצגת הפרק האקטיבי
+            showChapter(activeChapterId);
+
+            // הוספת קו מפריד והצגת שאר הפרקים
+            const hr = document.createElement('hr');
+            hr.style.margin = '2rem 0';
+            container.appendChild(hr);
+
+            for (const chapter in formulas) {
+                if (chapter !== activeChapterId) {
+                    showChapter(chapter);
+                }
+            }
+
+            modal.style.display = 'block';
+            MathJax.typeset();
+        }
+
+        function closeFormulaSheet() {
+            document.getElementById('formulaModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('formulaModal');
+            if (event.target == modal) {
+                closeFormulaSheet();
+            }
+        }
+    </script>
+</body>
+
+</html>
