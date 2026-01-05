@@ -3,14 +3,7 @@ import path from "path";
 import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import CourseContent from "./CourseContent";
-
-const COURSE_MAP: Record<string, string> = {
-    probability: "הסתברות",
-    harmonic: "הרמונית",
-    complex: "מרוכבות",
-    fluid: "תורת הזרימה 1",
-    thermodynamics: "תרמודינמיקה 1",
-};
+import { getCourseById } from "../../courses";
 
 export default async function CoursePage({
     params,
@@ -18,9 +11,9 @@ export default async function CoursePage({
     params: Promise<{ courseId: string }>;
 }) {
     const { courseId } = await params;
-    const folderName = COURSE_MAP[courseId];
+    const course = getCourseById(courseId);
 
-    if (!folderName) {
+    if (!course) {
         notFound();
     }
 
@@ -32,8 +25,8 @@ export default async function CoursePage({
 
     const filePath = path.join(
         process.cwd(),
-        "..",
-        folderName,
+        "content",
+        course.folder,
         "index.html"
     );
 
@@ -53,6 +46,9 @@ export default async function CoursePage({
 
     return (
         <div className="course-container">
+            <header className="p-4 border-b border-white/10">
+                <h1 className="text-xl font-bold">{course.name}</h1>
+            </header>
             <CourseContent content={content} styles={styles} />
         </div>
     );

@@ -1,45 +1,8 @@
 import { SignInButton, UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
+import { COURSES } from "./courses";
 
 export default function Home() {
-  const courses = [
-    {
-      id: "probability",
-      name: "הסתברות",
-      icon: "Σ",
-      desc: "לימוד יסודות ההסתברות, משתנים מקריים, התפלגויות וסטטיסטיקה.",
-      path: "/courses/probability"
-    },
-    {
-      id: "harmonic",
-      name: "אנליזה הרמונית",
-      icon: "∫",
-      desc: "טורי פורייה, התמרות פורייה ויישומים במתמטיקה ופיזיקה.",
-      path: "/courses/harmonic"
-    },
-    {
-      id: "complex",
-      name: "פונקציות מרוכבות",
-      icon: "i",
-      desc: "חקירת פונקציות במשתנה מרוכב, משפטי שאריות ומיפויים קונפורמיים.",
-      path: "/courses/complex"
-    },
-    {
-      id: "fluid",
-      name: "תורת הזרימה 1",
-      icon: "≋",
-      desc: "מכניקת זורמים, משוואות נאוויה-סטוקס, זרימה למינרית וטורבולנטית.",
-      path: "/courses/fluid"
-    },
-    {
-      id: "thermodynamics",
-      name: "תרמודינמיקה 1",
-      icon: "ΔQ",
-      desc: "חוקי התרמודינמיקה, מחזורי כוח, אנטרופיה ואנתלפיה.",
-      path: "/courses/thermodynamics"
-    }
-  ];
-
   return (
     <div className="min-h-screen rtl font-assistant">
       <div className="floating-blob blob-1"></div>
@@ -70,8 +33,8 @@ export default function Home() {
 
       <main>
         <div className="course-grid">
-          {courses.map((course) => (
-            <Link key={course.id} href={course.path} className="course-card">
+          {COURSES.map((course) => (
+            <Link key={course.id} href={`/courses/${course.id}`} className="course-card">
               <div>
                 <div className="course-icon">{course.icon}</div>
                 <div className="course-name">{course.name}</div>
