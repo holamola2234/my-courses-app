@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Script from "next/script";
+import Latex from "react-latex-next";
 
 interface CourseContentProps {
     content: string;
@@ -22,45 +22,14 @@ export default function CourseContent({ content, styles }: CourseContentProps) {
                 }
             });
         }
-
-        // Trigger MathJax typeset if it's already loaded
-        if (typeof (window as any).MathJax !== "undefined" && (window as any).MathJax.typesetPromise) {
-            (window as any).MathJax.typesetPromise();
-        }
     }, [content]);
 
     return (
         <>
-            <Script
-                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-                strategy="afterInteractive"
-                onLoad={() => {
-                    if ((window as any).MathJax && (window as any).MathJax.typesetPromise) {
-                        (window as any).MathJax.typesetPromise();
-                    }
-                }}
-            />
-            <Script id="mathjax-config" strategy="beforeInteractive">
-                {`
-          window.MathJax = {
-            tex: {
-              inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-              displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
-              processEscapes: true
-            },
-            options: {
-              ignoreHtmlClass: 'tex2jax_ignore',
-              processHtmlClass: 'tex2jax_process'
-            }
-          };
-        `}
-            </Script>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
-            <div
-                ref={contentRef}
-                className="course-content-render"
-                dangerouslySetInnerHTML={{ __html: content }}
-            />
+            <div ref={contentRef} className="course-content-render">
+                <Latex strict={false}>{content}</Latex>
+            </div>
         </>
     );
 }
